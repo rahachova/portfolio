@@ -304,6 +304,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  color: #665f55;
 }
 
 .button_hint {
@@ -322,4 +323,75 @@ ul {
   display: flex;
   gap: 100px;
   align-items: center;
+}
+
+.contacts {
+  display: flex;
+  max-width: 1360px;
+  padding: 100px;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+  background-color: #665f55;
+  border-radius: 40px;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.contacts_button {
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  background-color: #665f55;
+  border: 1px solid #c1b6ad;
+}
+
+.offer {
+  max-width: 530px;
+  width: 100%;
+}
+
+.offer_slogan {
+  color: #e1d4c9;
+  font-size: 60px;
+  font-weight: 600;
+  line-height: 125%;
+}
+
+.offer_text {
+  margin-bottom: 40px;
+  color: #b0907a;
+  font-size: 60px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 125%;
+}
+
+.contacts_title {
+  margin-bottom: 40px;
+  color: #e1d4c9;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 125%;
+}
+
+.contacts_info {
+  max-width: 530px;
+  width: 100%;
+}
+
+.contact {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.contact_info {
+  color: #e1d4c9;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 150%;
 }
