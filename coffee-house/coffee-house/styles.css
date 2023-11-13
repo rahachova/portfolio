@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
+  transition: transform 0.2s;
 }
 
 body {
@@ -126,12 +127,9 @@ ul {
   line-height: 105%;
 }
 
-.title {
-  margin-bottom: 40px;
-}
-
 .title-headword {
   color: #b0907a;
+  font-style: italic;
 }
 
 .hero_description {
@@ -154,10 +152,11 @@ ul {
   border-color: transparent;
 }
 
-.title {
+.favorite_title {
   font-size: 60px;
   font-weight: 600;
   line-height: 125%;
+  margin-bottom: 40px;
 }
 
 .favorite-coffee {
@@ -186,16 +185,10 @@ ul {
   width: 60px;
   height: 60px;
   border-radius: 100px;
-  border-radius: 100px;
   border: 1px solid #665f55;
   background-color: transparent;
   cursor: pointer;
 }
-
-/* .slider_image {
-  width: 480px;
-  height: 480px;
-} */
 
 .slider_name {
   margin-top: 20px;
@@ -236,6 +229,7 @@ ul {
 }
 
 .about_description {
+  margin-bottom: 40px;
   font-size: 60px;
   font-style: normal;
   font-weight: 600;
@@ -260,6 +254,72 @@ ul {
   object-fit: none;
 }
 
+.about_image:hover {
+  transform: scale(0.9);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
 .about_image-small {
   height: 430px;
+}
+
+.mobile_title {
+  font-size: 60px;
+  font-weight: 600;
+  line-height: 125%;
+}
+
+.mobile_info {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.mobile_description {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.mobile_buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.mobile_button {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 200px;
+  height: 60px;
+  border-radius: 100px;
+  border-radius: 100px;
+  border: 1px solid #665f55;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.button_hint {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.button_name {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+.mobile-app {
+  display: flex;
+  gap: 100px;
+  align-items: center;
 }
