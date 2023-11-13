@@ -240,6 +240,26 @@ ul {
   font-style: normal;
   font-weight: 600;
   line-height: 125%;
-  text-align: justify;
-  letter-spacing: -2px;
+}
+
+.about_column {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.about_images {
+  display: flex;
+  gap: 40px;
+}
+
+.about_image {
+  width: 660px;
+  height: 590px;
+  border-radius: 20px;
+  object-fit: none;
+}
+
+.about_image-small {
+  height: 430px;
 }
