@@ -30,11 +30,17 @@
         <nav class="nav">
           <ul class="nav_list">
             <li>
-              <a class="nav_item" href="#favorite-coffee">Favorite coffee</a>
+              <a class="nav_item" href="index.html#favorite-coffee"
+                >Favorite coffee</a
+              >
             </li>
-            <li><a class="nav_item" href="#about">About</a></li>
-            <li><a class="nav_item" href="#mobile-app">Mobile app</a></li>
-            <li><a class="nav_item" href="#contact-us">Contact us</a></li>
+            <li><a class="nav_item" href="index.html#about">About</a></li>
+            <li>
+              <a class="nav_item" href=" index.html#mobile-app">Mobile app</a>
+            </li>
+            <li>
+              <a class="nav_item" href="#contact-us">Contact us</a>
+            </li>
           </ul>
         </nav>
         <div class="header_menu header_menu--active">
@@ -43,32 +49,31 @@
         </div>
       </header>
       <section class="menu">
-        <h2 class="section_title">
+        <h1 class="section_title">
           Behind each of our cups <br />
           hides an <span class="title-headword">amazing surprise</span>
-        </h2>
+        </h1>
         <div class="tabs">
-          <div class="tab tab--checked">
-            <div class="tab_button">
+          <button id="coffee" class="tab tab--checked">
+            <span class="tab_button">
               <img src="assets/icons/coffee-tab.png" alt="Coffee cup" />
-            </div>
-            <p class="tab_text">Coffee</p>
-          </div>
-          <div class="tab">
-            <div class="tab_button">
+            </span>
+            <span class="tab_text">Coffee</span>
+          </button>
+          <button id="tea" class="tab">
+            <span class="tab_button">
               <img src="assets/icons/tea-tab.png" alt="Teapot" />
-            </div>
-            <p class="tab_text">Tea</p>
-          </div>
-          <div class="tab">
-            <div class="tab_button">
+            </span>
+            <span class="tab_text">Tea</span>
+          </button>
+          <button id="dessert" class="tab">
+            <span class="tab_button">
               <img src="assets/icons/dessert-tab.png" alt="Dessert" />
-            </div>
-            <p class="tab_text">Dessert</p>
-          </div>
+            </span>
+            <span class="tab_text">Dessert</span>
+          </button>
         </div>
-        <div class="menu_container">
-        </div>
+        <div class="menu_container"></div>
       </section>
       <footer id="contact-us" class="contacts">
         <div class="offer">

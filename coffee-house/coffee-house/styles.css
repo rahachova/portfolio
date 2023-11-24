@@ -58,15 +58,15 @@ ul {
   gap: 4px;
 }
 
-.icon_title {
+/* .icon_title {
   width: 64.784px;
   height: 5.986px;
-}
+} */
 
 .icon_shop-name {
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 5px;
+  top: 14px;
 }
 
 .icon_circle {
@@ -91,6 +91,7 @@ ul {
 }
 
 .header_menu {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -100,13 +101,18 @@ ul {
   color: #403f3d;
 }
 
-.header_menu--active::after {
+.header_menu::after {
   position: absolute;
   content: "";
-  width: 72px;
+  width: 100%;
   border-bottom: 2px solid #403f3d;
-  bottom: 13px;
-  cursor: none;
+  bottom: -4px;
+  opacity: 0;
+  transition: all 0.2s ease-out;
+}
+
+.header_menu:not(.header_menu--active)::after {
+  opacity: 1;
 }
 
 .menu_title {
@@ -118,6 +124,7 @@ ul {
   padding: 100px;
   background-image: url("assets/images/hero.png");
   background-size: cover;
+  background-position: 0px -29px;
   border-radius: 40px;
   max-width: 1360px;
   height: 644px;
@@ -128,7 +135,7 @@ ul {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 40px;
+  gap: 41px;
   max-width: 530px;
   color: #e1d4c9;
 }
@@ -136,7 +143,6 @@ ul {
 .hero_title {
   margin: 0;
   font-size: 72px;
-  font-style: italic;
   font-weight: 600;
   line-height: 105%;
 }
@@ -158,7 +164,6 @@ ul {
   width: 200px;
   padding: 20px 78px;
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 8px;
   border-radius: 100px;
@@ -209,12 +214,13 @@ ul {
 .slider_item {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 480px;
 }
 
 .slider_button {
+  margin-right: 4px;
+  margin-left: 4px;
   width: 60px;
   height: 60px;
   border-radius: 100px;
@@ -233,24 +239,21 @@ ul {
 }
 
 .slider_name {
-  margin-top: 20px;
+  margin: 20px 0 21px;
   font-size: 24px;
   font-weight: 600;
   line-height: 125%;
 }
 
 .slider_price {
-  margin-top: 16px;
+  margin-top: 21px;
   font-size: 24px;
   font-weight: 600;
   line-height: 125%;
 }
 
-.slider-description {
-  margin-top: 16px;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 150%;
+.slider_description {
+  text-align: center;
 }
 
 .controls {
@@ -334,7 +337,7 @@ ul {
   align-items: center;
   gap: 8px;
   width: 200px;
-  height: 60px;
+  height: 64px;
   border-radius: 100px;
   border-radius: 100px;
   border: 1px solid #665f55;
@@ -454,6 +457,7 @@ ul {
 }
 
 .contacts_info {
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -499,6 +503,7 @@ ul {
 }
 
 .menu_container {
+  margin-top: -2px;
   display: flex;
   flex-wrap: wrap;
   gap: 40px;
@@ -511,6 +516,12 @@ ul {
   border: 1px solid #c1b6ad;
   width: 310px;
   height: 507px;
+  transition: transform 0.2s;
+}
+
+.menu_item:hover {
+  transform: scale(0.9);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .menu_image {
@@ -539,6 +550,7 @@ ul {
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
+  letter-spacing: -0.04px;
 }
 
 .menu_price {
@@ -551,7 +563,7 @@ ul {
 
 .tabs {
   display: flex;
-  gap: 16px;
+  gap: 15px;
 }
 
 .tab {
@@ -562,11 +574,19 @@ ul {
   gap: 8px;
   border-radius: 100px;
   border: 1px solid #c1b6ad;
+  background-color: transparent;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.tab:not(.tab--checked):hover {
+  transform: scale(0.9);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .tab--checked {
   background-color: #665f55;
+  cursor: auto;
 }
 
 .tab--checked .tab_button {
@@ -579,7 +599,7 @@ ul {
 
 .tab_button {
   display: flex;
-  padding: 3px 7px;
+  padding: 7px 7px;
   justify-content: center;
   align-items: center;
   border-radius: 100px;

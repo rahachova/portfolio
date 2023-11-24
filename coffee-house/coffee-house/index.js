@@ -1,4 +1,4 @@
-const fullMenu = {
+const FULL_MENU = {
   coffee: [
     {
       name: "Irish coffee",
@@ -61,15 +61,94 @@ const fullMenu = {
     {
       name: "Moroccan",
       image: "./assets/images/tea/tea-1.png",
-      info: "Fragrant black coffee with cognac and whipped cream",
+      info: "Fragrant black tea with the addition of tangerine, cinnamon, honey, lemon and mint",
+      price: "$4.50",
+      alt: "Moroccan tea",
+    },
+    {
+      name: "Ginger",
+      image: "./assets/images/tea/tea-2.png",
+      info: "Original black tea with fresh ginger, lemon and honey",
+      price: "$5.00",
+      alt: "Ginger tea",
+    },
+    {
+      name: "Cranberry",
+      image: "./assets/images/tea/tea-3.png",
+      info: "Invigorating black tea with cranberry and honey",
+      price: "$5.00",
+      alt: "Cranberry tea",
+    },
+    {
+      name: "Sea buckthorn",
+      image: "./assets/images/tea/tea-4.png",
+      info: "Toning sweet black tea with sea buckthorn, fresh thyme and cinnamon",
+      price: "$5.50",
+      alt: "Sea buckthorn tea",
+    },
+  ],
+  dessert: [
+    {
+      name: "Marble cheesecake",
+      image: "./assets/images/dessert/dessert-1.png",
+      info: "Philadelphia cheese with lemon zest on a light sponge cake and red currant jam",
+      price: "$3.50",
+      alt: "Marble cheesecake",
+    },
+    {
+      name: "Red velvet",
+      image: "./assets/images/dessert/dessert-2.png",
+      info: "Layer cake with cream cheese frosting",
+      price: "$4.00",
+      alt: "Red velvet",
+    },
+    {
+      name: "Cheesecakes",
+      image: "./assets/images/dessert/dessert-3.png",
+      info: "Soft cottage cheese pancakes with sour cream and fresh berries and sprinkled with powdered sugar",
+      price: "$4.50",
+      alt: "Cheesecakes",
+    },
+    {
+      name: "Creme brulee",
+      image: "./assets/images/dessert/dessert-4.png",
+      info: "Delicate creamy dessert in a caramel basket with wild berries",
+      price: "$4.00",
+      alt: "Creme brulee",
+    },
+    {
+      name: "Pancakes",
+      image: "./assets/images/dessert/dessert-5.png",
+      info: "Tender pancakes with strawberry jam and fresh strawberries",
+      price: "$4.50",
+      alt: "Pancakes",
+    },
+    {
+      name: "Honey cake",
+      image: "./assets/images/dessert/dessert-6.png",
+      info: "Classic honey cake with delicate custard",
+      price: "$4.50",
+      alt: "Honey cake",
+    },
+    {
+      name: "Chocolate cake",
+      image: "./assets/images/dessert/dessert-7.png",
+      info: "Cake with hot chocolate filling and nuts with dried apricots",
+      price: "$5.50",
+      alt: "Chocolate cake",
+    },
+    {
+      name: "Black forest",
+      image: "./assets/images/dessert/dessert-8.png",
+      info: "A combination of thin sponge cake with cherry jam and light chocolate mousse",
       price: "$6.50",
-      alt: "Coffee with cognac",
-    }
-  ]
+      alt: "Black forest",
+    },
+  ],
 };
 
 const menuContainer = document.querySelector(".menu_container");
-const tabs = document.querySelector(".tabs");
+const tabs = [...document.querySelectorAll(".tab")];
 
 function createMenuItem(menu) {
   const item = document.createElement("div");
@@ -94,4 +173,15 @@ function createMenuItem(menu) {
   return item;
 }
 
-menuContainer.append(...fullMenu.coffee.map(createMenuItem));
+menuContainer.append(...FULL_MENU.coffee.map(createMenuItem));
+
+// tabs.addEventListener("click", function (event) {
+//   menuContainer.replaceChildren(...FULL_MENU[event.target.id].map(createMenuItem));
+// });
+
+tabs.forEach((tab) => {
+  tab.addEventListener("click", (event) => {
+    menuContainer.replaceChildren(...FULL_MENU[tab.id].map(createMenuItem));
+    console.log(event.target === tab);
+  });
+});
