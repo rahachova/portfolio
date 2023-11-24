@@ -111,7 +111,7 @@ ul {
   transition: all 0.2s ease-out;
 }
 
-.header_menu:not(.header_menu--active)::after {
+.header_menu:not(.header_menu--active):hover:after {
   opacity: 1;
 }
 
