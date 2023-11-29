@@ -97,6 +97,7 @@ ul {
 
 .nav_item {
   position: relative;
+  position: relative;
   color: #403f3d;
   font-size: 16px;
   font-weight: 600;
@@ -111,7 +112,7 @@ ul {
   border-bottom: 2px solid #403f3d;
   bottom: -4px;
   opacity: 0;
-  transition: all 0.4s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .nav_item:hover::after {
@@ -192,6 +193,7 @@ ul {
   width: 200px;
   padding: 20px 78px;
   display: flex;
+  justify-content: center;
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -325,6 +327,7 @@ ul {
   height: 590px;
   border-radius: 20px;
   object-fit: none;
+  transition: all 0.2s;
   transition: all 0.2s;
 }
 
