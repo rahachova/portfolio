@@ -63,11 +63,6 @@ ul {
   gap: 4px;
 }
 
-/* .icon_title {
-  width: 64.784px;
-  height: 5.986px;
-} */
-
 .icon_shop-name {
   position: absolute;
   left: 5px;
@@ -89,10 +84,26 @@ ul {
 }
 
 .nav_item {
+  position: relative;
   color: #403f3d;
   font-size: 16px;
   font-weight: 600;
   line-height: 150%;
+}
+
+.nav_item::after {
+  position: absolute;
+  left: 0;
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid #403f3d;
+  bottom: -4px;
+  opacity: 0;
+  transition: all 0.2s ease-out;
+}
+
+.nav_item:hover::after {
+  opacity: 1;
 }
 
 .header_menu {
@@ -169,6 +180,7 @@ ul {
   width: 200px;
   padding: 20px 78px;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 8px;
   border-radius: 100px;
@@ -301,7 +313,7 @@ ul {
   height: 590px;
   border-radius: 20px;
   object-fit: none;
-  transition: transform 0.2s;
+  transition: all 0.2s;
 }
 
 .about_image:hover {
