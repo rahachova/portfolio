@@ -99,7 +99,7 @@ ul {
   border-bottom: 2px solid #403f3d;
   bottom: -4px;
   opacity: 0;
-  transition: all 0.2s ease-out;
+  transition: all 0.4s ease-out;
 }
 
 .nav_item:hover::after {
@@ -124,7 +124,7 @@ ul {
   border-bottom: 2px solid #403f3d;
   bottom: -4px;
   opacity: 0;
-  transition: all 0.2s ease-out;
+  transition: all 0.4s ease-out;
 }
 
 .header_menu:not(.header_menu--active):hover:after {
@@ -361,7 +361,7 @@ ul {
   background-color: transparent;
   color: #665f55;
   cursor: pointer;
-  /* transition: all 0.2s ease-out; */
+  transition: all 0.3s ease-out;
 }
 
 .button_icon {
@@ -373,7 +373,6 @@ ul {
 }
 
 .mobile_button:hover .button_container {
-  background-color: #665f55;
   color: #e1d4c9;
 }
 
@@ -597,7 +596,6 @@ ul {
 }
 
 .tab:not(.tab--checked):hover {
-  transform: scale(0.9);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
