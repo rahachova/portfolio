@@ -9,6 +9,11 @@
       type="image/x-icon"
       href="assets/icons/favicon-cupcake.png"
     />
+    <link
+      rel="stylesheet"
+      href="tablet.css"
+      media="screen and (max-width:768px)"
+    />
     <title>Coffee House</title>
   </head>
   <body>
@@ -47,11 +52,26 @@
           <p class="menu_title">Menu</p>
           <img src="assets/icons/coffee-cup.svg" alt="Coffee cup" />
         </div>
+        <div class="burger_icon"></div>
       </header>
       <section class="menu">
+        <div class="burger">
+          <ul class="nav_list">
+            <li>
+              <a class="nav_item" href="#favorite-coffee">Favorite coffee</a>
+            </li>
+            <li><a class="nav_item" href="#about">About</a></li>
+            <li><a class="nav_item" href="#mobile-app">Mobile app</a></li>
+            <li><a class="nav_item" href="#contact-us">Contact us</a></li>
+          </ul>
+          <a href="./menu.html" class="burger_menu">
+            <p class="menu_title">Menu</p>
+            <img  class="menu_cup" src="assets/icons/coffee-cup.svg" alt="Coffee cup" />
+          </a>
+        </div>
         <h1 class="section_title">
-          Behind each of our cups <br />
-          hides an <span class="title-headword">amazing surprise</span>
+          Behind each of our cups hides an
+          <span class="title-headword">amazing surprise</span>
         </h1>
         <div class="tabs">
           <button id="coffee" class="tab tab--checked">
@@ -159,5 +179,6 @@
       </footer>
     </main>
     <script src="index.js"></script>
+    <script src="burger.js"></script>
   </body>
 </html>
