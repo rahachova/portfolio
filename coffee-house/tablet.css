@@ -47,11 +47,6 @@
   margin: 19px 0 21px;
 }
 
-/* .about_images {
-  flex-direction: column;
-  align-items: center;
-} */
-
 .about_image {
   width: 688px;
 }
@@ -59,16 +54,6 @@
 .about_image:not(.tablet-image) {
   display: none;
 }
-
-/* .mobile-app {
-  flex-direction: column;
-} */
-
-/* .contacts {
-  padding: 100px 60px;
-  flex-direction: column;
-  gap: 85px;
-} */
 
 .offer {
   max-width: none;
@@ -82,6 +67,14 @@
   margin-bottom: 5px;
 }
 
+.menu_container {
+  justify-content: center;
+}
+
 .menu_item:nth-child(n + 5) {
   display: none;
+}
+
+.menu_refresh {
+  display: flex;
 }

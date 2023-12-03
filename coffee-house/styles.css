@@ -197,7 +197,7 @@ ul {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 41px;
+  gap: 40px;
   max-width: 530px;
   color: #e1d4c9;
 }
@@ -249,6 +249,7 @@ ul {
 }
 
 .section_title {
+  width: 800px;
   font-size: 60px;
   font-weight: 600;
   line-height: 125%;
@@ -364,9 +365,11 @@ ul {
   transition: all 0.2s;
 }
 
-.about_image:hover {
-  transform: scale(0.9);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+@media (hover: hover) {
+  .about_image:hover {
+    transform: scale(0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .about_image-small {
@@ -416,16 +419,18 @@ ul {
   fill: #665f55;
 }
 
-.mobile_button:hover {
-  background-color: #665f55;
-}
+@media (hover: hover) {
+  .mobile_button:hover {
+    background-color: #665f55;
+  }
 
-.mobile_button:hover .button_container {
-  color: #e1d4c9;
-}
+  .mobile_button:hover .button_container {
+    color: #e1d4c9;
+  }
 
-.mobile_button:hover .button_icon {
-  fill: #e1d4c9;
+  .mobile_button:hover .button_icon {
+    fill: #e1d4c9;
+  }
 }
 
 .button_container {
@@ -492,6 +497,9 @@ ul {
 }
 
 .offer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
   max-width: 530px;
   width: 100%;
 }
@@ -504,12 +512,8 @@ ul {
 }
 
 .offer_text {
-  margin-bottom: 40px;
   color: #b0907a;
-  font-size: 60px;
   font-style: italic;
-  font-weight: 600;
-  line-height: 125%;
 }
 
 .contacts_title {
@@ -568,7 +572,7 @@ ul {
 }
 
 .menu_container {
-  margin-top: -2px;
+  margin-top: -3px;
   display: flex;
   flex-wrap: wrap;
   gap: 40px;
@@ -632,7 +636,7 @@ ul {
 }
 
 .tab {
-  padding: 8px 16px 8px 8px;
+  padding: 7px 16px 7px 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -689,24 +693,34 @@ ul {
   transition: color 0.4s;
 }
 
+.menu_refresh {
+  display: none;
+  width: 60px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  border: 1px solid #665f55;
+  background-color: transparent;
+}
+
 .burger {
   display: flex;
-  padding: 60px 40px;
   position: absolute;
   top: 98px;
-  left: 0;
-  width: 100vw;
+  right: 0;
+  width: 0;
   height: 100vh;
   flex-direction: column;
   gap: 100px;
   align-items: center;
   background-color: #e1d4c9;
-  transition: transform 0.3s ease;
-  transform: translateX(768px);
+  transition: width 0.3s ease;
+  overflow: hidden;
 }
 
 .burger--shown {
-  transform: translateX(0);
+  width: 100vw;
 }
 
 .disable-scrolling {
@@ -728,7 +742,7 @@ ul {
 .burger_menu {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 16px;
   width: 72px;
