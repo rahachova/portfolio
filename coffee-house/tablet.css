@@ -31,7 +31,6 @@
 
 .hero {
   position: static;
-  padding: 100px 60px;
   background-position-x: center;
 }
 
@@ -45,10 +44,6 @@
 
 .slider_name {
   margin: 19px 0 21px;
-}
-
-.about_image {
-  width: 688px;
 }
 
 .about_image:not(.tablet-image) {

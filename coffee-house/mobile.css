@@ -17,10 +17,6 @@ main {
   font-size: 32px;
 }
 
-.slider_button {
-  display: none;
-}
-
 .slider_image {
   width: 348px;
   height: 348px;
@@ -34,19 +30,19 @@ main {
   width: 100%;
 }
 
-.mobile_screens {
+/* .mobile_screens {
   width: 348px;
   height: 348px;
-}
+} */
 
 .mobile_buttons {
   flex-direction: column;
 }
 
-.offer_slogan,
+/* .offer_slogan,
 .offer_text {
   font-size: 32px;
-}
+} */
 
 .contacts {
   padding: 60px 16px;
