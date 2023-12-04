@@ -9,6 +9,16 @@
       type="image/x-icon"
       href="assets/icons/favicon-cupcake.png"
     />
+    <link
+      rel="stylesheet"
+      href="tablet.css"
+      media="screen and (max-width:768px)"
+    />
+    <link
+      rel="stylesheet"
+      href="mobile.css"
+      media="screen and (max-width:380px)"
+    />
     <title>Coffee House</title>
   </head>
   <body>
@@ -41,8 +51,27 @@
           <p class="menu_title">Menu</p>
           <img src="assets/icons/coffee-cup.svg" alt="Coffee cup" />
         </a>
+        <div class="burger_icon"></div>
       </header>
       <section class="hero">
+        <div class="burger">
+          <ul class="nav_list">
+            <li>
+              <a class="nav_item" href="#favorite-coffee">Favorite coffee</a>
+            </li>
+            <li><a class="nav_item" href="#about">About</a></li>
+            <li><a class="nav_item" href="#mobile-app">Mobile app</a></li>
+            <li><a class="nav_item" href="#contact-us">Contact us</a></li>
+          </ul>
+          <a href="./menu.html" class="burger_menu">
+            <p class="menu_title">Menu</p>
+            <img
+              class="menu_cup"
+              src="assets/icons/coffee-cup.svg"
+              alt="Coffee cup"
+            />
+          </a>
+        </div>
         <div class="hero_container">
           <h1 class="hero_title">
             <span class="title-headword">Enjoy</span> premium coffee at our
@@ -66,7 +95,8 @@
       </section>
       <section id="favorite-coffee" class="favorite-coffee">
         <h2 class="section_title">
-          Choose your <span class="title-headword">favorite</span> coffee
+          Choose your <span class="title-headword">favorite</span>
+          coffee
         </h2>
         <div class="slider">
           <button class="slider_button">
@@ -121,16 +151,15 @@
       </section>
       <section id="about" class="about">
         <h2 class="about_description">
-          Resource is the
-          <span class="title-headword">perfect and cozy place</span> where
-          <br />
+          Resource is
+          <span class="title-headword">the perfect and cozy place</span> where
           you can enjoy a variety of hot beverages, relax, catch up with
           friends, or get some work done.
         </h2>
         <div class="about_images">
           <div class="about_column">
             <img
-              class="about_image"
+              class="about_image tablet-image"
               src="assets/images/about-1.png"
               alt="Girl with coffee"
             />
@@ -147,7 +176,7 @@
               alt="Man with coffee"
             />
             <img
-              class="about_image"
+              class="about_image tablet-image"
               src="assets/images/about-4.png"
               alt="Couple with cups"
             />
@@ -207,18 +236,23 @@
                 />
               </svg>
               <span class="button_container">
-                <span class="button_hint">Available on the</span>
+                <span class="button_hint">Available on</span>
                 <span class="button_name">Google Play</span>
               </span>
             </button>
           </div>
         </div>
-        <img src="assets/images/mobile-screens.png" alt="Mobile screens" />
+        <img
+          class="mobile_screens"
+          src="assets/images/mobile-screens.png"
+          alt="Mobile screens"
+        />
       </section>
       <footer id="contact-us" class="contacts">
         <div class="offer">
-          <h3 class="offer_slogan">Sip, Savor, Smile.</h3>
-          <p class="offer_text">It’s coffee time!</p>
+          <h3 class="offer_slogan">
+            Sip, Savor, Smile.<span class="offer_text"> It’s coffee time!</span>
+          </h3>
           <div class="socials">
             <button class="contacts_button">
               <svg
@@ -299,5 +333,6 @@
         </div>
       </footer>
     </main>
+    <script src="burger.js"></script>
   </body>
 </html>

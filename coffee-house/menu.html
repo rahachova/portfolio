@@ -9,6 +9,16 @@
       type="image/x-icon"
       href="assets/icons/favicon-cupcake.png"
     />
+    <link
+      rel="stylesheet"
+      href="tablet.css"
+      media="screen and (max-width:768px)"
+    />
+    <link
+      rel="stylesheet"
+      href="mobile.css"
+      media="screen and (max-width:380px)"
+    />
     <title>Coffee House</title>
   </head>
   <body>
@@ -47,11 +57,30 @@
           <p class="menu_title">Menu</p>
           <img src="assets/icons/coffee-cup.svg" alt="Coffee cup" />
         </div>
+        <div class="burger_icon"></div>
       </header>
       <section class="menu">
-        <h1 class="section_title">
-          Behind each of our cups <br />
-          hides an <span class="title-headword">amazing surprise</span>
+        <div class="burger">
+          <ul class="nav_list">
+            <li>
+              <a class="nav_item" href="#favorite-coffee">Favorite coffee</a>
+            </li>
+            <li><a class="nav_item" href="#about">About</a></li>
+            <li><a class="nav_item" href="#mobile-app">Mobile app</a></li>
+            <li><a class="nav_item" href="#contact-us">Contact us</a></li>
+          </ul>
+          <a href="./menu.html" class="burger_menu">
+            <p class="menu_title">Menu</p>
+            <img
+              class="menu_cup"
+              src="assets/icons/coffee-cup.svg"
+              alt="Coffee cup"
+            />
+          </a>
+        </div>
+        <h1 class="title_menu">
+          Behind each of our cups hides an
+          <span class="title-headword">amazing surprise</span>
         </h1>
         <div class="tabs">
           <button id="coffee" class="tab tab--checked">
@@ -74,11 +103,34 @@
           </button>
         </div>
         <div class="menu_container"></div>
+        <button class="menu_refresh">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M21.8883 13.5C21.1645 18.3113 17.013 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C16.1006 2 19.6248 4.46819 21.1679 8"
+              stroke="#403F3D"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M17 8H21.4C21.7314 8 22 7.73137 22 7.4V3"
+              stroke="#403F3D"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
       </section>
       <footer id="contact-us" class="contacts">
         <div class="offer">
-          <h3 class="offer_slogan">Sip, Savor, Smile.</h3>
-          <p class="offer_text">It’s coffee time!</p>
+          <h3 class="offer_slogan">
+            Sip, Savor, Smile. <span class="offer_text">It’s coffee time!</span>
+          </h3>
           <div class="socials">
             <button class="contacts_button">
               <svg
@@ -159,5 +211,6 @@
       </footer>
     </main>
     <script src="index.js"></script>
+    <script src="burger.js"></script>
   </body>
 </html>

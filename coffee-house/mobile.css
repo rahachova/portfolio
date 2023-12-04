@@ -1,0 +1,80 @@
+main {
+  padding: 20px 16px;
+}
+
+.hero_title {
+  font-size: 42px;
+  line-height: 115%;
+}
+
+.hero {
+  padding: 60px 16px;
+  height: auto;
+}
+
+.section_title,
+.mobile_title {
+  font-size: 32px;
+}
+
+.slider_image {
+  width: 348px;
+  height: 348px;
+}
+
+.about_description {
+  font-size: 32px;
+}
+
+.about_image {
+  width: 100%;
+}
+
+/* .mobile_screens {
+  width: 348px;
+  height: 348px;
+} */
+
+.mobile_buttons {
+  flex-direction: column;
+}
+
+/* .offer_slogan,
+.offer_text {
+  font-size: 32px;
+} */
+
+.contacts {
+  padding: 60px 16px;
+  gap: 23px;
+}
+
+.offer {
+  gap: 40px;
+}
+
+.slider_name {
+  margin-bottom: 16px;
+}
+
+.slider_description {
+  line-height: 150%;
+}
+
+.slider_price {
+  margin-top: 17px;
+}
+
+.mobile-app {
+  gap: 42px;
+}
+
+/* Menu page */
+
+.tabs {
+  gap: 8px;
+}
+
+.section_title {
+  width: auto;
+}
