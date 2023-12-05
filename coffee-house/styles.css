@@ -1,6 +1,18 @@
 @font-face {
   font-family: "Inter";
-  src: url(assets/fonts/Inter-Regular.ttf);
+  src: url(assets/fonts/Inter-SemiBoldItalic.otf);
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url(assets/fonts/Inter-SemiBold.otf);
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url(assets/fonts/Inter-Regular.otf);
 }
 
 html {
