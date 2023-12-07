@@ -188,15 +188,26 @@ ul {
 .hero {
   position: relative;
   padding: 100px;
-  background-image: url("assets/images/hero.png");
+  /* background-image: url("assets/images/hero.png");
   background-size: cover;
-  background-position: center;
+  background-position: 0px -29px; */
   border-radius: 40px;
   max-width: 1360px;
   height: 644px;
 }
 
+.hero_video {
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 4rem;
+}
+
 .hero_container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -598,7 +609,6 @@ ul {
 /* Menu page */
 
 .menu {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;

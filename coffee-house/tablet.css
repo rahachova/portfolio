@@ -30,7 +30,7 @@
 }
 
 .hero {
-  position: static;
+  /* position: static; */
   background-position-x: center;
 }
 
