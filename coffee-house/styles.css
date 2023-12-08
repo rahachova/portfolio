@@ -750,6 +750,7 @@ ul {
   background-color: #e1d4c9;
   transition: width 0.3s ease;
   overflow: hidden;
+  z-index: 2;
 }
 
 .burger--shown {
@@ -917,4 +918,130 @@ ul {
   .title_menu {
     font-size: 32px;
   }
+}
+
+/* Modals */
+
+.modal {
+  width: 800px;
+  border: 1px solid #403f3d;
+  border-radius: 40px;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.modal_info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal_image {
+  width: 310px;
+  height: 310px;
+  border-radius: 40px;
+  object-fit: none;
+}
+
+.modal_name {
+  margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 125%;
+}
+
+.modal_text {
+  /* margin-bottom: 7px; */
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.modal_tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.modal_tab {
+  display: flex;
+  height: 46px;
+  padding: 0 14px 0 7px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 100px;
+  border: 1px solid #c1b6ad;
+  background-color: transparent;
+}
+
+.modal_tab-size-value {
+  letter-spacing: 1.6px;
+}
+
+.modal_tab-header {
+  margin-bottom: 8px;
+}
+
+.modal_tab-button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  padding: 4px 9px 3px 9px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 150%;
+  color: #403f3d;
+}
+
+.modal_tab-size {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 17px;
+  color: #403f3d;
+  letter-spacing: 0.2px;
+}
+
+.modal_total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 125%;
+}
+
+.modal_hint {
+  padding: 12px 0;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.modal_hint-icon {
+  min-width: 16px;
+}
+
+.hint_text {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.modal_close-button {
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  border: 1px solid #665f55;
+  width: 438px;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 150%;
 }
