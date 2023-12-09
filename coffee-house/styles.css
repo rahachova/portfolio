@@ -460,6 +460,12 @@ ul {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
+  .menu_load:hover {
+    background-color: #665f55;
+    border-color: #665f55;
+    stroke: #e1d4c9;
+  }
+
   .nav_item:hover::after {
     opacity: 1;
   }
@@ -726,7 +732,7 @@ ul {
   transition: color 0.4s;
 }
 
-.menu_refresh {
+.menu_load {
   display: none;
   width: 60px;
   height: 60px;
@@ -735,6 +741,12 @@ ul {
   border-radius: 100px;
   border: 1px solid #665f55;
   background-color: transparent;
+  stroke: #403f3d;
+  transition: all 0.4s;
+}
+
+.menu_load--shown {
+  display: flex;
 }
 
 .burger {

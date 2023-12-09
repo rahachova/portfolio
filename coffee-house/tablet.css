@@ -66,10 +66,10 @@
   justify-content: center;
 }
 
-.menu_item:nth-child(n + 5) {
+.menu_container--collapsed .menu_item:nth-child(n + 5) {
   display: none;
 }
 
-.menu_refresh {
+/* .menu_load {
   display: flex;
-}
+} */
