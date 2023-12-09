@@ -150,6 +150,8 @@ const FULL_MENU = {
 const menuContainer = document.querySelector(".menu_container");
 const tabs = [...document.querySelectorAll(".tab")];
 
+let currentTab = tabs[0];
+
 function createMenuItem(menu) {
   const item = document.createElement("div");
   item.classList.add("menu_item");
@@ -180,8 +182,10 @@ menuContainer.append(...FULL_MENU.coffee.map(createMenuItem));
 // });
 
 tabs.forEach((tab) => {
-  tab.addEventListener("click", (event) => {
+  tab.addEventListener("click", () => {
     menuContainer.replaceChildren(...FULL_MENU[tab.id].map(createMenuItem));
-    console.log(event.target === tab);
+    currentTab.classList.remove("tab--checked");
+    tab.classList.add("tab--checked");
+    currentTab = tab;
   });
 });
