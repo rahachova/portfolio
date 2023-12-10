@@ -1,4 +1,3 @@
-const body = document.querySelector("body");
 const burger = document.querySelector(".burger");
 const burgerIcon = document.querySelector(".burger_icon");
 

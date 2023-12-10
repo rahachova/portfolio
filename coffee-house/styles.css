@@ -460,6 +460,12 @@ ul {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
+  .modal_close-button:hover {
+    background-color: #665f55;
+    border-color: #665f55;
+    color: #e1d4c9;
+  }
+
   .menu_load:hover {
     background-color: #665f55;
     border-color: #665f55;
@@ -701,6 +707,7 @@ ul {
   cursor: pointer;
 }
 
+.modal_tab.tab--checked,
 .tab--checked {
   background-color: #665f55;
   cursor: auto;
@@ -934,14 +941,31 @@ ul {
 
 /* Modals */
 
+.modals {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000096;
+}
+
+.modals--shown {
+  display: flex;
+}
+
 .modal {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
   width: 800px;
   border: 1px solid #403f3d;
   border-radius: 40px;
   padding: 16px;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
+  background-color: #e1d4c9;
 }
 
 .modal_info {
@@ -965,7 +989,6 @@ ul {
 }
 
 .modal_text {
-  /* margin-bottom: 7px; */
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
@@ -986,6 +1009,7 @@ ul {
   border-radius: 100px;
   border: 1px solid #c1b6ad;
   background-color: transparent;
+  transition: all 0.2s ease-out;
 }
 
 .modal_tab-size-value {
@@ -1053,7 +1077,18 @@ ul {
   border: 1px solid #665f55;
   width: 438px;
   background-color: transparent;
+  font-family: Inter;
+  color: #403f3d;
   font-size: 16px;
   font-weight: 600;
   line-height: 150%;
+  transition: all 0.2s ease-out;
+}
+
+.modal_tab-size-value.tab--checked {
+  color: #e1d4c9;
+}
+
+.modal_tab-size.tab--checked {
+  color: #e1d4c9;
 }
