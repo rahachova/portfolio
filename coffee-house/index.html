@@ -55,7 +55,7 @@
       </header>
       <section class="hero">
         <video class="hero_video" autoplay="" loop="" muted="">
-          <source src="/assets/video/hero_video.mp4" type="video/mp4" />
+          <source src="./assets/video/hero_video.mp4" type="video/mp4" />
         </video>
         <div class="hero_container">
           <h1 class="hero_title">
@@ -84,7 +84,7 @@
           coffee
         </h2>
         <div class="slider">
-          <button class="slider_button">
+          <button id="left_arrow" class="slider_button">
             <svg
               class="slider_arrow"
               width="24"
@@ -99,20 +99,23 @@
               />
             </svg>
           </button>
-          <div class="slider_item">
-            <img
-              class="slider_image"
-              src="assets/images/s'mores-frappuccino.png"
-              alt="S'mores frappuccino"
-            />
-            <h3 class="slider_name">S’mores Frappuccino</h3>
-            <p class="slider_description">
-              This new drink takes an espresso and mixes it with brown sugar and
-              cinnamon before being topped with oat milk.
-            </p>
-            <p class="slider_price">$5.50</p>
+          <div class="slider_wrapper">
+            <div class="slider_item">
+              <img
+                class="slider_image"
+                src="assets/images/s'mores-frappuccino.png"
+                alt="S'mores frappuccino"
+              />
+              <h3 class="slider_name">S’mores Frappuccino</h3>
+              <p class="slider_description">
+                This new drink takes an espresso and mixes it with brown sugar
+                and cinnamon before being topped with oat milk.
+              </p>
+              <p class="slider_price">$5.50</p>
+            </div>
           </div>
-          <button class="slider_button">
+
+          <button id="right_arrow" class="slider_button">
             <svg
               class="slider_arrow"
               width="24"
@@ -337,5 +340,7 @@
       </div>
     </main>
     <script src="burger.js"></script>
+    <script src="constants.js"></script>
+    <!-- <script src="slider.js"></script> -->
   </body>
 </html>
