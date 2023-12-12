@@ -275,10 +275,19 @@ ul {
 }
 
 .slider {
+  /* position: relative; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-self: normal;
+}
+
+.slider_wrapper {
+  display: flex;
+  /* position: absolute; */
+  width: 480px;
+  height: 640px;
+  overflow: hidden;
 }
 
 .slider_arrow {
@@ -937,6 +946,10 @@ ul {
   .title_menu {
     font-size: 32px;
   }
+
+  .modal_image {
+    display: none;
+  }
 }
 
 /* Modals */
@@ -975,7 +988,7 @@ ul {
 }
 
 .modal_image {
-  width: 310px;
+  width: 49%;
   height: 310px;
   border-radius: 40px;
   object-fit: none;
@@ -1056,6 +1069,7 @@ ul {
   display: flex;
   flex-direction: row;
   gap: 8px;
+  border-top: 1px solid #c1b6ad;
 }
 
 .modal_hint-icon {
@@ -1075,7 +1089,7 @@ ul {
   align-items: center;
   border-radius: 100px;
   border: 1px solid #665f55;
-  width: 438px;
+  max-width: 438px;
   background-color: transparent;
   font-family: Inter;
   color: #403f3d;
@@ -1085,10 +1099,7 @@ ul {
   transition: all 0.2s ease-out;
 }
 
-.modal_tab-size-value.tab--checked {
-  color: #e1d4c9;
-}
-
-.modal_tab-size.tab--checked {
+.tab--checked .modal_tab-size-value,
+.tab--checked .modal_tab-size {
   color: #e1d4c9;
 }

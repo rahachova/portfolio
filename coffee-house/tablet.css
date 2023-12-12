@@ -70,6 +70,12 @@
   display: none;
 }
 
-/* .menu_load {
-  display: flex;
-} */
+/* Modal */
+
+.modals {
+  padding: 0 40px;
+}
+
+.modal_tabs {
+  flex-wrap: wrap;
+}

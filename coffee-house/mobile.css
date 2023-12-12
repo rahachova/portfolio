@@ -78,3 +78,7 @@ main {
 .section_title {
   width: auto;
 }
+
+.modals {
+  padding: 0;
+}

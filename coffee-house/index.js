@@ -6,6 +6,8 @@ const modalsOverlay = document.querySelector(".modals");
 
 let modal;
 
+let currentTabChecked;
+
 let currentPrice = 0;
 let sizePrice = 0;
 let currentModalTotalPriceElement;
@@ -108,12 +110,14 @@ function createModalSizeButtons(sizes) {
     modalTab.append(modalTabButton, modalTabButtonSize);
     if (sizeData.checked) {
       modalTab.classList.add("tab--checked");
-      modalTabButtonValue.classList.add("tab--checked");
-      modalTabButtonSize.classList.add("tab--checked");
+      currentTabChecked = modalTab;
     }
     modalTab.addEventListener("click", () => {
+      currentTabChecked.classList.remove("tab--checked");
       sizePrice = sizeData.sizePrice;
       recalculate();
+      modalTab.classList.add("tab--checked");
+      currentTabChecked = modalTab;
     });
 
     return modalTab;
