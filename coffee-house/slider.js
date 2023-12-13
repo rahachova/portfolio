@@ -1,6 +1,10 @@
 const sliderWrapper = document.querySelector(".slider_wrapper");
 const leftArrow = document.getElementById("left_arrow");
 const rightArrow = document.getElementById("right_arrow");
+const controls = document.querySelectorAll(".control-progress");
+
+let sliderInterval;
+let currentControl;
 
 function createSliderItem(slide) {
   const sliderItem = document.createElement("div");
@@ -28,26 +32,61 @@ function createSliderItem(slide) {
   return sliderItem;
 }
 
-sliderWrapper.append(...CAROUSEL.map(createSliderItem));
+const slides = CAROUSEL.map(createSliderItem);
+
+sliderWrapper.append(...slides);
 
 function switchRightArrow() {
   const leftValue = parseInt(sliderWrapper.style.left) || 0;
-  if (leftValue > -960) {
-    sliderWrapper.style.left = leftValue - 480 + "px";
+  if (leftValue === 0) {
+    sliderWrapper.style.left = "-480px";
+    runProgressBar(controls[1]);
+  } else if (leftValue === -480) {
+    sliderWrapper.style.left = "-960px";
+    runProgressBar(controls[2]);
   } else {
     sliderWrapper.style.left = 0;
+    runProgressBar(controls[0]);
   }
+  runAutoSwitchSliderItem();
 }
 
 function switchLeftArrow() {
   const leftValue = parseInt(sliderWrapper.style.left) || 0;
-  if (leftValue < 0) {
-    sliderWrapper.style.left = leftValue + 480 + "px";
-  } else {
-    sliderWrapper.style.left = -960 + "px";
+  if (leftValue === 0) {
+    sliderWrapper.style.left = "-960px";
+    runProgressBar(controls[2]);
+  } else if (leftValue === -480) {
+    sliderWrapper.style.left = "0";
+    runProgressBar(controls[0]);
+  } else if (leftValue === -960) {
+    sliderWrapper.style.left = "-480px";
+    runProgressBar(controls[1]);
   }
+  runAutoSwitchSliderItem();
 }
-
 
 rightArrow.addEventListener("click", switchRightArrow);
 leftArrow.addEventListener("click", switchLeftArrow);
+
+function runAutoSwitchSliderItem() {
+  if (sliderInterval) {
+    clearInterval(sliderInterval);
+  }
+  sliderInterval = setInterval(() => {
+    switchRightArrow();
+  }, 5000);
+}
+
+function runProgressBar(control) {
+  if (currentControl) {
+    currentControl.classList.remove("control-progress--active");
+  }
+  control.classList.add("control-progress--active");
+  currentControl = control;
+}
+
+// Init:
+
+runAutoSwitchSliderItem();
+runProgressBar(controls[0]);

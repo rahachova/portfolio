@@ -355,8 +355,17 @@ ul {
   background-color: #c1b6ad;
 }
 
-.control--active {
+.control-progress {
+  display: block;
+  width: 0;
+  height: 4px;
+  border-radius: 100px;
   background-color: #665f55;
+}
+
+.control-progress--active {
+  width: 100%;
+  transition: all 5s linear;
 }
 
 .about_description {
