@@ -32,8 +32,10 @@ sliderWrapper.append(...CAROUSEL.map(createSliderItem));
 
 function switchRightArrow() {
   const leftValue = parseInt(sliderWrapper.style.left) || 0;
-  if (leftValue > -1900) {
+  if (leftValue > -960) {
     sliderWrapper.style.left = leftValue - 480 + "px";
+  } else {
+    sliderWrapper.style.left = 0;
   }
 }
 
@@ -41,8 +43,11 @@ function switchLeftArrow() {
   const leftValue = parseInt(sliderWrapper.style.left) || 0;
   if (leftValue < 0) {
     sliderWrapper.style.left = leftValue + 480 + "px";
+  } else {
+    sliderWrapper.style.left = -960 + "px";
   }
 }
+
 
 rightArrow.addEventListener("click", switchRightArrow);
 leftArrow.addEventListener("click", switchLeftArrow);

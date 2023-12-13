@@ -19,4 +19,10 @@ function handleResize() {
 }
 burgerIcon.addEventListener("click", toggleBurger);
 
+burger.addEventListener("click", (event) => {
+  if (event.target !== burger) {
+    toggleBurger();
+  }
+});
+
 window.addEventListener("resize", handleResize);

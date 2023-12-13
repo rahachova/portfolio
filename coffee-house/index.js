@@ -140,8 +140,15 @@ function createModalAdditives(additives) {
     modalTab.append(modalTabButton, modalTabButtonText);
 
     modalTab.addEventListener("click", () => {
-      additionsSelected++;
-      recalculate();
+      if (modalTab.classList.contains("tab--checked")) {
+        modalTab.classList.remove("tab--checked");
+        additionsSelected--;
+        recalculate();
+      } else {
+        modalTab.classList.toggle("tab--checked");
+        additionsSelected++;
+        recalculate();
+      }
     });
 
     return modalTab;
