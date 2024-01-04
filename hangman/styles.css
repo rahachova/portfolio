@@ -1,0 +1,91 @@
+p {
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-name {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: blue;
+}
+
+.playing-field {
+  padding: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 100px;
+  border: 1px solid #000;
+}
+
+.user-iteraction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.entry-field {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.entry-field_letter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000;
+  font-size: 32px;
+}
+
+.hint {
+  font-size: 20px;
+}
+
+.move-counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  max-width: 530px;
+  flex-wrap: wrap;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: #7292f1;
+    transform: scale(0.9);
+    cursor: pointer;
+  }
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #3565f3;
+  color: aliceblue;
+  border-radius: 5px;
+  font-size: 26px;
+  transition: all 0.3s ease-out;
+}
