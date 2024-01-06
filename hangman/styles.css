@@ -2,6 +2,10 @@ p {
   margin: 0;
 }
 
+* {
+  font-family: monospace;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -13,12 +17,60 @@ main {
   color: blue;
 }
 
+.gallows {
+  max-width: 353px;
+  max-height: 581px;
+}
+
+.gallows_wrapper {
+  position: relative;
+}
+
+.gallows_head,
+.gallows_body,
+.gallows_hand-one,
+.gallows_hand-two,
+.gallows_leg-one,
+.gallows_leg-two {
+  position: absolute;
+}
+
+.gallows_head {
+  right: 0;
+  top: 140px;
+}
+
+.gallows_body {
+  right: 48px;
+  bottom: 213px;
+}
+
+.gallows_hand-one {
+  right: 49px;
+  bottom: 240px;
+}
+
+.gallows_hand-two {
+  right: -17px;
+  bottom: 240px;
+}
+
+.gallows_leg-one {
+  bottom: 135px;
+  right: 49px;
+}
+
+.gallows_leg-two {
+  bottom: 135px;
+  right: -17px;
+}
+
 .playing-field {
   padding: 40px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 100px;
+  gap: 150px;
   border: 1px solid #000;
 }
 
@@ -46,8 +98,13 @@ main {
   font-size: 32px;
 }
 
-.hint {
+.hint_wrapper {
   font-size: 20px;
+  text-align: center;
+}
+
+.hint_description {
+  font-weight: 800;
 }
 
 .move-counter {
@@ -68,14 +125,6 @@ main {
   flex-wrap: wrap;
 }
 
-@media (hover: hover) {
-  .button:hover {
-    background-color: #7292f1;
-    transform: scale(0.9);
-    cursor: pointer;
-  }
-}
-
 .button {
   display: flex;
   flex-direction: column;
@@ -88,4 +137,59 @@ main {
   border-radius: 5px;
   font-size: 26px;
   transition: all 0.3s ease-out;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: #7292f1;
+    transform: scale(0.9);
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 850px) {
+  .gallows {
+    width: 200px;
+    height: auto;
+  }
+
+  .gallows_head {
+    width: 60px;
+    height: 60px;
+    right: -2px;
+    top: 84px;
+  }
+
+  .gallows_body {
+    height: 80px;
+    right: 27px;
+    bottom: 110px;
+  }
+
+  .gallows_hand-one,
+  .gallows_hand-two,
+  .gallows_leg-one,
+  .gallows_leg-two {
+    height: 50px;
+  }
+
+  .gallows_leg-one {
+    bottom: 62px;
+    right: 28px;
+  }
+
+  .gallows_leg-two {
+    bottom: 62px;
+    right: -13px;
+  }
+
+  .gallows_hand-one {
+    bottom: 123px;
+    right: 28px;
+  }
+
+  .gallows_hand-two {
+    bottom: 123px;
+    right: -13px;
+  }
 }
