@@ -5,6 +5,9 @@ const arrayOfLetters = [
   "D",
   "E",
   "F",
+  "G",
+  "H",
+  "I",
   "J",
   "K",
   "L",
@@ -103,6 +106,7 @@ const body = document.querySelector("body");
 
 let currentTask;
 let letterContainers;
+let failAttempts = 0;
 
 function generateCurrentTask() {
   const randomTask =
@@ -123,6 +127,7 @@ function createGallows(elementInfo) {
   return gallowsElement;
 }
 
+
 function createLetterContainers(currentTask) {
   return currentTask.answer.map(() => {
     const letterContainer = document.createElement("span");
@@ -131,11 +136,24 @@ function createLetterContainers(currentTask) {
   });
 }
 
+function takeTurn(letter) {
+  const matchIndices = currentTask.answer.reduce((accum, element, index) => {
+    if (element === letter) {
+      accum.push(index);
+    }
+    return accum;
+  }, []);
+  matchIndices.forEach((matchIndex) => {
+    letterContainers[matchIndex].textContent = letter;
+  });
+}
+
 function createKeyboard(arrayOfLetters) {
-  return arrayOfLetters.map((_, index) => {
+  return arrayOfLetters.map((letter) => {
     const button = document.createElement("button");
     button.classList.add("button");
-    button.textContent = arrayOfLetters[index];
+    button.textContent = letter;
+    button.addEventListener("click", () => takeTurn(letter));
     return button;
   });
 }
@@ -182,7 +200,7 @@ function initGame() {
   const hintText = document.createElement("span");
   hintText.textContent = "Hint: ";
   const hintDescription = document.createElement("span");
-  hintDescription.classList.add('hint_description')
+  hintDescription.classList.add("hint_description");
   hintDescription.textContent = currentTask.question;
   hintWrapper.append(hintText, hintDescription);
 
