@@ -6,6 +6,10 @@ p {
   font-family: monospace;
 }
 
+body {
+  position: relative;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -33,6 +37,12 @@ main {
 .gallows_leg-one,
 .gallows_leg-two {
   position: absolute;
+  opacity: 0;
+  transition: all 0.5s ease-out;
+}
+
+.show-element {
+  opacity: 1;
 }
 
 .gallows_head {
@@ -71,7 +81,8 @@ main {
   flex-direction: row;
   align-items: center;
   gap: 150px;
-  border: 1px solid #000;
+  border: 3px solid #b8b8b8;
+  border-radius: 10px;
 }
 
 .user-iteraction {
@@ -116,6 +127,10 @@ main {
   font-size: 20px;
 }
 
+.counter {
+  color: red;
+}
+
 .keyboard {
   display: flex;
   flex-direction: row;
@@ -139,8 +154,40 @@ main {
   transition: all 0.3s ease-out;
 }
 
+.button--disabled {
+  background-color: #f17272;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+.modal {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 10px 10px 5px #888888;
+  border-radius: 5px;
+  border: 1px solid #000;
+  font-size: 26px;
+}
+
+.button_play-again {
+  padding: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 18px;
+  background-color: rgb(210, 249, 198);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 @media (hover: hover) {
-  .button:hover {
+  .button:not(.button--disabled):hover {
     background-color: #7292f1;
     transform: scale(0.9);
     cursor: pointer;

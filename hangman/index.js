@@ -127,7 +127,6 @@ function createGallows(elementInfo) {
   return gallowsElement;
 }
 
-
 function createLetterContainers(currentTask) {
   return currentTask.answer.map(() => {
     const letterContainer = document.createElement("span");
@@ -136,26 +135,77 @@ function createLetterContainers(currentTask) {
   });
 }
 
-function takeTurn(letter) {
-  const matchIndices = currentTask.answer.reduce((accum, element, index) => {
-    if (element === letter) {
-      accum.push(index);
-    }
-    return accum;
-  }, []);
-  matchIndices.forEach((matchIndex) => {
-    letterContainers[matchIndex].textContent = letter;
-  });
-}
+// function takeTurn(letter) {
+//   console.log(letter);
+//   console.log(currentTask);
+//   const matchIndices = currentTask.answer.reduce((accum, element, index) => {
+//     if (element === letter) {
+//       accum.push(index);
+//     }
+//     return accum;
+//   }, []);
+//   matchIndices.forEach((matchIndex) => {
+//     letterContainers[matchIndex].textContent = letter;
+//   });
+
+//   if (matchIndices.length === 0) {
+//     failAttempts++;
+//     showGallowsElement(failAttempts);
+//   }
+// }
+
+// function showGallowsElement(failAttempts) {
+//   switch (failAttempts) {
+//     case 1:
+//       gallowsHead.classList.add("show-element");
+//       break;
+//     case 2:
+//       gallowsBody.classList.add("show-element");
+//       break;
+//     case 3:
+//       gallowsHandOne.classList.add("show-element");
+//       break;
+//     case 4:
+//       gallowsHandTwo.classList.add("show-element");
+//       break;
+//     case 5:
+//       gallowsLegOne.classList.add("show-element");
+//       break;
+//     case 6:
+//       gallowsLegTwo.classList.add("show-element");
+//       break;
+//   }
+// }
 
 function createKeyboard(arrayOfLetters) {
   return arrayOfLetters.map((letter) => {
     const button = document.createElement("button");
     button.classList.add("button");
     button.textContent = letter;
-    button.addEventListener("click", () => takeTurn(letter));
+    button.addEventListener("click", () => {
+      takeTurn(letter);
+      button.classList.add("button--disabled");
+    });
     return button;
   });
+}
+
+function createModal() {
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+  const notice = document.createElement("p");
+  notice.classList.add("notice");
+  notice.textContent = "You are winner! Congratulation!";
+
+  const secretWord = document.createElement("p");
+  secretWord.textContent = `Secret word: ${currentTask.answer.join("")}`;
+
+  const buttonPlayAgain = document.createElement("button");
+  buttonPlayAgain.classList.add("button_play-again");
+  buttonPlayAgain.textContent = "Play again";
+
+  modal.append(notice, secretWord, buttonPlayAgain);
+  return modal;
 }
 
 function initGame() {
@@ -209,7 +259,8 @@ function initGame() {
   const counterText = document.createElement("p");
   const text = document.createTextNode("Incorrect guesses: ");
   const counter = document.createElement("span");
-  counter.textContent = "0";
+  counter.classList.add("counter");
+  counter.textContent = failAttempts;
   counter.id = "counter";
   const moveQuantity = document.createTextNode(" / 6");
 
@@ -230,3 +281,53 @@ function initGame() {
 }
 
 body.appendChild(initGame());
+
+const gallowsHead = document.querySelector(".gallows_head");
+const gallowsBody = document.querySelector(".gallows_body");
+const gallowsHandOne = document.querySelector(".gallows_hand-one");
+const gallowsHandTwo = document.querySelector(".gallows_hand-two");
+const gallowsLegOne = document.querySelector(".gallows_leg-one");
+const gallowsLegTwo = document.querySelector(".gallows_leg-two");
+
+function takeTurn(letter) {
+  const matchIndices = currentTask.answer.reduce((accum, element, index) => {
+    if (element === letter) {
+      accum.push(index);
+    }
+    return accum;
+  }, []);
+  matchIndices.forEach((matchIndex) => {
+    letterContainers[matchIndex].textContent = letter;
+  });
+
+  if (matchIndices.length === 0) {
+    failAttempts++;
+    showGallowsElement(failAttempts);
+    counter.textContent = failAttempts;
+  }
+}
+
+function showGallowsElement(failAttempts) {
+  switch (failAttempts) {
+    case 1:
+      gallowsHead.classList.add("show-element");
+      break;
+    case 2:
+      gallowsBody.classList.add("show-element");
+      break;
+    case 3:
+      gallowsHandOne.classList.add("show-element");
+      break;
+    case 4:
+      gallowsHandTwo.classList.add("show-element");
+      break;
+    case 5:
+      gallowsLegOne.classList.add("show-element");
+      break;
+    case 6:
+      gallowsLegTwo.classList.add("show-element");
+      break;
+  }
+}
+
+body.appendChild(createModal());
