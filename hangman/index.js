@@ -103,6 +103,8 @@ const gallowsComponents = [
 ];
 
 const body = document.querySelector("body");
+const modal = document.querySelector(".modal");
+// const main = document.querySelector("main");
 
 let currentTask;
 let letterContainers;
@@ -195,7 +197,11 @@ function createModal() {
   modal.classList.add("modal");
   const notice = document.createElement("p");
   notice.classList.add("notice");
-  notice.textContent = "You are winner! Congratulation!";
+  if (failAttempts === 6) {
+    notice.textContent = "You lose! :(";
+  } else if (isLetterContainersFull()) {
+    notice.textContent = "You are winner! Congratulation!";
+  }
 
   const secretWord = document.createElement("p");
   secretWord.textContent = `Secret word: ${currentTask.answer.join("")}`;
@@ -203,6 +209,7 @@ function createModal() {
   const buttonPlayAgain = document.createElement("button");
   buttonPlayAgain.classList.add("button_play-again");
   buttonPlayAgain.textContent = "Play again";
+  buttonPlayAgain.addEventListener("click", () => playAgain());
 
   modal.append(notice, secretWord, buttonPlayAgain);
   return modal;
@@ -305,6 +312,15 @@ function takeTurn(letter) {
     showGallowsElement(failAttempts);
     counter.textContent = failAttempts;
   }
+  if (failAttempts === 6 || isLetterContainersFull()) {
+    main.appendChild(createModal());
+  }
+}
+
+function isLetterContainersFull() {
+  return letterContainers.every(
+    (container) => !!container.textContent === true
+  );
 }
 
 function showGallowsElement(failAttempts) {
@@ -330,4 +346,12 @@ function showGallowsElement(failAttempts) {
   }
 }
 
-body.appendChild(createModal());
+function playAgain() {
+  if (main) {
+    body.removeChild(main);
+  }
+  failAttempts = 0;
+  body.appendChild(initGame());
+}
+
+const main = document.querySelector("main");
