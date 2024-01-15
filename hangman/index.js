@@ -24,7 +24,7 @@ const arrayOfLetters = [
   "W",
   "X",
   "Y",
-  "X",
+  "Z",
 ];
 const questionsInfo = [
   {
@@ -103,20 +103,30 @@ const gallowsComponents = [
 ];
 
 const body = document.querySelector("body");
-const modal = document.querySelector(".modal");
-// const main = document.querySelector("main");
 
 let currentTask;
+let mainGameElement;
 let letterContainers;
 let failAttempts = 0;
 
+let gallowsHead;
+let gallowsBody;
+let gallowsHandOne;
+let gallowsHandTwo;
+let gallowsLegOne;
+let gallowsLegTwo;
+
+let keyboard;
+
 function generateCurrentTask() {
+  const lastActiveTask = localStorage.getItem("lastActiveTask");
   const randomTask =
     questionsInfo[Math.floor(Math.random() * questionsInfo.length)];
-  if (currentTask === randomTask) {
+  if (currentTask === randomTask || lastActiveTask === randomTask.question) {
     generateCurrentTask();
   } else {
     currentTask = randomTask;
+    localStorage.setItem("lastActiveTask", currentTask.question);
   }
 }
 
@@ -137,50 +147,8 @@ function createLetterContainers(currentTask) {
   });
 }
 
-// function takeTurn(letter) {
-//   console.log(letter);
-//   console.log(currentTask);
-//   const matchIndices = currentTask.answer.reduce((accum, element, index) => {
-//     if (element === letter) {
-//       accum.push(index);
-//     }
-//     return accum;
-//   }, []);
-//   matchIndices.forEach((matchIndex) => {
-//     letterContainers[matchIndex].textContent = letter;
-//   });
-
-//   if (matchIndices.length === 0) {
-//     failAttempts++;
-//     showGallowsElement(failAttempts);
-//   }
-// }
-
-// function showGallowsElement(failAttempts) {
-//   switch (failAttempts) {
-//     case 1:
-//       gallowsHead.classList.add("show-element");
-//       break;
-//     case 2:
-//       gallowsBody.classList.add("show-element");
-//       break;
-//     case 3:
-//       gallowsHandOne.classList.add("show-element");
-//       break;
-//     case 4:
-//       gallowsHandTwo.classList.add("show-element");
-//       break;
-//     case 5:
-//       gallowsLegOne.classList.add("show-element");
-//       break;
-//     case 6:
-//       gallowsLegTwo.classList.add("show-element");
-//       break;
-//   }
-// }
-
 function createKeyboard(arrayOfLetters) {
-  return arrayOfLetters.map((letter) => {
+  keyboard = arrayOfLetters.map((letter) => {
     const button = document.createElement("button");
     button.classList.add("button");
     button.textContent = letter;
@@ -190,9 +158,12 @@ function createKeyboard(arrayOfLetters) {
     });
     return button;
   });
+  return keyboard;
 }
 
 function createModal() {
+  const modalWrapper = document.createElement("div");
+  modalWrapper.classList.add("modal_wrapper");
   const modal = document.createElement("div");
   modal.classList.add("modal");
   const notice = document.createElement("p");
@@ -204,6 +175,7 @@ function createModal() {
   }
 
   const secretWord = document.createElement("p");
+  secretWord.classList.add("notice");
   secretWord.textContent = `Secret word: ${currentTask.answer.join("")}`;
 
   const buttonPlayAgain = document.createElement("button");
@@ -212,7 +184,8 @@ function createModal() {
   buttonPlayAgain.addEventListener("click", () => playAgain());
 
   modal.append(notice, secretWord, buttonPlayAgain);
-  return modal;
+  modalWrapper.appendChild(modal);
+  return { modalWrapper, buttonPlayAgain };
 }
 
 function initGame() {
@@ -239,6 +212,13 @@ function initGame() {
 
   const [head, body, handOne, handTwo, legOne, legTwo] =
     gallowsComponents.map(createGallows);
+
+  gallowsHead = head;
+  gallowsBody = body;
+  gallowsHandOne = handOne;
+  gallowsHandTwo = handTwo;
+  gallowsLegOne = legOne;
+  gallowsLegTwo = legTwo;
 
   gallowsWrapper.append(gallows, head, body, handOne, handTwo, legOne, legTwo);
 
@@ -284,17 +264,9 @@ function initGame() {
   playingField.append(gallowsWrapper, userIteraction);
 
   main.append(gameName, gameStart, playingField);
+  mainGameElement = main;
   return main;
 }
-
-body.appendChild(initGame());
-
-const gallowsHead = document.querySelector(".gallows_head");
-const gallowsBody = document.querySelector(".gallows_body");
-const gallowsHandOne = document.querySelector(".gallows_hand-one");
-const gallowsHandTwo = document.querySelector(".gallows_hand-two");
-const gallowsLegOne = document.querySelector(".gallows_leg-one");
-const gallowsLegTwo = document.querySelector(".gallows_leg-two");
 
 function takeTurn(letter) {
   const matchIndices = currentTask.answer.reduce((accum, element, index) => {
@@ -313,7 +285,9 @@ function takeTurn(letter) {
     counter.textContent = failAttempts;
   }
   if (failAttempts === 6 || isLetterContainersFull()) {
-    main.appendChild(createModal());
+    const { modalWrapper, buttonPlayAgain } = createModal();
+    mainGameElement.appendChild(modalWrapper);
+    buttonPlayAgain.focus();
   }
 }
 
@@ -347,11 +321,17 @@ function showGallowsElement(failAttempts) {
 }
 
 function playAgain() {
-  if (main) {
-    body.removeChild(main);
-  }
   failAttempts = 0;
+  body.removeChild(mainGameElement);
   body.appendChild(initGame());
 }
 
-const main = document.querySelector("main");
+body.appendChild(initGame());
+
+document.addEventListener("keydown", (e) => {
+  const index = arrayOfLetters.indexOf(e.key.toLocaleUpperCase());
+  if (arrayOfLetters.includes(e.key.toLocaleUpperCase())) {
+    takeTurn(e.key.toLocaleUpperCase());
+    keyboard[index].classList.add("button--disabled");
+  }
+});
