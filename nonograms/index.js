@@ -50,9 +50,9 @@ let currentCells;
 let currentCellsData;
 
 function createPlayField(matrix) {
-  const playField = document.createElement("h2");
+  const playField = document.createElement("div");
   playField.classList.add("play-field");
-  const gameName = document.createElement("h1");
+  const gameName = document.createElement("h2");
   gameName.textContent = "Nonograms";
   const cellContainer = document.createElement("div");
   cellContainer.classList.add("cell-container");
@@ -60,8 +60,39 @@ function createPlayField(matrix) {
   cellContainer.append(...currentCells);
   cellContainer.addEventListener("click", handleLeftClick);
   cellContainer.addEventListener("contextmenu", handleRightClick);
-  playField.append(gameName, cellContainer);
+
+  const resetButton = document.createElement("button");
+  resetButton.textContent = "Reset game";
+  resetButton.addEventListener("click", resetGame);
+  playField.append(gameName, cellContainer, resetButton);
+
+  // const modalWrapper = document.createElement("div");
+  // modalWrapper.classList.add("modal_wrapper");
+  // const modal = document.createElement("div");
+  // modal.classList.add("modal");
+
+  // const modalText = document.createElement("p");
+  // modalText.textContent = "Great! You have solved the nonogram!";
+
+  // const button = document.createElement("button");
+  // button.textContent = "Close";
+
+  // modal.append(modalText, button);
+  // modalWrapper.appendChild(modal);
+
+  // main.appendChild(modalWrapper);
+
   main.appendChild(playField);
+}
+
+function resetGame() {
+  currentCells.forEach((cell) => {
+    cell.classList.remove("cell--selected");
+    cell.textContent = "";
+  });
+  currentCellsData.forEach((cellData) => {
+    cellData.selected = false;
+  });
 }
 
 function handleRightClick(event) {
@@ -81,6 +112,10 @@ function handleLeftClick(event) {
     }
   }
 }
+
+// function createModal() {
+//   const modal = document.createElement('div')
+// }
 
 function isGameWon() {
   return currentCellsData.every((cellData) => {
