@@ -1,51 +1,82 @@
 const easyGame = {
   heart: [
     [
-      { value: 0, selected: false },
-      { value: 1, selected: false },
-      { value: 0, selected: false },
-      { value: 1, selected: false },
-      { value: 0, selected: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
     ],
     [
-      { value: 1, selected: false },
-      { value: 1, selected: false },
-      { value: 1, selected: false },
-      { value: 1, selected: false },
-      { value: 1, selected: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
     ],
     [
-      { value: 0, selected: false },
-      { value: 1, selected: false },
-      { value: 1, selected: false },
-      { value: 1, selected: false },
-      { value: 0, selected: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
     ],
     [
-      { value: 0, selected: false },
-      { value: 0, selected: false },
-      { value: 1, selected: false },
-      { value: 0, selected: false },
-      { value: 0, selected: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
     ],
     [
-      { value: 0, selected: false },
-      { value: 0, selected: false },
-      { value: 0, selected: false },
-      { value: 0, selected: false },
-      { value: 0, selected: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
     ],
   ],
   crown: [
-    [0, 0, 0, 0, 0],
-    [1, 0, 1, 0, 1],
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0],
+    [
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+    ],
+    [
+      { value: 1, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+    ],
+    [
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+    ],
+    [
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+      { value: 1, selected: false, crossed: false },
+    ],
+    [
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+      { value: 0, selected: false, crossed: false },
+    ],
   ],
 };
 
 const main = document.querySelector("main");
+const body = document.querySelector("body");
 let currentCells;
 let currentCellsData;
 
@@ -54,6 +85,7 @@ function createPlayField(matrix) {
   playField.classList.add("play-field");
   const gameName = document.createElement("h2");
   gameName.textContent = "Nonograms";
+  gameName.classList.add("game-name");
   const cellContainer = document.createElement("div");
   cellContainer.classList.add("cell-container");
   currentCells = createCells(matrix);
@@ -61,10 +93,45 @@ function createPlayField(matrix) {
   cellContainer.addEventListener("click", handleLeftClick);
   cellContainer.addEventListener("contextmenu", handleRightClick);
 
+  const saveButton = document.createElement("button");
+  saveButton.textContent = "Save game";
+  saveButton.classList.add("button");
+  saveButton.addEventListener("click", () => {
+    localStorage.setItem("saving", JSON.stringify(currentCellsData));
+  });
+
+  const continueButton = document.createElement("button");
+  continueButton.textContent = "Continue last game";
+  continueButton.classList.add("button");
+  continueButton.addEventListener("click", () => {
+    currentCellsData = JSON.parse(localStorage.getItem("saving"));
+    createPlayField(currentCellsData);
+  });
+
   const resetButton = document.createElement("button");
   resetButton.textContent = "Reset game";
+  resetButton.classList.add("button");
   resetButton.addEventListener("click", resetGame);
-  playField.append(gameName, cellContainer, resetButton);
+
+  const showSolutionButton = document.createElement("button");
+  showSolutionButton.textContent = "Show solution";
+  showSolutionButton.classList.add("button");
+  showSolutionButton.addEventListener("click", showSolution);
+
+  const toggleDarkThemeButton = document.createElement("button");
+  toggleDarkThemeButton.textContent = "Toggle dark theme";
+  toggleDarkThemeButton.classList.add("button");
+  toggleDarkThemeButton.addEventListener("click", toggleDarkTheme);
+
+  playField.append(
+    gameName,
+    cellContainer,
+    saveButton,
+    continueButton,
+    resetButton,
+    showSolutionButton,
+    toggleDarkThemeButton
+  );
 
   // const modalWrapper = document.createElement("div");
   // modalWrapper.classList.add("modal_wrapper");
@@ -83,6 +150,31 @@ function createPlayField(matrix) {
   // main.appendChild(modalWrapper);
 
   main.appendChild(playField);
+  return { gameName, resetButton, showSolutionButton, toggleDarkThemeButton };
+}
+
+// createPlayField(easyGame.heart);
+
+const { gameName, resetButton, showSolutionButton, toggleDarkThemeButton } =
+  createPlayField(easyGame.heart);
+
+function toggleDarkTheme() {
+  body.classList.toggle("body--dark");
+  gameName.classList.toggle("game-name--dark");
+  resetButton.classList.toggle("button--dark");
+  showSolutionButton.classList.toggle("button--dark");
+  toggleDarkThemeButton.classList.toggle("button--dark");
+  currentCells.forEach((cell) => {
+    cell.classList.toggle("cell--dark");
+  });
+}
+
+function showSolution() {
+  currentCellsData.forEach((cell, index) => {
+    if (cell.value) {
+      currentCells[index].classList.toggle("cell--selected");
+    }
+  });
 }
 
 function resetGame() {
@@ -92,6 +184,7 @@ function resetGame() {
   });
   currentCellsData.forEach((cellData) => {
     cellData.selected = false;
+    cellData.crossed = false;
   });
 }
 
@@ -99,6 +192,8 @@ function handleRightClick(event) {
   event.preventDefault();
   if (event.target.classList.contains("cell")) {
     currentCells[event.target.id].textContent = "X";
+    currentCellsData[event.target.id].crossed =
+      !currentCellsData[event.target.id].crossed;
   }
 }
 
@@ -136,5 +231,3 @@ function createCells(matrix) {
     return cellElenent;
   });
 }
-
-createPlayField(easyGame.heart);
