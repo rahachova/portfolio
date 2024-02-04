@@ -49,6 +49,16 @@ main {
   gap: 10px;
 }
 
+.vertical-hints {
+  border-top: 3px solid black;
+  padding-right: 4px;
+}
+
+.horizontal-hints {
+  border-left: 3px solid black;
+  padding-bottom: 3px;
+}
+
 .vertical-hints .hint,
 .horizontal-hints .hint {
   text-align: center;
@@ -61,6 +71,24 @@ main {
   grid-template-columns: 20% 20% 20% 20% 20%;
   grid-template-rows: 20% 20% 20% 20% 20%;
   border: 1px solid black;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+}
+
+.cell-container--medium {
+  height: 300px;
+  width: 300px;
+  display: grid;
+  grid-template-columns: repeat(10, 2fr);
+  grid-template-rows: repeat(10, 2fr);
+}
+
+.cell-container--hard {
+  height: 400px;
+  width: 400px;
+  display: grid;
+  grid-template-columns: repeat(15, 2fr);
+  grid-template-rows: repeat(15, 2fr);
 }
 
 .cell {
