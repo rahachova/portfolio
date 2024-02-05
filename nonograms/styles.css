@@ -34,33 +34,40 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 26.6px;
   font-size: 14px;
   gap: 10px;
+}
+
+.horizontal-hints_block--easy {
+  width: 40px;
+}
+
+.horizontal-hints_block--medium {
+  width: 30px;
+}
+
+.horizontal-hints_block--hard {
+  width: 26.6px;
 }
 
 .vertical-hints_block {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: 26.6px;
   font-size: 14px;
   gap: 10px;
 }
 
-.horizontal-hints_block--easy {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  width: 40px;
+.vertical-hints_block--easy {
+  height: 40px;
 }
 
-.vertical-hints_block--easy {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 40px;
-  gap: 10px;
+.vertical-hints_block--medium {
+  height: 30px;
+}
+
+.vertical-hints_block--hard {
+  height: 26.6px;
 }
 
 .vertical-hints {
@@ -96,6 +103,9 @@ main {
   display: grid;
   grid-template-columns: repeat(10, 2fr);
   grid-template-rows: repeat(10, 2fr);
+  border: 1px solid black;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
 }
 
 .cell-container--hard {
@@ -104,8 +114,8 @@ main {
   display: grid;
   grid-template-columns: repeat(15, 2fr);
   grid-template-rows: repeat(15, 2fr);
-  border-top: 3px solid black;
-  border-left: 3px solid black;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
 }
 
 .cell {
@@ -122,6 +132,10 @@ main {
 .cell--selected,
 .cell--selected-shown {
   background-color: black;
+}
+
+.cell--selected-hidden {
+  background-color: #edeaea;
 }
 
 .game-name {

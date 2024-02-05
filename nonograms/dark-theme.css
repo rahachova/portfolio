@@ -2,9 +2,9 @@
   background-color: rgb(10, 10, 10);
 }
 
-.cell--selected--dark {
+/* .dark-theme .cell--selected {
   background-color: rgb(153, 0, 255);
-}
+} */
 
 .dark-theme .cell-container--easy,
 .dark-theme .cell-container--medium,
@@ -27,11 +27,24 @@
   border-color: white;
 }
 
+.dark-theme .cell--selected-shown,
+.dark-theme .cell--selected {
+  background-color: rgb(153, 0, 255);
+}
+
+.dark-theme .cell--selected-hidden {
+  background-color: rgb(206, 176, 247);
+}
+
 .dark-theme .horizontal-hints,
 .dark-theme .vertical-hints {
   border-color: #edeaea;
 }
 
 .dark-theme .hint {
+  color: #edeaea;
+}
+
+.dark-theme .timer {
   color: #edeaea;
 }
