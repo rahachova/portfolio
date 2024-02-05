@@ -1,0 +1,37 @@
+.dark-theme {
+  background-color: rgb(10, 10, 10);
+}
+
+.cell--selected--dark {
+  background-color: rgb(153, 0, 255);
+}
+
+.dark-theme .cell-container--easy,
+.dark-theme .cell-container--medium,
+.dark-theme .cell-container--hard {
+  border-color: #edeaea;
+}
+
+.dark-theme .game-name {
+  color: rgb(153, 0, 255);
+}
+
+.dark-theme .button {
+  background-color: #a375dc;
+  color: azure;
+  border-color: rgb(153, 0, 255);
+}
+
+.dark-theme .cell {
+  background-color: rgb(206, 176, 247);
+  border-color: white;
+}
+
+.dark-theme .horizontal-hints,
+.dark-theme .vertical-hints {
+  border-color: #edeaea;
+}
+
+.dark-theme .hint {
+  color: #edeaea;
+}

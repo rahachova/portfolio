@@ -2078,6 +2078,13 @@ const hardGame = {
 const main = document.querySelector("main");
 const body = document.querySelector("body");
 
+const audioRightClick = new Audio();
+audioRightClick.src = "./assets/right-click.mp3";
+const audioLeftClick = new Audio();
+audioLeftClick.src = "./assets/left-click.mp3";
+const audioWin = new Audio();
+audioWin.src = "./assets/win.mp3";
+
 let currentCells;
 let currentCellsData;
 let cellContainer;
@@ -2090,10 +2097,38 @@ let secondElement;
 let seconds = 0;
 let timerCounter;
 
+const templates = ["heart", "crown", "anchor", "flower", "wineglass"];
+
 function createPlayField(matrix) {
   const gameName = document.createElement("h2");
   gameName.textContent = "Nonograms";
   gameName.classList.add("game-name");
+
+  const sizeControls = document.createElement("div");
+  sizeControls.classList.add("controls-container");
+  const buttonEasy = document.createElement("button");
+  buttonEasy.textContent = "easy";
+  buttonEasy.classList.add("button");
+  const buttonMedium = document.createElement("button");
+  buttonMedium.textContent = "medium";
+  buttonMedium.classList.add("button");
+  const buttonHard = document.createElement("button");
+  buttonHard.textContent = "hard";
+  buttonHard.classList.add("button");
+
+  sizeControls.append(buttonEasy, buttonMedium, buttonHard);
+
+  const templateControls = document.createElement("div");
+  templateControls.classList.add("controls-container");
+  const templateButtons = templates.map((template) => {
+    const button = document.createElement("button");
+    button.id = template;
+    button.textContent = template;
+    button.classList.add("button");
+    return button;
+  });
+
+  templateControls.append(...templateButtons);
 
   const timer = document.createElement("div");
   minuteElement = document.createElement("span");
@@ -2182,7 +2217,7 @@ function createPlayField(matrix) {
 
   gameArea.append(playField, buttonsContainer);
 
-  main.append(gameName, timer, gameArea);
+  main.append(gameName, sizeControls, templateControls, timer, gameArea);
   return {
     gameName,
     resetButton,
@@ -2190,6 +2225,8 @@ function createPlayField(matrix) {
     toggleDarkThemeButton,
     saveButton,
     continueButton,
+    sizeControls,
+    templateControls,
   };
 }
 
@@ -2200,6 +2237,8 @@ const {
   toggleDarkThemeButton,
   saveButton,
   continueButton,
+  sizeControls,
+  templateControls,
 } = createPlayField(hardGame.wineglass);
 
 function startTimer() {
@@ -2229,16 +2268,7 @@ function updateTimer() {
 }
 
 function toggleDarkTheme() {
-  body.classList.toggle("body--dark");
-  gameName.classList.toggle("game-name--dark");
-  resetButton.classList.toggle("button--dark");
-  showSolutionButton.classList.toggle("button--dark");
-  toggleDarkThemeButton.classList.toggle("button--dark");
-  saveButton.classList.toggle("button--dark");
-  continueButton.classList.toggle("button--dark");
-  currentCells.forEach((cell) => {
-    cell.classList.toggle("cell--dark");
-  });
+  body.classList.toggle("dark-theme");
 }
 
 function showSolution() {
@@ -2267,6 +2297,7 @@ function handleRightClick(event) {
     currentCells[event.target.id].textContent = "X";
     currentCellsData[event.target.id].crossed =
       !currentCellsData[event.target.id].crossed;
+    audioRightClick.play();
   }
 }
 
@@ -2278,8 +2309,10 @@ function handleLeftClick(event) {
       !currentCellsData[event.target.id].selected;
     if (isGameWon()) {
       createModal();
+      audioWin.play();
       clearTimer();
     }
+    audioLeftClick.play();
   }
 }
 
@@ -2364,6 +2397,7 @@ function createHintCells(matrix) {
   }
   const horizontalHintCells = horizontalHints.map((horizontalHint) => {
     const horizontalHintElement = document.createElement("div");
+    horizontalHintElement.classList.add("horizontal-hints_block");
     horizontalHintElement.append(
       ...horizontalHint.map((hint) => {
         const hintElement = document.createElement("div");
@@ -2376,6 +2410,7 @@ function createHintCells(matrix) {
   });
   const verticalHintCells = verticalHints.map((verticalHint) => {
     const verticalHintElement = document.createElement("div");
+    verticalHintElement.classList.add("vertical-hints_block");
     verticalHintElement.append(
       ...verticalHint.map((hint) => {
         const hintElement = document.createElement("div");

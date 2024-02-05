@@ -2,20 +2,20 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+h2 {
+  margin: 0;
+}
+
 body {
   position: relative;
   background-color: white;
-}
-
-.body--dark {
-  background-color: rgb(10, 10, 10);
 }
 
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
 
 .game-area {
@@ -30,18 +30,32 @@ main {
   align-items: end;
 }
 
-.horizontal-hints {
+.horizontal-hints_block {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 26.6px;
+  font-size: 14px;
+  gap: 10px;
 }
 
-.horizontal-hints > div {
+.vertical-hints_block {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 26.6px;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.horizontal-hints_block--easy {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   width: 40px;
 }
 
-.vertical-hints > div {
+.vertical-hints_block--easy {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -55,6 +69,7 @@ main {
 }
 
 .horizontal-hints {
+  display: flex;
   border-left: 3px solid black;
   padding-bottom: 3px;
 }
@@ -64,7 +79,7 @@ main {
   text-align: center;
 }
 
-.cell-container {
+.cell-container--easy {
   height: 200px;
   width: 200px;
   display: grid;
@@ -89,6 +104,8 @@ main {
   display: grid;
   grid-template-columns: repeat(15, 2fr);
   grid-template-rows: repeat(15, 2fr);
+  border-top: 3px solid black;
+  border-left: 3px solid black;
 }
 
 .cell {
@@ -96,19 +113,10 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 25px;
+  font-size: 15px;
   border: 1px solid rgb(100, 100, 100);
   cursor: pointer;
   background-color: #edeaea;
-}
-
-.cell--dark {
-  background-color: rgb(206, 176, 247);
-  border-color: white;
-}
-
-.cell--selected--dark {
-  background-color: rgb(153, 0, 255);
 }
 
 .cell--selected,
@@ -117,11 +125,8 @@ main {
 }
 
 .game-name {
+  margin-top: 10px;
   color: black;
-}
-
-.game-name--dark {
-  color: rgb(153, 0, 255);
 }
 
 .modal_wrapper {
@@ -159,7 +164,7 @@ main {
 }
 
 .button {
-  padding: 5px;
+  padding: 7px;
   border-radius: 10px;
   font-size: 14px;
   transition: all 0.3s ease-out;
@@ -169,16 +174,29 @@ main {
   cursor: pointer;
 }
 
-.button--dark {
-  background-color: #a375dc;
-  color: azure;
-  border-color: rgb(153, 0, 255);
+.controls-container {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
 }
+
+/* .complexity-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
 
 @media (hover: hover) {
   .button:hover {
     background-color: #cfcfcf;
     transform: scale(0.95);
     cursor: pointer;
+  }
+}
+
+@media (max-width: 650px) {
+  .game-area {
+    flex-direction: column;
   }
 }
