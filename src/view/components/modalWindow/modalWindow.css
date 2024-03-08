@@ -1,0 +1,34 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid black;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+.modal_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal_button {
+    width: 90px;
+    height: 50px;
+    align-self: center;
+    border: none;
+    outline: none;
+    background: #3f3f3f;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 40px;
+    text-align: center;
+    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    cursor: pointer;
+}
