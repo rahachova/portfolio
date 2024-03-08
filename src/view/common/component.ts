@@ -52,6 +52,14 @@ export default class Component {
         this.node.classList.toggle(className);
     }
 
+    public addClass(className: string) {
+        this.node.classList.add(className);
+    }
+
+    public removeClass(className: string) {
+        this.node.classList.remove(className);
+    }
+
     public addListener(
         event: string,
         listener: (event: Event) => void,
