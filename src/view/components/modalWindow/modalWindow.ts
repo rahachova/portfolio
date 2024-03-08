@@ -1,5 +1,6 @@
 import './modalWindow.css';
 import Component from '../../common/component';
+import LocalStorageController from '../../../controllers/localStorageController';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 export default class ModalWindow extends Component {
@@ -13,6 +14,8 @@ export default class ModalWindow extends Component {
 
     nameInputId: string = 'nameInput';
 
+    nameInputName: string = 'name';
+
     nameError: Component;
 
     surnameError: Component;
@@ -22,6 +25,8 @@ export default class ModalWindow extends Component {
     surnameInputLabel: Component;
 
     surnameInputId: string = 'surnameId';
+
+    surnameInputName: string = 'surname';
 
     formButton: Component;
 
@@ -80,9 +85,11 @@ export default class ModalWindow extends Component {
         this.nameInput.setAttribute('required', '');
         this.nameInput.setAttribute('minlength', '3');
         this.nameInput.setAttribute('pattern', NAME_REGEX);
+        this.nameInput.setAttribute('name', this.nameInputName);
         this.surnameInput.setAttribute('required', '');
         this.surnameInput.setAttribute('minlength', '4');
         this.surnameInput.setAttribute('pattern', NAME_REGEX);
+        this.surnameInput.setAttribute('name', this.surnameInputName);
     }
 
     setupListeners() {
@@ -108,6 +115,13 @@ export default class ModalWindow extends Component {
         if (surnameErrorText) {
             ModalWindow.showInputError(surnameErrorText, this.surnameError);
         }
+
+        const formData = new FormData(event.target as HTMLFormElement);
+
+        LocalStorageController.saveUserData(
+            formData.get(this.nameInputName) as string,
+            formData.get(this.surnameInputName) as string
+        );
     }
 
     static hideInputError(errorComponent: Component) {
