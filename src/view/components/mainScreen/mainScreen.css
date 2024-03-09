@@ -1,0 +1,13 @@
+.main-screen {
+    display: none;
+}
+
+.main-screen--shown {
+    display: block;
+}
+
+.main_header {
+    display: flex;
+    justify-content: end;
+    margin-right: 20px;
+}

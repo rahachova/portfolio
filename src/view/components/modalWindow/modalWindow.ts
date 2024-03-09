@@ -1,6 +1,6 @@
 import './modalWindow.css';
 import Component from '../../common/component';
-import LocalStorageController from '../../../controllers/localStorageController';
+import loginController from '../../../controllers/loginController';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 export default class ModalWindow extends Component {
@@ -59,13 +59,15 @@ export default class ModalWindow extends Component {
         });
         this.formButton = new Component({
             tag: 'button',
-            className: 'modal_button',
+            className: 'button',
             text: 'Login',
         });
 
         this.setupElements();
         this.setupListeners();
+        this.setupSubscribtion();
         this.setupForm();
+        this.setupState();
         this.build();
     }
 
@@ -80,6 +82,12 @@ export default class ModalWindow extends Component {
         this.formButton.setAttribute('type', 'submit');
     }
 
+    setupState() {
+        if (loginController.isLoggedin) {
+            this.hideModalWindow();
+        }
+    }
+
     setupForm() {
         this.form.setAttribute('novalidate', '');
         this.nameInput.setAttribute('required', '');
@@ -90,6 +98,10 @@ export default class ModalWindow extends Component {
         this.surnameInput.setAttribute('minlength', '4');
         this.surnameInput.setAttribute('pattern', NAME_REGEX);
         this.surnameInput.setAttribute('name', this.surnameInputName);
+    }
+
+    setupSubscribtion() {
+        loginController.onLogout(this.showModalWindow.bind(this));
     }
 
     setupListeners() {
@@ -118,10 +130,19 @@ export default class ModalWindow extends Component {
 
         const formData = new FormData(event.target as HTMLFormElement);
 
-        LocalStorageController.saveUserData(
+        this.hideModalWindow();
+        loginController.handleLogin(
             formData.get(this.nameInputName) as string,
             formData.get(this.surnameInputName) as string
         );
+    }
+
+    hideModalWindow() {
+        this.addClass('modal--hidden');
+    }
+
+    showModalWindow() {
+        this.removeClass('modal--hidden');
     }
 
     static hideInputError(errorComponent: Component) {
