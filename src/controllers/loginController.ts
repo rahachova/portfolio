@@ -5,10 +5,12 @@ class LoginController {
 
     isLoggedin: boolean;
 
+    firstNameKey: string = 'firstName';
+
+    surNameKey: string = 'surname';
+
     constructor() {
-        this.isLoggedin = Boolean(
-            localStorage.getItem('firstName') && localStorage.getItem('surname')
-        );
+        this.isLoggedin = Boolean(localStorage.getItem(this.firstNameKey) && localStorage.getItem(this.surNameKey));
     }
 
     onLogout(subscribtion: () => void) {
@@ -20,23 +22,27 @@ class LoginController {
     }
 
     handleLogin(firstName: string, surname: string) {
-        LoginController.saveUserData(firstName, surname);
+        this.saveUserData(firstName, surname);
         this.loginSubscribtions.forEach((subscribtion) => subscribtion());
     }
 
     handleLogout() {
-        LoginController.detateUserData();
+        this.detateUserData();
         this.logoutSubscribtions.forEach((subscribtion) => subscribtion());
     }
 
-    static saveUserData(firstName: string, surname: string) {
-        localStorage.setItem('firstName', firstName);
-        localStorage.setItem('surname', surname);
+    saveUserData(firstName: string, surname: string) {
+        localStorage.setItem(this.firstNameKey, firstName);
+        localStorage.setItem(this.surNameKey, surname);
     }
 
-    static detateUserData() {
-        localStorage.removeItem('firstName');
-        localStorage.removeItem('surname');
+    detateUserData() {
+        localStorage.removeItem(this.firstNameKey);
+        localStorage.removeItem(this.surNameKey);
+    }
+
+    getFullName() {
+        return `${localStorage.getItem(this.firstNameKey)} ${localStorage.getItem(this.surNameKey)}`;
     }
 }
 

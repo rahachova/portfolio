@@ -1,11 +1,14 @@
 import './mainScreen.css';
 import Component from '../../common/component';
 import loginController from '../../../controllers/loginController';
+import StartScreen from '../startScreen/startScreen';
 
 export default class MainScreen extends Component {
     header: Component;
 
     button: Component;
+
+    startScreen: StartScreen;
 
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
@@ -19,6 +22,8 @@ export default class MainScreen extends Component {
             className: 'button',
             text: 'Logout',
         });
+
+        this.startScreen = new StartScreen();
 
         this.setupSubscribtion();
         this.setupListeners();
@@ -56,6 +61,6 @@ export default class MainScreen extends Component {
     build() {
         this.header.append(this.button);
 
-        this.append(this.header);
+        this.appendChildren([this.header, this.startScreen]);
     }
 }

@@ -1,8 +1,11 @@
 import './startScreen.css';
 import Component from '../../common/component';
+import loginController from '../../../controllers/loginController';
 
 export default class StartScreen extends Component {
     header: Component;
+
+    greeting: Component;
 
     description: Component;
 
@@ -16,6 +19,11 @@ export default class StartScreen extends Component {
             className: 'start_header',
             text: 'RSS Puzzle',
         });
+        this.greeting = new Component({
+            tag: 'h2',
+            className: 'start_greeting',
+            text: `Hello, ${loginController.getFullName()}!`,
+        });
         this.description = new Component({
             tag: 'p',
             className: 'start_description',
@@ -27,13 +35,21 @@ export default class StartScreen extends Component {
             text: 'Start',
         });
 
-        // this.setupSubscribtion();
+        this.setupSubscribtion();
         // this.setupListeners();
         // this.setupState();
         this.build();
     }
 
+    updateGreeting() {
+        this.greeting.setTextContent(`Hello, ${loginController.getFullName()}!`);
+    }
+
+    setupSubscribtion() {
+        loginController.onLogin(this.updateGreeting.bind(this));
+    }
+
     build() {
-        this.appendChildren([this.header, this.description, this.button]);
+        this.appendChildren([this.header, this.greeting, this.description, this.button]);
     }
 }
