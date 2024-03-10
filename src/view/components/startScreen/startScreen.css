@@ -8,6 +8,13 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 10px 10px 5px #888888;
+    transition: all 0.2s;
+    animation: fadeInStart 0.5s ease-in;
+}
+
+.start-screen--hidden {
+    display: none;
+    animation: fadeOutStart 0.5s ease-out;
 }
 
 .start_header {
@@ -29,4 +36,38 @@
     font-weight: 600;
     align-self: center;
     color: #73c5bd;
+}
+
+@keyframes fadeInStart {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: flex;
+        opacity: 0;
+    }
+
+    100% {
+        display: flex;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutStart {
+    0% {
+        display: flex;
+        opacity: 1;
+    }
+
+    99% {
+        display: flex;
+        opacity: 0;
+    }
+
+    100% {
+        display: none;
+        opacity: 0;
+    }
 }

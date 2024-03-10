@@ -36,7 +36,7 @@ export default class StartScreen extends Component {
         });
 
         this.setupSubscribtion();
-        // this.setupListeners();
+        this.setupListeners();
         // this.setupState();
         this.build();
     }
@@ -47,6 +47,19 @@ export default class StartScreen extends Component {
 
     setupSubscribtion() {
         loginController.onLogin(this.updateGreeting.bind(this));
+        loginController.onLogout(this.showStartScreen.bind(this));
+    }
+
+    setupListeners() {
+        this.button.addListener('click', this.hideStartScreen.bind(this));
+    }
+
+    hideStartScreen() {
+        this.addClass('start-screen--hidden');
+    }
+
+    showStartScreen() {
+        this.removeClass('start-screen--hidden');
     }
 
     build() {

@@ -55,7 +55,7 @@ export default class MainScreen extends Component {
 
     handleLogoutClick() {
         this.hideMainScreen();
-        loginController.handleLogout();
+        setTimeout(() => loginController.handleLogout(), 500);
     }
 
     build() {

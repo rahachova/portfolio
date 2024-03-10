@@ -106,34 +106,30 @@ export default class ModalWindow extends Component {
 
     setupListeners() {
         this.form.addListener('submit', this.handleFormSubmit.bind(this));
-        this.nameInput.addListener('input', () =>
-            ModalWindow.hideInputError(this.nameError)
-        );
-        this.surnameInput.addListener('input', () =>
-            ModalWindow.hideInputError(this.surnameError)
-        );
+        this.nameInput.addListener('input', () => ModalWindow.hideInputError(this.nameError));
+        this.surnameInput.addListener('input', () => ModalWindow.hideInputError(this.surnameError));
     }
 
     handleFormSubmit(event: Event) {
         event.preventDefault();
         const nameErrorText = ModalWindow.validateInput(this.nameInputElement);
-        const surnameErrorText = ModalWindow.validateInput(
-            this.surnameInputElement
-        );
+        const surnameErrorText = ModalWindow.validateInput(this.surnameInputElement);
 
         if (nameErrorText) {
             ModalWindow.showInputError(nameErrorText, this.nameError);
+            return;
         }
         if (surnameErrorText) {
             ModalWindow.showInputError(surnameErrorText, this.surnameError);
+            return;
         }
 
         const formData = new FormData(event.target as HTMLFormElement);
 
         this.hideModalWindow();
-        loginController.handleLogin(
-            formData.get(this.nameInputName) as string,
-            formData.get(this.surnameInputName) as string
+        setTimeout(
+            () => loginController.handleLogin(formData.get(this.nameInputName) as string, formData.get(this.surnameInputName) as string),
+            500
         );
     }
 
