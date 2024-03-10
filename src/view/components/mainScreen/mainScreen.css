@@ -1,5 +1,6 @@
 .main-screen {
     display: none;
+    align-self: flex-end;
 }
 
 .main-screen--shown {

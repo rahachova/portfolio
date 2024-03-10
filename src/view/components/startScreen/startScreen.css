@@ -1,0 +1,23 @@
+.start-screen {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    width: 800px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+.start_header {
+    align-self: center;
+    color: #7bd2ca;
+}
+
+.start_description {
+    white-space: break-spaces;
+    letter-spacing: 1px;
+    line-height: 30px;
+    text-align: justify;
+}

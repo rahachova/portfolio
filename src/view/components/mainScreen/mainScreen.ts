@@ -22,7 +22,7 @@ export default class MainScreen extends Component {
 
         this.setupSubscribtion();
         this.setupListeners();
-        this.setupState()
+        this.setupState();
         this.build();
     }
 
