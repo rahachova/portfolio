@@ -43,12 +43,20 @@ export default class GamePage extends Component {
     }
 
     createCards() {
-        const array = GameController.getWordCollection(1).rounds[0].words[0].textExample.split(' ');
-        return array.map((word) => {
+        const arrayOfWords = GameController.getWordCollection(1).rounds[0].words[0].textExample.split(' ');
+        const cardWidths = GamePage.calculateCardWidths(arrayOfWords);
+        return arrayOfWords.map((word, index) => {
             const card = new Component({ tag: 'div', className: 'card', text: word });
+            card.setAttribute('style', `width: ${cardWidths[index]}%;`);
             card.addListener('click', () => this.moveCardToResultBlock(card));
             return card;
         });
+    }
+
+    static calculateCardWidths(array: string[]): number[] {
+        const totalSymbolsAmount = array.reduce((accum, currentValue) => accum + currentValue.length, 0);
+        const percentsPerSymbol = 100 / totalSymbolsAmount;
+        return array.map((word) => word.length * percentsPerSymbol);
     }
 
     moveCardToResultBlock(card: Component) {
