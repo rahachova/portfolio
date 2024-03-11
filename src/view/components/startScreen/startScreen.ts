@@ -1,6 +1,7 @@
 import './startScreen.css';
 import Component from '../../common/component';
 import loginController from '../../../controllers/loginController';
+import gameController from '../../../controllers/gameController';
 
 export default class StartScreen extends Component {
     header: Component;
@@ -51,7 +52,12 @@ export default class StartScreen extends Component {
     }
 
     setupListeners() {
-        this.button.addListener('click', this.hideStartScreen.bind(this));
+        this.button.addListener('click', this.handleStart.bind(this));
+    }
+
+    handleStart() {
+        this.hideStartScreen();
+        setTimeout(() => gameController.handleGameStart(), 500);
     }
 
     hideStartScreen() {

@@ -2,6 +2,7 @@ import './mainScreen.css';
 import Component from '../../common/component';
 import loginController from '../../../controllers/loginController';
 import StartScreen from '../startScreen/startScreen';
+import GamePage from '../gamePage/gamePage';
 
 export default class MainScreen extends Component {
     header: Component;
@@ -9,6 +10,8 @@ export default class MainScreen extends Component {
     button: Component;
 
     startScreen: StartScreen;
+
+    gamePage: GamePage;
 
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
@@ -24,6 +27,8 @@ export default class MainScreen extends Component {
         });
 
         this.startScreen = new StartScreen();
+
+        this.gamePage = new GamePage();
 
         this.setupSubscribtion();
         this.setupListeners();
@@ -61,6 +66,6 @@ export default class MainScreen extends Component {
     build() {
         this.header.append(this.button);
 
-        this.appendChildren([this.header, this.startScreen]);
+        this.appendChildren([this.header, this.startScreen, this.gamePage]);
     }
 }
