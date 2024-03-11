@@ -4,8 +4,11 @@ import Component from '../../common/component';
 export default class Card extends Component {
     private isUsedValue: boolean = false;
 
-    constructor(word: string) {
+    private cardIndexValue: number = 0;
+
+    constructor(word: string, cardIndexValue: number) {
         super({ tag: 'div', className: 'card', text: word });
+        this.cardIndexValue = cardIndexValue;
     }
 
     setIsUsed(value: boolean) {
@@ -14,5 +17,9 @@ export default class Card extends Component {
 
     get isUsed(): boolean {
         return this.isUsedValue;
+    }
+
+    get cardIndex(): number {
+        return this.cardIndexValue;
     }
 }

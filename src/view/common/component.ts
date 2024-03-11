@@ -3,10 +3,7 @@ export default class Component {
 
     private node: HTMLElement;
 
-    constructor(
-        { tag = 'div', className = '', text = '', },
-        ...children: Component[]
-    ) {
+    constructor({ tag = 'div', className = '', text = '' }, ...children: Component[]) {
         const node = document.createElement(tag);
         node.className = className;
         node.textContent = text;
@@ -20,6 +17,11 @@ export default class Component {
     public append(child: Component) {
         this.children.push(child);
         this.node.append(child.getNode());
+    }
+
+    public removeChild(child: Component) {
+        const childIndex = this.children.indexOf(child);
+        this.children.splice(childIndex, 1);
     }
 
     public appendChildren(children: Component[]) {
@@ -60,19 +62,11 @@ export default class Component {
         this.node.classList.remove(className);
     }
 
-    public addListener(
-        event: string,
-        listener: (event: Event) => void,
-        options: boolean = false
-    ) {
+    public addListener(event: string, listener: (event: Event) => void, options: boolean = false) {
         this.node.addEventListener(event, listener, options);
     }
 
-    public removeListener(
-        event: string,
-        listener: () => void,
-        options: boolean = false
-    ) {
+    public removeListener(event: string, listener: () => void, options: boolean = false) {
         this.node.removeEventListener(event, listener, options);
     }
 
