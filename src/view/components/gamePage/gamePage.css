@@ -29,19 +29,3 @@
     border-radius: 10px;
     background-color: white;
 }
-
-.card {
-    padding: 7px;
-    border: 1px solid black;
-    box-sizing: border-box;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-    background-color: #c2ede9;
-}
-
-.card:hover {
-    color: white;
-    background-color: #73c5bd;
-}

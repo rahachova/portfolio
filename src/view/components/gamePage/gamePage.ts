@@ -1,7 +1,6 @@
 import './gamePage.css';
 import Component from '../../common/component';
-// import loginController from '../../../controllers/loginController';
-// import StartScreen from '../startScreen/startScreen';
+import Card from '../card/card';
 import gameController, { GameController } from '../../../controllers/gameController';
 import loginController from '../../../controllers/loginController';
 
@@ -24,8 +23,6 @@ export default class GamePage extends Component {
             className: 'source-block',
         });
         this.setupSubscribtion();
-        // this.setupListeners();
-        // this.setupState();
         this.build();
     }
 
@@ -46,9 +43,10 @@ export default class GamePage extends Component {
         const arrayOfWords = GameController.getWordCollection(1).rounds[0].words[0].textExample.split(' ');
         const cardWidths = GamePage.calculateCardWidths(arrayOfWords);
         return arrayOfWords.map((word, index) => {
-            const card = new Component({ tag: 'div', className: 'card', text: word });
+            const card = new Card(word);
             card.setAttribute('style', `width: ${cardWidths[index]}%;`);
-            card.addListener('click', () => this.moveCardToResultBlock(card));
+            card.addListener('click', (event: Event) => this.moveCardToResultBlock(card, event));
+            card.addListener('click', (event: Event) => this.moveCardToSourceBlock(card, event));
             return card;
         });
     }
@@ -59,11 +57,23 @@ export default class GamePage extends Component {
         return array.map((word) => word.length * percentsPerSymbol);
     }
 
-    moveCardToResultBlock(card: Component) {
-        this.resultBlock.append(card);
+    moveCardToResultBlock(card: Card, event: Event) {
+        if (!card.isUsed) {
+            this.resultBlock.append(card);
+            card.setIsUsed(true);
+            event.stopImmediatePropagation();
+        }
     }
 
-    static shuffleCards(arrayOfCards: Component[]) {
+    moveCardToSourceBlock(card: Card, event: Event) {
+        if (card.isUsed) {
+            this.sourceBlock.append(card);
+            card.setIsUsed(false);
+            event.stopImmediatePropagation();
+        }
+    }
+
+    static shuffleCards(arrayOfCards: Card[]) {
         return arrayOfCards.sort(() => Math.random() - 0.5);
     }
 
@@ -76,10 +86,6 @@ export default class GamePage extends Component {
         gameController.onGameStart(this.initGamePage.bind(this));
         loginController.onLogout(this.hideGamePage.bind(this));
     }
-
-    // setupListeners() {
-    //     this.sourceBlock.addListener('click', this.moveCardToResultBlock.bind(this));
-    // }
 
     build() {
         this.appendChildren([this.resultBlock, this.sourceBlock]);
