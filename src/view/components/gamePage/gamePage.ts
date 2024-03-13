@@ -3,6 +3,7 @@ import Component from '../../common/component';
 import Card from '../card/card';
 import gameController, { GameController } from '../../../controllers/gameController';
 import loginController from '../../../controllers/loginController';
+import { Level } from '../../../types/level';
 
 export default class GamePage extends Component {
     activeResultBlock: Component;
@@ -17,9 +18,13 @@ export default class GamePage extends Component {
 
     cardQuantity: number = 0;
 
-    currentRound: number = 1;
+    maxSentenceIndex: number = 9;
 
-    currentSentence: number = 1;
+    currentLevel: Level = 1;
+
+    currentRound: number = 0;
+
+    currentSentenceIndex: number = 0;
 
     constructor() {
         super({ tag: 'div', className: 'game-page' });
@@ -53,7 +58,7 @@ export default class GamePage extends Component {
 
     initGamePage() {
         this.showGamePage();
-        this.initNextSentence();
+        this.fillSourceBlock();
     }
 
     showGamePage() {
@@ -73,15 +78,17 @@ export default class GamePage extends Component {
     }
 
     showContinueButton() {
-        this.checkButton.removeClass('button--hidden');
+        this.continueButton.removeClass('button--hidden');
     }
 
     hideContinueButton() {
-        this.checkButton.addClass('button--hidden');
+        this.continueButton.addClass('button--hidden');
     }
 
     createCards() {
-        const arrayOfWords = GameController.getWordCollection(1).rounds[0].words[0].textExample.split(' ');
+        const arrayOfWords = GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[
+            this.currentSentenceIndex
+        ].textExample.split(' ');
         this.cardQuantity = arrayOfWords.length;
         const cardWidths = GamePage.calculateCardWidths(arrayOfWords);
         return arrayOfWords.map((word, index) => {
@@ -100,28 +107,30 @@ export default class GamePage extends Component {
     }
 
     moveCardToResultBlock(card: Card, event: Event) {
-        if (!card.isUsed) {
-            this.activeResultBlock.append(card);
-            this.sourceBlock.removeChild(card);
-            card.setIsUsed(true);
-            event.stopImmediatePropagation();
-            if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
-                this.showCheckButton();
-            }
+        if (card.isUsed || card.isInactive) {
+            return;
+        }
+        this.activeResultBlock.append(card);
+        this.sourceBlock.removeChild(card);
+        card.setIsUsed(true);
+        event.stopImmediatePropagation();
+        if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
+            this.showCheckButton();
         }
     }
 
     moveCardToSourceBlock(card: Card, event: Event) {
-        if (card.isUsed) {
-            if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
-                this.hideCheckButton();
-            }
-            this.sourceBlock.append(card);
-            this.activeResultBlock.removeChild(card);
-            card.setIsUsed(false);
-            card.removeClass('card--correct');
-            card.removeClass('card--incorrect');
-            event.stopImmediatePropagation();
+        if (!card.isUsed || card.isInactive) {
+            return;
+        }
+        this.sourceBlock.append(card);
+        this.activeResultBlock.removeChild(card);
+        card.setIsUsed(false);
+        card.removeClass('card--correct');
+        card.removeClass('card--incorrect');
+        event.stopImmediatePropagation();
+        if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
+            this.hideCheckButton();
         }
     }
 
@@ -152,8 +161,31 @@ export default class GamePage extends Component {
             className: 'result-block',
         });
         this.resultField.append(this.activeResultBlock);
-        // this.activeResultBlock.destroyChildren();
+    }
+
+    disableInactiveCards() {
+        this.activeResultBlock.getChildren().forEach((card) => {
+            (card as Card).setIsInactive();
+            card.addClass('card--inactive');
+        });
+    }
+
+    switchToNextSentence() {
+        if (this.currentSentenceIndex === this.maxSentenceIndex) {
+            this.resultField.destroyChildren();
+            this.currentRound += 1;
+            this.currentSentenceIndex = 0;
+        } else {
+            this.currentSentenceIndex += 1;
+        }
+    }
+
+    handleContinueButton() {
+        this.disableInactiveCards();
+        this.switchToNextSentence();
+        this.initNextSentence();
         this.fillSourceBlock();
+        this.hideContinueButton();
     }
 
     fillSourceBlock() {
@@ -168,11 +200,11 @@ export default class GamePage extends Component {
 
     setupListeners() {
         this.checkButton.addListener('click', this.checkResult.bind(this));
-        this.continueButton.addListener('click', this.initNextSentence.bind(this));
+        this.continueButton.addListener('click', this.handleContinueButton.bind(this));
     }
 
     build() {
-        // this.resultField.append(this.activeResultBlock);
+        this.resultField.append(this.activeResultBlock);
         this.appendChildren([this.resultField, this.sourceBlock, this.checkButton, this.continueButton]);
     }
 }

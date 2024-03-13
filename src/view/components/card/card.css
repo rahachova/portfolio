@@ -28,3 +28,8 @@
     outline-offset: -4px;
     outline: 3px ridge rgb(255 101 101 / 80%);
 }
+
+.card--inactive {
+    pointer-events: none;
+    outline: none;
+}

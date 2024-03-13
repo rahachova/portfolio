@@ -6,6 +6,8 @@ export default class Card extends Component {
 
     private cardIndexValue: number = 0;
 
+    private isInactiveValue: boolean = false;
+
     constructor(word: string, cardIndexValue: number) {
         super({ tag: 'div', className: 'card', text: word });
         this.cardIndexValue = cardIndexValue;
@@ -17,6 +19,14 @@ export default class Card extends Component {
 
     get isUsed(): boolean {
         return this.isUsedValue;
+    }
+
+    setIsInactive() {
+        this.isInactiveValue = true;
+    }
+
+    get isInactive() {
+        return this.isInactiveValue;
     }
 
     get cardIndex(): number {
