@@ -5,18 +5,30 @@ import gameController, { GameController } from '../../../controllers/gameControl
 import loginController from '../../../controllers/loginController';
 
 export default class GamePage extends Component {
-    resultBlock: Component;
+    activeResultBlock: Component;
+
+    resultField: Component;
 
     sourceBlock: Component;
 
     checkButton: Component;
 
+    continueButton: Component;
+
     cardQuantity: number = 0;
+
+    currentRound: number = 1;
+
+    currentSentence: number = 1;
 
     constructor() {
         super({ tag: 'div', className: 'game-page' });
+        this.resultField = new Component({
+            tag: 'div',
+            className: 'result-field',
+        });
 
-        this.resultBlock = new Component({
+        this.activeResultBlock = new Component({
             tag: 'div',
             className: 'result-block',
         });
@@ -29,6 +41,11 @@ export default class GamePage extends Component {
             className: 'button button--hidden',
             text: 'Check',
         });
+        this.continueButton = new Component({
+            tag: 'button',
+            className: 'button button--hidden',
+            text: 'Continue',
+        });
         this.setupSubscribtion();
         this.setupListeners();
         this.build();
@@ -36,7 +53,7 @@ export default class GamePage extends Component {
 
     initGamePage() {
         this.showGamePage();
-        this.fillSourceBlock();
+        this.initNextSentence();
     }
 
     showGamePage() {
@@ -52,6 +69,14 @@ export default class GamePage extends Component {
     }
 
     hideCheckButton() {
+        this.checkButton.addClass('button--hidden');
+    }
+
+    showContinueButton() {
+        this.checkButton.removeClass('button--hidden');
+    }
+
+    hideContinueButton() {
         this.checkButton.addClass('button--hidden');
     }
 
@@ -76,11 +101,11 @@ export default class GamePage extends Component {
 
     moveCardToResultBlock(card: Card, event: Event) {
         if (!card.isUsed) {
-            this.resultBlock.append(card);
+            this.activeResultBlock.append(card);
             this.sourceBlock.removeChild(card);
             card.setIsUsed(true);
             event.stopImmediatePropagation();
-            if (this.cardQuantity === this.resultBlock.getChildren().length) {
+            if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
                 this.showCheckButton();
             }
         }
@@ -88,11 +113,11 @@ export default class GamePage extends Component {
 
     moveCardToSourceBlock(card: Card, event: Event) {
         if (card.isUsed) {
-            if (this.cardQuantity === this.resultBlock.getChildren().length) {
+            if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
                 this.hideCheckButton();
             }
             this.sourceBlock.append(card);
-            this.resultBlock.removeChild(card);
+            this.activeResultBlock.removeChild(card);
             card.setIsUsed(false);
             card.removeClass('card--correct');
             card.removeClass('card--incorrect');
@@ -105,7 +130,7 @@ export default class GamePage extends Component {
     }
 
     checkResult() {
-        const cardToCheck = this.resultBlock.getChildren();
+        const cardToCheck = this.activeResultBlock.getChildren();
         const isCorrect = cardToCheck.every((card, index) => (card as Card).cardIndex === index);
         console.log(isCorrect);
         cardToCheck.forEach((card, index) => {
@@ -115,6 +140,20 @@ export default class GamePage extends Component {
                 card.addClass('card--incorrect');
             }
         });
+        if (isCorrect) {
+            this.checkButton.addClass('button--hidden');
+            this.continueButton.removeClass('button--hidden');
+        }
+    }
+
+    initNextSentence() {
+        this.activeResultBlock = new Component({
+            tag: 'div',
+            className: 'result-block',
+        });
+        this.resultField.append(this.activeResultBlock);
+        // this.activeResultBlock.destroyChildren();
+        this.fillSourceBlock();
     }
 
     fillSourceBlock() {
@@ -129,9 +168,11 @@ export default class GamePage extends Component {
 
     setupListeners() {
         this.checkButton.addListener('click', this.checkResult.bind(this));
+        this.continueButton.addListener('click', this.initNextSentence.bind(this));
     }
 
     build() {
-        this.appendChildren([this.resultBlock, this.sourceBlock, this.checkButton]);
+        // this.resultField.append(this.activeResultBlock);
+        this.appendChildren([this.resultField, this.sourceBlock, this.checkButton, this.continueButton]);
     }
 }
