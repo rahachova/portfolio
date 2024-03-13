@@ -4,17 +4,22 @@ import Card from '../card/card';
 import gameController, { GameController } from '../../../controllers/gameController';
 import loginController from '../../../controllers/loginController';
 import { Level } from '../../../types/level';
+import ResultBlock from '../resultBlock/resultBlock';
 
 export default class GamePage extends Component {
-    activeResultBlock: Component;
+    activeResultBlock: ResultBlock;
 
     resultField: Component;
 
     sourceBlock: Component;
 
+    controls: Component;
+
     checkButton: Component;
 
     continueButton: Component;
+
+    autoCompleteButton: Component;
 
     cardQuantity: number = 0;
 
@@ -33,10 +38,7 @@ export default class GamePage extends Component {
             className: 'result-field',
         });
 
-        this.activeResultBlock = new Component({
-            tag: 'div',
-            className: 'result-block',
-        });
+        this.activeResultBlock = new ResultBlock();
         this.sourceBlock = new Component({
             tag: 'div',
             className: 'source-block',
@@ -46,10 +48,19 @@ export default class GamePage extends Component {
             className: 'button button--hidden',
             text: 'Check',
         });
+        this.controls = new Component({
+            tag: 'div',
+            className: 'controls',
+        });
         this.continueButton = new Component({
             tag: 'button',
             className: 'button button--hidden',
             text: 'Continue',
+        });
+        this.autoCompleteButton = new Component({
+            tag: 'button',
+            className: 'button',
+            text: 'Auto Complete',
         });
         this.setupSubscribtion();
         this.setupListeners();
@@ -106,14 +117,14 @@ export default class GamePage extends Component {
         return array.map((word) => word.length * percentsPerSymbol);
     }
 
-    moveCardToResultBlock(card: Card, event: Event) {
+    moveCardToResultBlock(card: Card, event?: Event) {
         if (card.isUsed || card.isInactive) {
             return;
         }
         this.activeResultBlock.append(card);
         this.sourceBlock.removeChild(card);
         card.setIsUsed(true);
-        event.stopImmediatePropagation();
+        event?.stopImmediatePropagation();
         if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
             this.showCheckButton();
         }
@@ -139,35 +150,23 @@ export default class GamePage extends Component {
     }
 
     checkResult() {
-        const cardToCheck = this.activeResultBlock.getChildren();
-        const isCorrect = cardToCheck.every((card, index) => (card as Card).cardIndex === index);
-        console.log(isCorrect);
-        cardToCheck.forEach((card, index) => {
-            if ((card as Card).cardIndex === index) {
-                card.addClass('card--correct');
-            } else {
-                card.addClass('card--incorrect');
-            }
-        });
+        const isCorrect = this.activeResultBlock.checkIsCorrect();
         if (isCorrect) {
             this.checkButton.addClass('button--hidden');
             this.continueButton.removeClass('button--hidden');
         }
     }
 
-    initNextSentence() {
-        this.activeResultBlock = new Component({
-            tag: 'div',
-            className: 'result-block',
+    handleAutoComplete() {
+        [...this.sourceBlock.getChildren()].forEach((card) => {
+            this.moveCardToResultBlock(card as Card);
         });
-        this.resultField.append(this.activeResultBlock);
+        this.activeResultBlock.setCorrectOrder()
     }
 
-    disableInactiveCards() {
-        this.activeResultBlock.getChildren().forEach((card) => {
-            (card as Card).setIsInactive();
-            card.addClass('card--inactive');
-        });
+    initNextSentence() {
+        this.activeResultBlock = new ResultBlock();
+        this.resultField.append(this.activeResultBlock);
     }
 
     switchToNextSentence() {
@@ -181,7 +180,7 @@ export default class GamePage extends Component {
     }
 
     handleContinueButton() {
-        this.disableInactiveCards();
+        this.activeResultBlock.disableInactiveCards();
         this.switchToNextSentence();
         this.initNextSentence();
         this.fillSourceBlock();
@@ -201,10 +200,12 @@ export default class GamePage extends Component {
     setupListeners() {
         this.checkButton.addListener('click', this.checkResult.bind(this));
         this.continueButton.addListener('click', this.handleContinueButton.bind(this));
+        this.autoCompleteButton.addListener('click', this.handleAutoComplete.bind(this));
     }
 
     build() {
         this.resultField.append(this.activeResultBlock);
-        this.appendChildren([this.resultField, this.sourceBlock, this.checkButton, this.continueButton]);
+        this.controls.appendChildren([this.autoCompleteButton, this.checkButton, this.continueButton]);
+        this.appendChildren([this.resultField, this.sourceBlock, this.controls]);
     }
 }

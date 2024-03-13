@@ -29,7 +29,9 @@
     background-color: white;
 }
 
-.result-block {
+.controls {
     display: flex;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
 }

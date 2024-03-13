@@ -38,8 +38,8 @@ export default class StartScreen extends Component {
 
         this.setupSubscribtion();
         this.setupListeners();
-        // this.setupState();
         this.build();
+        // this.handleStart();
     }
 
     updateGreeting() {
