@@ -1,12 +1,21 @@
 .card {
-    padding: 5px;
-    border: 1px solid black;
-    box-sizing: border-box;
-    border-radius: 10px;
+    padding: 0 6px 0 10px;
+    margin-left: -8px;
+    margin-right: -8px;
     cursor: pointer;
     transition: all 0.2s;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
     background-color: #c2ede9;
+    position: relative;
+    mask:
+        radial-gradient(circle at 0 50%, rgba(0, 0, 0, 0) 16px, black 16px),
+        linear-gradient(rgba(0, 0, 0, 0) 0px, black 0px) right / 16px 100%,
+        radial-gradient(circle at calc(100% - 16px) 50%, rgba(0, 0, 0, 1) 16px, rgba(0, 0, 0, 0) 16px);
+    mask-composite: subtract;
+    mask-repeat: no-repeat;
 }
 
 .card:hover {
@@ -21,12 +30,12 @@
 
 .card--correct {
     outline-offset: -4px;
-    outline: 3px ridge rgb(55 255 33 / 80%);
+    color: green;
 }
 
 .card--incorrect {
     outline-offset: -4px;
-    outline: 3px ridge rgb(255 101 101 / 80%);
+    color: red;
 }
 
 .card--inactive {
