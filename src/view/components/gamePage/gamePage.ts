@@ -21,6 +21,8 @@ export default class GamePage extends Component {
 
     autoCompleteButton: Component;
 
+    translationHint: Component;
+
     cardQuantity: number = 0;
 
     maxSentenceIndex: number = 9;
@@ -62,6 +64,11 @@ export default class GamePage extends Component {
             className: 'button',
             text: 'Auto Complete',
         });
+        this.translationHint = new Component({
+            tag: 'p',
+            className: 'translation-hint',
+            text: 'AAAAAAAAAAAA',
+        });
         this.setupSubscribtion();
         this.setupListeners();
         this.build();
@@ -70,6 +77,14 @@ export default class GamePage extends Component {
     initGamePage() {
         this.showGamePage();
         this.fillSourceBlock();
+        this.addTranslationHint();
+    }
+
+    addTranslationHint() {
+        this.translationHint.setTextContent(
+            GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex]
+                .textExampleTranslate
+        );
     }
 
     showGamePage() {
@@ -169,6 +184,7 @@ export default class GamePage extends Component {
 
     initNextSentence() {
         this.activeResultBlock = new ResultBlock();
+        this.addTranslationHint();
         this.resultField.append(this.activeResultBlock);
     }
 
@@ -276,6 +292,6 @@ export default class GamePage extends Component {
     build() {
         this.resultField.append(this.activeResultBlock);
         this.controls.appendChildren([this.autoCompleteButton, this.checkButton, this.continueButton]);
-        this.appendChildren([this.resultField, this.sourceBlock, this.controls]);
+        this.appendChildren([this.translationHint, this.resultField, this.sourceBlock, this.controls]);
     }
 }

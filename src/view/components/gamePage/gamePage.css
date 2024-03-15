@@ -1,7 +1,7 @@
 .game-page {
     display: none;
     flex-direction: column;
-    gap: 100px;
+    gap: 40px;
     font-size: 24px;
 }
 
@@ -34,4 +34,13 @@
     flex-direction: row;
     justify-content: center;
     gap: 30px;
+}
+
+.translation-hint {
+    padding: 10px;
+    border: 2px dashed #3f3f3f;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+    text-wrap: wrap;
 }
