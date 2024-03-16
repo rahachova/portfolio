@@ -37,10 +37,37 @@
 }
 
 .translation-hint {
+    display: none;
     padding: 10px;
     border: 2px dashed #3f3f3f;
     border-radius: 10px;
     background-color: white;
     text-align: center;
     text-wrap: wrap;
+    font-size: 20px;
+}
+
+.translation-hint--shown {
+    display: block;
+}
+
+.settings-button {
+    padding: 0 5px;
+    min-width: 40px;
+    height: 50px;
+    align-self: center;
+    border: none;
+    outline: none;
+    background: #3f3f3f;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.settings-button--checked {
+    background: #b0b0b0;
 }

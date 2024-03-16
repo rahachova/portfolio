@@ -5,6 +5,7 @@ import gameController, { GameController } from '../../../controllers/gameControl
 import loginController from '../../../controllers/loginController';
 import { Level } from '../../../types/level';
 import ResultBlock from '../resultBlock/resultBlock';
+import HintImage from '../../../assets/images/hint.svg';
 
 export default class GamePage extends Component {
     activeResultBlock: ResultBlock;
@@ -15,6 +16,8 @@ export default class GamePage extends Component {
 
     controls: Component;
 
+    settings: Component;
+
     checkButton: Component;
 
     continueButton: Component;
@@ -22,6 +25,10 @@ export default class GamePage extends Component {
     autoCompleteButton: Component;
 
     translationHint: Component;
+
+    toggleTranslationHint: Component;
+
+    translationHintIcon: Component;
 
     cardQuantity: number = 0;
 
@@ -54,6 +61,13 @@ export default class GamePage extends Component {
             tag: 'div',
             className: 'controls',
         });
+        this.toggleTranslationHint = new Component({
+            tag: 'button',
+            className: 'settings-button',
+        });
+        this.translationHintIcon = new Component({
+            tag: 'img',
+        });
         this.continueButton = new Component({
             tag: 'button',
             className: 'button button--hidden',
@@ -64,13 +78,17 @@ export default class GamePage extends Component {
             className: 'button',
             text: 'Auto Complete',
         });
+        this.settings = new Component({
+            tag: 'div',
+            className: 'settings',
+        });
         this.translationHint = new Component({
             tag: 'p',
             className: 'translation-hint',
-            text: 'AAAAAAAAAAAA',
         });
         this.setupSubscribtion();
         this.setupListeners();
+        this.setupAttribute();
         this.build();
     }
 
@@ -85,6 +103,16 @@ export default class GamePage extends Component {
             GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex]
                 .textExampleTranslate
         );
+    }
+
+    showTranslationHint() {
+        if (this.toggleTranslationHint.checkClass('settings-button--checked')) {
+            this.translationHint.removeClass('translation-hint--shown');
+            this.toggleTranslationHint.removeClass('settings-button--checked');
+        } else {
+            this.translationHint.addClass('translation-hint--shown');
+            this.toggleTranslationHint.addClass('settings-button--checked');
+        }
     }
 
     showGamePage() {
@@ -279,6 +307,10 @@ export default class GamePage extends Component {
         loginController.onLogout(this.hideGamePage.bind(this));
     }
 
+    setupAttribute() {
+        this.translationHintIcon.setAttribute('src', HintImage);
+    }
+
     setupListeners() {
         this.checkButton.addListener('click', this.checkResult.bind(this));
         this.continueButton.addListener('click', this.handleContinueButton.bind(this));
@@ -287,11 +319,14 @@ export default class GamePage extends Component {
         this.resultField.addListener('drop', (event) => this.handleResultDrop(event as DragEvent));
         this.sourceBlock.addListener('dragover', (event) => GamePage.handleDragover(event as DragEvent));
         this.sourceBlock.addListener('drop', (event) => this.handleSourceDrop(event as DragEvent));
+        this.toggleTranslationHint.addListener('click', () => this.showTranslationHint());
     }
 
     build() {
+        this.settings.append(this.toggleTranslationHint);
         this.resultField.append(this.activeResultBlock);
+        this.toggleTranslationHint.append(this.translationHintIcon);
         this.controls.appendChildren([this.autoCompleteButton, this.checkButton, this.continueButton]);
-        this.appendChildren([this.translationHint, this.resultField, this.sourceBlock, this.controls]);
+        this.appendChildren([this.settings, this.translationHint, this.resultField, this.sourceBlock, this.controls]);
     }
 }

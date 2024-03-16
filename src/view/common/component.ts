@@ -50,9 +50,9 @@ export default class Component {
         this.node.removeAttribute(attribute);
     }
 
-    public toggleClass(className: string) {
-        this.node.classList.toggle(className);
-    }
+    // public toggleClass(className: string) {
+    //     this.node.classList.toggle(className);
+    // }
 
     public addClass(className: string) {
         this.node.classList.add(className);
@@ -60,6 +60,10 @@ export default class Component {
 
     public removeClass(className: string) {
         this.node.classList.remove(className);
+    }
+
+    public checkClass(className: string): boolean {
+        return this.node.classList.contains(className);
     }
 
     public addListener(event: string, listener: (event: Event) => void, options: boolean = false) {
