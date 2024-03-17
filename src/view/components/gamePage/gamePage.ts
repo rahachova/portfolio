@@ -6,7 +6,8 @@ import loginController from '../../../controllers/loginController';
 import { Level } from '../../../types/level';
 import ResultBlock from '../resultBlock/resultBlock';
 import TranslationHintIcon from '../../../assets/images/translation-hint.svg';
-import AudioHintIcon from '../../../assets/images/audio-hint.svg';
+import AudioMuteHintIcon from '../../../assets/images/speaker-mute-hint.svg';
+import AudioHintIcon from '../../../assets/images/speaker-hint.svg';
 
 export default class GamePage extends Component {
     activeResultBlock: ResultBlock;
@@ -32,6 +33,8 @@ export default class GamePage extends Component {
     translationHintIcon: Component;
 
     toggleAudioHint: Component;
+
+    // audioMuteHintIcon: Component;
 
     audioHintIcon: Component;
 
@@ -84,6 +87,9 @@ export default class GamePage extends Component {
         this.audioHintIcon = new Component({
             tag: 'img',
         });
+        // this.audioMuteHintIcon = new Component({
+        //     tag: 'img',
+        // });
         this.continueButton = new Component({
             tag: 'button',
             className: 'button button--hidden',
@@ -122,6 +128,8 @@ export default class GamePage extends Component {
             `../../../assets/${GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex].audioExample}`
         );
         const audio = new Audio(audioFile.default);
+        audio.addEventListener('playing', () => this.audioHintIcon.setAttribute('src', AudioHintIcon));
+        audio.addEventListener('ended', () => this.audioHintIcon.setAttribute('src', AudioMuteHintIcon));
         audio.play();
     }
 
@@ -329,7 +337,7 @@ export default class GamePage extends Component {
 
     setupAttribute() {
         this.translationHintIcon.setAttribute('src', TranslationHintIcon);
-        this.audioHintIcon.setAttribute('src', AudioHintIcon);
+        this.audioHintIcon.setAttribute('src', AudioMuteHintIcon);
     }
 
     setupListeners() {
