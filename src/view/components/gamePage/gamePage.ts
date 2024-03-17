@@ -5,7 +5,8 @@ import gameController, { GameController } from '../../../controllers/gameControl
 import loginController from '../../../controllers/loginController';
 import { Level } from '../../../types/level';
 import ResultBlock from '../resultBlock/resultBlock';
-import HintImage from '../../../assets/images/hint.svg';
+import TranslationHintIcon from '../../../assets/images/translation-hint.svg';
+import AudioHintIcon from '../../../assets/images/audio-hint.svg';
 
 export default class GamePage extends Component {
     activeResultBlock: ResultBlock;
@@ -29,6 +30,10 @@ export default class GamePage extends Component {
     toggleTranslationHint: Component;
 
     translationHintIcon: Component;
+
+    toggleAudioHint: Component;
+
+    audioHintIcon: Component;
 
     cardQuantity: number = 0;
 
@@ -68,6 +73,17 @@ export default class GamePage extends Component {
         this.translationHintIcon = new Component({
             tag: 'img',
         });
+        this.translationHint = new Component({
+            tag: 'p',
+            className: 'translation-hint',
+        });
+        this.toggleAudioHint = new Component({
+            tag: 'button',
+            className: 'settings-button',
+        });
+        this.audioHintIcon = new Component({
+            tag: 'img',
+        });
         this.continueButton = new Component({
             tag: 'button',
             className: 'button button--hidden',
@@ -81,10 +97,6 @@ export default class GamePage extends Component {
         this.settings = new Component({
             tag: 'div',
             className: 'settings',
-        });
-        this.translationHint = new Component({
-            tag: 'p',
-            className: 'translation-hint',
         });
         this.setupSubscribtion();
         this.setupListeners();
@@ -103,6 +115,14 @@ export default class GamePage extends Component {
             GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex]
                 .textExampleTranslate
         );
+    }
+
+    async playAudio() {
+        const audioFile = await import(
+            `../../../assets/${GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex].audioExample}`
+        );
+        const audio = new Audio(audioFile.default);
+        audio.play();
     }
 
     showTranslationHint() {
@@ -308,7 +328,8 @@ export default class GamePage extends Component {
     }
 
     setupAttribute() {
-        this.translationHintIcon.setAttribute('src', HintImage);
+        this.translationHintIcon.setAttribute('src', TranslationHintIcon);
+        this.audioHintIcon.setAttribute('src', AudioHintIcon);
     }
 
     setupListeners() {
@@ -320,12 +341,14 @@ export default class GamePage extends Component {
         this.sourceBlock.addListener('dragover', (event) => GamePage.handleDragover(event as DragEvent));
         this.sourceBlock.addListener('drop', (event) => this.handleSourceDrop(event as DragEvent));
         this.toggleTranslationHint.addListener('click', () => this.showTranslationHint());
+        this.toggleAudioHint.addListener('click', () => this.playAudio());
     }
 
     build() {
-        this.settings.append(this.toggleTranslationHint);
+        this.settings.appendChildren([this.toggleTranslationHint, this.toggleAudioHint]);
         this.resultField.append(this.activeResultBlock);
         this.toggleTranslationHint.append(this.translationHintIcon);
+        this.toggleAudioHint.append(this.audioHintIcon);
         this.controls.appendChildren([this.autoCompleteButton, this.checkButton, this.continueButton]);
         this.appendChildren([this.settings, this.translationHint, this.resultField, this.sourceBlock, this.controls]);
     }

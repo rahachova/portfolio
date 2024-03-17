@@ -20,7 +20,7 @@ const baseConfig = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(jpg|png|svg|gif)$/,
+                test: /\.(jpg|png|svg|gif|mp3)$/,
                 type: 'asset/resource',
             },
         ],
