@@ -57,10 +57,14 @@ export default class GamePage extends Component {
 
     currentSentenceIndex: number = 0;
 
-    isPlayAudioActive: boolean = false;
+    isPlayAudioActive: boolean = true;
+
+    isImageHintActive: boolean = true;
+
+    isTranslationHintActive: boolean = true;
 
     constructor() {
-        super({ tag: 'div', className: 'game-page game-page--background-hidden' });
+        super({ tag: 'div', className: 'game-page' });
         this.resultField = new Component({
             tag: 'div',
             className: 'result-field',
@@ -82,7 +86,7 @@ export default class GamePage extends Component {
         });
         this.toggleTranslationHint = new Component({
             tag: 'button',
-            className: 'settings-button',
+            className: 'settings-button settings-button--checked',
         });
         this.translationHintIcon = new Component({
             tag: 'img',
@@ -93,21 +97,21 @@ export default class GamePage extends Component {
         });
         this.toggleAudioHintButton = new Component({
             tag: 'button',
-            className: 'settings-button',
+            className: 'settings-button settings-button--checked',
         });
         this.toggleAudioHintIcon = new Component({
             tag: 'img',
         });
         this.playAudioHintButton = new Component({
             tag: 'button',
-            className: 'play-button play-button--hidden',
+            className: 'play-button',
         });
         this.playAudioHintIcon = new Component({
             tag: 'img',
         });
         this.toggleImageHintButton = new Component({
             tag: 'button',
-            className: 'settings-button',
+            className: 'settings-button settings-button--checked',
         });
         this.imageHintIcon = new Component({
             tag: 'img',
@@ -133,9 +137,42 @@ export default class GamePage extends Component {
     }
 
     initGamePage() {
+        this.initSettings();
         this.showGamePage();
         this.fillSourceBlock();
         this.addTranslationHint();
+    }
+
+    initSettings() {
+        const storedIsTranslationHintActive = localStorage.getItem('isTranslationHintActive');
+        this.isTranslationHintActive = storedIsTranslationHintActive ? JSON.parse(storedIsTranslationHintActive) : true;
+        if (this.isTranslationHintActive) {
+            this.translationHint.removeClass('translation-hint--hidden');
+            this.toggleTranslationHint.addClass('settings-button--checked');
+        } else {
+            this.translationHint.addClass('translation-hint--hidden');
+            this.toggleTranslationHint.removeClass('settings-button--checked');
+        }
+        const storedIsImageHintActive = localStorage.getItem('isImageHintActive');
+        this.isImageHintActive = storedIsImageHintActive ? JSON.parse(storedIsImageHintActive) : true;
+        if (this.isImageHintActive) {
+            this.removeClass('game-page--background-hidden');
+            this.toggleImageHintButton.addClass('settings-button--checked');
+        } else {
+            this.addClass('game-page--background-hidden');
+            this.toggleImageHintButton.removeClass('settings-button--checked');
+        }
+        const storedIsAudioHintActive = localStorage.getItem('isPlayAudioActive');
+        this.isPlayAudioActive = storedIsAudioHintActive ? JSON.parse(storedIsAudioHintActive) : true;
+        if (this.isPlayAudioActive) {
+            this.playAudioHintButton.removeClass('play-button--hidden');
+            this.toggleAudioHintIcon.setAttribute('src', AudioControlIcon);
+            this.toggleAudioHintButton.addClass('settings-button--checked');
+        } else {
+            this.toggleAudioHintIcon.setAttribute('src', AudioMuteControlIcon);
+            this.playAudioHintButton.addClass('play-button--hidden');
+            this.toggleAudioHintButton.removeClass('settings-button--checked');
+        }
     }
 
     addTranslationHint() {
@@ -147,6 +184,7 @@ export default class GamePage extends Component {
 
     toggleAudioHint() {
         this.isPlayAudioActive = !this.isPlayAudioActive;
+        localStorage.setItem('isPlayAudioActive', JSON.stringify(this.isPlayAudioActive));
         if (this.isPlayAudioActive) {
             this.playAudioHintButton.removeClass('play-button--hidden');
             this.toggleAudioHintIcon.setAttribute('src', AudioControlIcon);
@@ -169,22 +207,26 @@ export default class GamePage extends Component {
     }
 
     showTranslationHint() {
-        if (this.toggleTranslationHint.checkClass('settings-button--checked')) {
-            this.translationHint.removeClass('translation-hint--shown');
-            this.toggleTranslationHint.removeClass('settings-button--checked');
-        } else {
-            this.translationHint.addClass('translation-hint--shown');
+        this.isTranslationHintActive = !this.isTranslationHintActive;
+        localStorage.setItem('isTranslationHintActive', JSON.stringify(this.isTranslationHintActive));
+        if (this.isTranslationHintActive) {
+            this.translationHint.removeClass('translation-hint--hidden');
             this.toggleTranslationHint.addClass('settings-button--checked');
+        } else {
+            this.translationHint.addClass('translation-hint--hidden');
+            this.toggleTranslationHint.removeClass('settings-button--checked');
         }
     }
 
     toggleImageHint() {
-        if (this.toggleImageHintButton.checkClass('settings-button--checked')) {
-            this.addClass('game-page--background-hidden');
-            this.toggleImageHintButton.removeClass('settings-button--checked');
-        } else {
+        this.isImageHintActive = !this.isImageHintActive;
+        localStorage.setItem('isImageHintActive', JSON.stringify(this.isImageHintActive));
+        if (this.isImageHintActive) {
             this.removeClass('game-page--background-hidden');
             this.toggleImageHintButton.addClass('settings-button--checked');
+        } else {
+            this.addClass('game-page--background-hidden');
+            this.toggleImageHintButton.removeClass('settings-button--checked');
         }
     }
 
@@ -418,7 +460,7 @@ export default class GamePage extends Component {
     setupAttribute() {
         this.translationHintIcon.setAttribute('src', TranslationHintIcon);
         this.playAudioHintIcon.setAttribute('src', AudioHintIcon);
-        this.toggleAudioHintIcon.setAttribute('src', AudioMuteControlIcon);
+        this.toggleAudioHintIcon.setAttribute('src', AudioControlIcon);
         this.imageHintIcon.setAttribute('src', ImageHintIcon);
     }
 

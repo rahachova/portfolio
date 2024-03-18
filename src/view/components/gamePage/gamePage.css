@@ -39,7 +39,7 @@
 }
 
 .translation-hint {
-    display: none;
+    display: block;
     padding: 10px;
     border: 2px dashed #3f3f3f;
     border-radius: 10px;
@@ -49,8 +49,8 @@
     font-size: 20px;
 }
 
-.translation-hint--shown {
-    display: block;
+.translation-hint--hidden {
+    display: none;
 }
 
 .settings {

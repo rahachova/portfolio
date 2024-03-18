@@ -27,7 +27,7 @@ class LoginController {
     }
 
     handleLogout() {
-        this.detateUserData();
+        LoginController.detateUserData();
         this.logoutSubscribtions.forEach((subscribtion) => subscribtion());
     }
 
@@ -36,9 +36,8 @@ class LoginController {
         localStorage.setItem(this.surNameKey, surname);
     }
 
-    detateUserData() {
-        localStorage.removeItem(this.firstNameKey);
-        localStorage.removeItem(this.surNameKey);
+    static detateUserData() {
+        localStorage.clear();
     }
 
     getFullName() {
