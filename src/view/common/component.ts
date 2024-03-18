@@ -50,6 +50,10 @@ export default class Component {
         this.node.removeAttribute(attribute);
     }
 
+    public toggleClass(className: string) {
+        this.node.classList.toggle(className);
+    }
+
     public addClass(className: string) {
         this.node.classList.add(className);
     }

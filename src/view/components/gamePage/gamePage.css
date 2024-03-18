@@ -71,3 +71,17 @@
 .settings-button--checked {
     background: #b0b0b0;
 }
+
+.play-button {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    align-self: center;
+    cursor: pointer;
+}
+
+.play-button--hidden {
+    display: none;
+}
