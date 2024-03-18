@@ -12,7 +12,6 @@ export default {
             words: [
                 {
                     audioExample: 'files/01_0001_example.mp3',
-                    // textExample: '1 2 3',
                     textExample: 'The students agree they have too much homework',
                     textExampleTranslate: 'Студенты согласны, что у них слишком много домашней работы',
                     id: 1,

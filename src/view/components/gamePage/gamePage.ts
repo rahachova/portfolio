@@ -190,17 +190,32 @@ export default class GamePage extends Component {
         this.continueButton.addClass('button--hidden');
     }
 
-    createCards() {
+    async createCards() {
         const arrayOfWords = GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[
             this.currentSentenceIndex
         ].textExample.split(' ');
         this.cardQuantity = arrayOfWords.length;
         const cardWidths = GamePage.calculateCardWidths(arrayOfWords);
+        const imageSrc = await import(
+            `../../../assets/images/${GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].levelData.cutSrc}`
+        );
         return arrayOfWords.map((word, index) => {
             const card = new Card(word, index);
-            card.setAttribute('style', `width: ${cardWidths[index]}%;`);
+            const backgroundOffSet = cardWidths.slice(0, index).reduce((offSet, width) => offSet + width, 0);
+            const calculatedBackgroundXOffSet = index > 0 ? `-${backgroundOffSet}px` : 'unset';
+            const calculatedBackgroundYOffSet = `-${50 * this.currentSentenceIndex}px`;
+
+            card.setAttribute(
+                'style',
+                `width: ${cardWidths[index]}px; background-image: url(${imageSrc.default}); background-position-x: ${calculatedBackgroundXOffSet}; background-position-y: ${calculatedBackgroundYOffSet};`
+            );
             card.setAttribute('draggable', 'true');
             card.setAttribute('id', `${index}`);
+            if (index === 0) {
+                card.addClass('card--first');
+            } else if (index === arrayOfWords.length - 1) {
+                card.addClass('card--last');
+            }
             card.addListener('click', (event: Event) => this.moveCardToResultBlock(card, event));
             card.addListener('click', (event: Event) => this.moveCardToSourceBlock(card, event));
             card.addListener('dragstart', (event) => GamePage.handleDragStart(event as DragEvent, card as Card));
@@ -209,9 +224,10 @@ export default class GamePage extends Component {
     }
 
     static calculateCardWidths(array: string[]): number[] {
+        const imageWidth = 1000;
         const totalSymbolsAmount = array.reduce((accum, currentValue) => accum + currentValue.length, 0);
-        const percentsPerSymbol = 100 / totalSymbolsAmount;
-        return array.map((word) => word.length * percentsPerSymbol);
+        const pixelsPerSymbol = imageWidth / totalSymbolsAmount;
+        return array.map((word) => word.length * pixelsPerSymbol);
     }
 
     moveCardToResultBlock(card: Card, event?: Event) {
@@ -252,6 +268,7 @@ export default class GamePage extends Component {
             this.checkButton.addClass('button--hidden');
             this.continueButton.removeClass('button--hidden');
             this.showPlayButtonOnCorrectCheck();
+            this.activeResultBlock.disableInactiveCards();
         }
     }
 
@@ -291,7 +308,6 @@ export default class GamePage extends Component {
     }
 
     handleContinueButton() {
-        this.activeResultBlock.disableInactiveCards();
         this.switchToNextSentence();
         this.initNextSentence();
         this.fillSourceBlock();
@@ -299,13 +315,13 @@ export default class GamePage extends Component {
         this.hidePlayButtonOnContinue();
     }
 
-    fillSourceBlock() {
+    async fillSourceBlock() {
         this.sourceBlock.destroyChildren();
-        this.sourceBlock.appendChildren(GamePage.shuffleCards(this.createCards()));
+        const sourceCards = await this.createCards();
+        this.sourceBlock.appendChildren(GamePage.shuffleCards(sourceCards));
     }
 
     static handleDragStart(event: DragEvent, card: Card) {
-        // event.preventDefault();
         event.dataTransfer?.setData('text', String(card.cardIndex));
         event.dataTransfer!.dropEffect = 'move';
     }
@@ -321,7 +337,7 @@ export default class GamePage extends Component {
         const id = Number(event.dataTransfer?.getData('text'));
         const cardToMove = (this.sourceBlock.getChildren() as Card[]).find((card: Card) => card.cardIndex === id) as Card;
         if (!cardToMove) {
-            GamePage.rearangeInResultBlock(event, id, this.activeResultBlock);
+            GamePage.rearangeInBlock(event, id, this.activeResultBlock);
             return;
         }
         this.activeResultBlock.append(cardToMove);
@@ -330,22 +346,27 @@ export default class GamePage extends Component {
         if (this.cardQuantity === this.activeResultBlock.getChildren().length) {
             this.showCheckButton();
         }
+        if ((event.target as HTMLElement).classList.contains('card')) {
+            GamePage.rearangeInBlock(event, id, this.activeResultBlock);
+        }
     }
 
-    static rearangeInResultBlock(event: DragEvent, cardIndex: number, block: Component) {
-        if (!(event.target as HTMLElement).classList.contains('card')) {
-            return;
+    static rearangeInBlock(event: DragEvent, cardIndex: number, block: Component) {
+        const cards = block.getChildren() as Card[];
+        const cardToMoveIndex = cards.findIndex((card: Card) => card.cardIndex === cardIndex);
+        const [cardToMove] = cards.splice(cardToMoveIndex, 1);
+        let newCards;
+        if ((event.target as HTMLElement).classList.contains('card')) {
+            const targetWidth = (event.target as HTMLElement).offsetWidth;
+            const clickOffset = event.offsetX;
+            const isMoveBeforeTarget = clickOffset < targetWidth / 2;
+            const targedCardId = Number((event.target as HTMLElement).id);
+            const targedCardIndex = cards.findIndex((card: Card) => card.cardIndex === targedCardId);
+            const indexToMoveOn = isMoveBeforeTarget ? targedCardIndex : targedCardIndex + 1;
+            newCards = [...cards.slice(0, indexToMoveOn), cardToMove, ...cards.slice(indexToMoveOn)];
+        } else {
+            newCards = [...cards, cardToMove];
         }
-        const targetWidth = (event.target as HTMLElement).offsetWidth;
-        const clickOffset = event.offsetX;
-        const isMoveBeforeTarget = clickOffset < targetWidth / 2;
-        const targedCardId = Number((event.target as HTMLElement).id);
-        const resultCards = block.getChildren() as Card[];
-        const cardToMoveIndex = resultCards.findIndex((card: Card) => card.cardIndex === cardIndex);
-        const [cardToMove] = resultCards.splice(cardToMoveIndex, 1);
-        const targedCardIndex = resultCards.findIndex((card: Card) => card.cardIndex === targedCardId);
-        const indexToMoveOn = isMoveBeforeTarget ? targedCardIndex : targedCardIndex + 1;
-        const newCards = [...resultCards.slice(0, indexToMoveOn), cardToMove, ...resultCards.slice(indexToMoveOn)];
         block.destroyChildren();
         block.appendChildren(newCards);
     }
@@ -356,7 +377,7 @@ export default class GamePage extends Component {
         const id = Number(event.dataTransfer?.getData('text'));
         const cardToMove = (this.activeResultBlock.getChildren() as Card[]).find((card: Card) => card.cardIndex === id) as Card;
         if (!cardToMove) {
-            GamePage.rearangeInResultBlock(event, id, this.sourceBlock);
+            GamePage.rearangeInBlock(event, id, this.sourceBlock);
             return;
         }
         this.sourceBlock.append(cardToMove);

@@ -1,7 +1,7 @@
 .game-page {
     display: none;
     flex-direction: column;
-    gap: 40px;
+    gap: 15px;
     font-size: 24px;
 }
 
@@ -14,6 +14,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 10px;
     height: 70px;
     border: 1px solid black;
     border-radius: 10px;
@@ -22,11 +23,12 @@
 
 .result-field {
     padding: 7px;
-    width: 700px;
-    min-height: 300px;
+    width: 1000px;
+    min-height: 500px;
     border: 1px solid black;
     border-radius: 10px;
     background-color: white;
+    align-self: center;
 }
 
 .controls {
@@ -80,6 +82,7 @@
     background: transparent;
     align-self: center;
     cursor: pointer;
+    position: absolute;
 }
 
 .play-button--hidden {

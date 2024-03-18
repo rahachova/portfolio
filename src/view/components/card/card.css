@@ -1,7 +1,13 @@
 .card {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-text-fill-color: #000000;
+    -webkit-text-stroke: 1px #fff;
+    /* -webkit-text-stroke: 1px #30b626; */
     padding: 0 6px 0 10px;
     margin-left: -8px;
     margin-right: -8px;
+    font-size: 26px;
+    font-weight: 800;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -12,8 +18,21 @@
     position: relative;
     mask:
         radial-gradient(circle at 0 50%, rgba(0, 0, 0, 0) 16px, black 16px),
-        linear-gradient(rgba(0, 0, 0, 0) 0px, black 0px) right / 16px 100%,
+        linear-gradient(rgba(0, 0, 0, 0) 0px, black 0px) 101% / 16px 100%,
         radial-gradient(circle at calc(100% - 16px) 50%, rgba(0, 0, 0, 1) 16px, rgba(0, 0, 0, 0) 16px);
+    mask-composite: subtract;
+    mask-repeat: no-repeat;
+}
+
+.card--first {
+    mask:
+        linear-gradient(rgba(0, 0, 0, 0) 0px, rgb(255, 255, 255) 0px) left/ calc(100% - 16px) 100%,
+        radial-gradient(circle at calc(100% - 16px) 50%, rgba(0, 0, 0, 1) 16px, rgba(0, 0, 0, 0) 16px);
+    mask-composite: add;
+    mask-repeat: no-repeat;
+}
+.card--last {
+    mask: radial-gradient(circle at 0 50%, rgba(0, 0, 0, 0) 16px, black 16px);
     mask-composite: subtract;
     mask-repeat: no-repeat;
 }
@@ -29,13 +48,11 @@
 }
 
 .card--correct {
-    outline-offset: -4px;
-    color: green;
+    -webkit-text-fill-color: green;
 }
 
 .card--incorrect {
-    outline-offset: -4px;
-    color: red;
+    -webkit-text-fill-color: red;
 }
 
 .card--inactive {
