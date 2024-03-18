@@ -1,0 +1,36 @@
+.settings {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.settings-button {
+    padding: 0 5px;
+    min-width: 40px;
+    height: 50px;
+    align-self: center;
+    border: none;
+    outline: none;
+    background: #3f3f3f;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.settings-button--checked {
+    background: #b0b0b0;
+}
+
+label {
+    font-size: 20px;
+    padding-right: 10px;
+}
+
+select {
+    font-size: 20px;
+    padding: 2px 8px;
+}

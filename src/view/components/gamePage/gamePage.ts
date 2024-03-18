@@ -1,19 +1,18 @@
 import './gamePage.css';
 import Component from '../../common/component';
 import Card from '../card/card';
-import gameController, { GameController } from '../../../controllers/gameController';
+import gameController from '../../../controllers/gameController';
 import loginController from '../../../controllers/loginController';
-import { Level } from '../../../types/level';
 import ResultBlock from '../resultBlock/resultBlock';
-import TranslationHintIcon from '../../../assets/images/translation-hint.svg';
-import AudioMuteControlIcon from '../../../assets/images/speaker-mute-hint.svg';
-import AudioControlIcon from '../../../assets/images/speaker-hint.svg';
-import AudioActiveHintIcon from '../../../assets/images/speaker-active.svg';
-import AudioHintIcon from '../../../assets/images/speaker.svg';
-import ImageHintIcon from '../../../assets/images/image-hint.svg';
+import Settings from '../settings/settings';
+import Hints from '../hints/hints';
 
 export default class GamePage extends Component {
     activeResultBlock: ResultBlock;
+
+    settings: Settings;
+
+    hints: Hints;
 
     resultField: Component;
 
@@ -21,47 +20,13 @@ export default class GamePage extends Component {
 
     controls: Component;
 
-    settings: Component;
-
     checkButton: Component;
 
     continueButton: Component;
 
     autoCompleteButton: Component;
 
-    translationHint: Component;
-
-    toggleTranslationHint: Component;
-
-    translationHintIcon: Component;
-
-    toggleAudioHintButton: Component;
-
-    toggleAudioHintIcon: Component;
-
-    playAudioHintButton: Component;
-
-    playAudioHintIcon: Component;
-
-    toggleImageHintButton: Component;
-
-    imageHintIcon: Component;
-
     cardQuantity: number = 0;
-
-    maxSentenceIndex: number = 9;
-
-    currentLevel: Level = 1;
-
-    currentRound: number = 0;
-
-    currentSentenceIndex: number = 0;
-
-    isPlayAudioActive: boolean = true;
-
-    isImageHintActive: boolean = true;
-
-    isTranslationHintActive: boolean = true;
 
     constructor() {
         super({ tag: 'div', className: 'game-page' });
@@ -71,6 +36,8 @@ export default class GamePage extends Component {
         });
 
         this.activeResultBlock = new ResultBlock();
+        this.settings = new Settings();
+        this.hints = new Hints();
         this.sourceBlock = new Component({
             tag: 'div',
             className: 'source-block',
@@ -84,38 +51,6 @@ export default class GamePage extends Component {
             tag: 'div',
             className: 'controls',
         });
-        this.toggleTranslationHint = new Component({
-            tag: 'button',
-            className: 'settings-button settings-button--checked',
-        });
-        this.translationHintIcon = new Component({
-            tag: 'img',
-        });
-        this.translationHint = new Component({
-            tag: 'p',
-            className: 'translation-hint',
-        });
-        this.toggleAudioHintButton = new Component({
-            tag: 'button',
-            className: 'settings-button settings-button--checked',
-        });
-        this.toggleAudioHintIcon = new Component({
-            tag: 'img',
-        });
-        this.playAudioHintButton = new Component({
-            tag: 'button',
-            className: 'play-button',
-        });
-        this.playAudioHintIcon = new Component({
-            tag: 'img',
-        });
-        this.toggleImageHintButton = new Component({
-            tag: 'button',
-            className: 'settings-button settings-button--checked',
-        });
-        this.imageHintIcon = new Component({
-            tag: 'img',
-        });
         this.continueButton = new Component({
             tag: 'button',
             className: 'button button--hidden',
@@ -126,107 +61,22 @@ export default class GamePage extends Component {
             className: 'button',
             text: 'Auto Complete',
         });
-        this.settings = new Component({
-            tag: 'div',
-            className: 'settings',
-        });
         this.setupSubscribtion();
         this.setupListeners();
-        this.setupAttribute();
         this.build();
     }
 
     initGamePage() {
-        this.initSettings();
+        this.settings.initSettings();
         this.showGamePage();
         this.fillSourceBlock();
-        this.addTranslationHint();
     }
 
-    initSettings() {
-        const storedIsTranslationHintActive = localStorage.getItem('isTranslationHintActive');
-        this.isTranslationHintActive = storedIsTranslationHintActive ? JSON.parse(storedIsTranslationHintActive) : true;
-        if (this.isTranslationHintActive) {
-            this.translationHint.removeClass('translation-hint--hidden');
-            this.toggleTranslationHint.addClass('settings-button--checked');
-        } else {
-            this.translationHint.addClass('translation-hint--hidden');
-            this.toggleTranslationHint.removeClass('settings-button--checked');
-        }
-        const storedIsImageHintActive = localStorage.getItem('isImageHintActive');
-        this.isImageHintActive = storedIsImageHintActive ? JSON.parse(storedIsImageHintActive) : true;
-        if (this.isImageHintActive) {
+    showImageHint(isVisible: boolean) {
+        if (isVisible) {
             this.removeClass('game-page--background-hidden');
-            this.toggleImageHintButton.addClass('settings-button--checked');
         } else {
             this.addClass('game-page--background-hidden');
-            this.toggleImageHintButton.removeClass('settings-button--checked');
-        }
-        const storedIsAudioHintActive = localStorage.getItem('isPlayAudioActive');
-        this.isPlayAudioActive = storedIsAudioHintActive ? JSON.parse(storedIsAudioHintActive) : true;
-        if (this.isPlayAudioActive) {
-            this.playAudioHintButton.removeClass('play-button--hidden');
-            this.toggleAudioHintIcon.setAttribute('src', AudioControlIcon);
-            this.toggleAudioHintButton.addClass('settings-button--checked');
-        } else {
-            this.toggleAudioHintIcon.setAttribute('src', AudioMuteControlIcon);
-            this.playAudioHintButton.addClass('play-button--hidden');
-            this.toggleAudioHintButton.removeClass('settings-button--checked');
-        }
-    }
-
-    addTranslationHint() {
-        this.translationHint.setTextContent(
-            GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex]
-                .textExampleTranslate
-        );
-    }
-
-    toggleAudioHint() {
-        this.isPlayAudioActive = !this.isPlayAudioActive;
-        localStorage.setItem('isPlayAudioActive', JSON.stringify(this.isPlayAudioActive));
-        if (this.isPlayAudioActive) {
-            this.playAudioHintButton.removeClass('play-button--hidden');
-            this.toggleAudioHintIcon.setAttribute('src', AudioControlIcon);
-            this.toggleAudioHintButton.addClass('settings-button--checked');
-        } else {
-            this.toggleAudioHintIcon.setAttribute('src', AudioMuteControlIcon);
-            this.playAudioHintButton.addClass('play-button--hidden');
-            this.toggleAudioHintButton.removeClass('settings-button--checked');
-        }
-    }
-
-    async playAudio() {
-        const audioFile = await import(
-            `../../../assets/${GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex].audioExample}`
-        );
-        const audio = new Audio(audioFile.default);
-        audio.addEventListener('playing', () => this.playAudioHintIcon.setAttribute('src', AudioActiveHintIcon));
-        audio.addEventListener('ended', () => this.playAudioHintIcon.setAttribute('src', AudioHintIcon));
-        audio.play();
-    }
-
-    showTranslationHint() {
-        this.isTranslationHintActive = !this.isTranslationHintActive;
-        localStorage.setItem('isTranslationHintActive', JSON.stringify(this.isTranslationHintActive));
-        if (this.isTranslationHintActive) {
-            this.translationHint.removeClass('translation-hint--hidden');
-            this.toggleTranslationHint.addClass('settings-button--checked');
-        } else {
-            this.translationHint.addClass('translation-hint--hidden');
-            this.toggleTranslationHint.removeClass('settings-button--checked');
-        }
-    }
-
-    toggleImageHint() {
-        this.isImageHintActive = !this.isImageHintActive;
-        localStorage.setItem('isImageHintActive', JSON.stringify(this.isImageHintActive));
-        if (this.isImageHintActive) {
-            this.removeClass('game-page--background-hidden');
-            this.toggleImageHintButton.addClass('settings-button--checked');
-        } else {
-            this.addClass('game-page--background-hidden');
-            this.toggleImageHintButton.removeClass('settings-button--checked');
         }
     }
 
@@ -255,19 +105,15 @@ export default class GamePage extends Component {
     }
 
     async createCards() {
-        const arrayOfWords = GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[
-            this.currentSentenceIndex
-        ].textExample.split(' ');
+        const arrayOfWords = gameController.currentTextExample.split(' ');
         this.cardQuantity = arrayOfWords.length;
         const cardWidths = GamePage.calculateCardWidths(arrayOfWords);
-        const imageSrc = await import(
-            `../../../assets/images/${GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].levelData.cutSrc}`
-        );
+        const imageSrc = await import(`../../../assets/images/${gameController.currentImage}`);
         return arrayOfWords.map((word, index) => {
             const card = new Card(word, index);
             const backgroundOffSet = cardWidths.slice(0, index).reduce((offSet, width) => offSet + width, 0);
             const calculatedBackgroundXOffSet = index > 0 ? `-${backgroundOffSet}px` : 'unset';
-            const calculatedBackgroundYOffSet = `-${50 * this.currentSentenceIndex}px`;
+            const calculatedBackgroundYOffSet = `-${50 * gameController.currentSentenceIndex}px`;
 
             card.setAttribute(
                 'style',
@@ -337,14 +183,14 @@ export default class GamePage extends Component {
     }
 
     showPlayButtonOnCorrectCheck() {
-        if (!this.isPlayAudioActive) {
-            this.playAudioHintButton.removeClass('play-button--hidden');
+        if (!this.settings.isPlayAudioActive) {
+            gameController.handleAudioHintVisibility(true);
         }
     }
 
     hidePlayButtonOnContinue() {
-        if (!this.isPlayAudioActive) {
-            this.playAudioHintButton.addClass('play-button--hidden');
+        if (!this.settings.isPlayAudioActive) {
+            gameController.handleAudioHintVisibility(false);
         }
     }
 
@@ -357,22 +203,15 @@ export default class GamePage extends Component {
 
     initNextSentence() {
         this.activeResultBlock = new ResultBlock();
-        this.addTranslationHint();
+        gameController.handleInitNextSentence();
         this.resultField.append(this.activeResultBlock);
     }
 
-    switchToNextSentence() {
-        if (this.currentSentenceIndex === this.maxSentenceIndex) {
-            this.resultField.destroyChildren();
-            this.currentRound += 1;
-            this.currentSentenceIndex = 0;
-        } else {
-            this.currentSentenceIndex += 1;
-        }
-    }
-
     handleContinueButton() {
-        this.switchToNextSentence();
+        const isNeedSwitchToNextRound = gameController.switchToNextSentence();
+        if (isNeedSwitchToNextRound) {
+            this.resultField.destroyChildren();
+        }
         this.initNextSentence();
         this.fillSourceBlock();
         this.hideContinueButton();
@@ -455,13 +294,7 @@ export default class GamePage extends Component {
     setupSubscribtion() {
         gameController.onGameStart(this.initGamePage.bind(this));
         loginController.onLogout(this.hideGamePage.bind(this));
-    }
-
-    setupAttribute() {
-        this.translationHintIcon.setAttribute('src', TranslationHintIcon);
-        this.playAudioHintIcon.setAttribute('src', AudioHintIcon);
-        this.toggleAudioHintIcon.setAttribute('src', AudioControlIcon);
-        this.imageHintIcon.setAttribute('src', ImageHintIcon);
+        gameController.onImageHintVisibility(this.showImageHint.bind(this));
     }
 
     setupListeners() {
@@ -472,27 +305,11 @@ export default class GamePage extends Component {
         this.resultField.addListener('drop', (event) => this.handleResultDrop(event as DragEvent));
         this.sourceBlock.addListener('dragover', (event) => GamePage.handleDragover(event as DragEvent));
         this.sourceBlock.addListener('drop', (event) => this.handleSourceDrop(event as DragEvent));
-        this.toggleTranslationHint.addListener('click', () => this.showTranslationHint());
-        this.toggleAudioHintButton.addListener('click', () => this.toggleAudioHint());
-        this.playAudioHintButton.addListener('click', () => this.playAudio());
-        this.toggleImageHintButton.addListener('click', () => this.toggleImageHint());
     }
 
     build() {
-        this.settings.appendChildren([this.toggleTranslationHint, this.toggleAudioHintButton, this.toggleImageHintButton]);
         this.resultField.append(this.activeResultBlock);
-        this.toggleTranslationHint.append(this.translationHintIcon);
-        this.toggleAudioHintButton.append(this.toggleAudioHintIcon);
-        this.playAudioHintButton.append(this.playAudioHintIcon);
-        this.toggleImageHintButton.append(this.imageHintIcon);
         this.controls.appendChildren([this.autoCompleteButton, this.checkButton, this.continueButton]);
-        this.appendChildren([
-            this.settings,
-            this.playAudioHintButton,
-            this.translationHint,
-            this.resultField,
-            this.sourceBlock,
-            this.controls,
-        ]);
+        this.appendChildren([this.settings, this.hints, this.resultField, this.sourceBlock, this.controls]);
     }
 }

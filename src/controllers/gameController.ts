@@ -8,7 +8,23 @@ import { Level } from '../types/level';
 import { WorldCollection } from '../types/worldCollection';
 
 export class GameController {
+    currentLevel: Level = 1;
+
+    currentRound: number = 0;
+
+    currentSentenceIndex: number = 0;
+
+    maxSentenceIndex: number = 9;
+
     gameStartSubscribtions: Array<() => void> = [];
+
+    initNextSentenceSubscribtions: Array<() => void> = [];
+
+    translationHintVisibilitySubscribtions: Array<(isVisible: boolean) => void> = [];
+
+    imageHintVisibilitySubscribtions: Array<(isVisible: boolean) => void> = [];
+
+    audioHintVisibilitySubscribtions: Array<(isVisible: boolean) => void> = [];
 
     onGameStart(subscribtion: () => void) {
         this.gameStartSubscribtions.push(subscribtion);
@@ -16,6 +32,76 @@ export class GameController {
 
     handleGameStart() {
         this.gameStartSubscribtions.forEach((subscribtion) => subscribtion());
+    }
+
+    onInitNextSentence(subscribtion: () => void) {
+        this.initNextSentenceSubscribtions.push(subscribtion);
+    }
+
+    handleInitNextSentence() {
+        this.initNextSentenceSubscribtions.forEach((subscribtion) => subscribtion());
+    }
+
+    onTranslationHintVisibility(subscribtion: (isVisible: boolean) => void) {
+        this.translationHintVisibilitySubscribtions.push(subscribtion);
+    }
+
+    handleTranslationHintVisibility(isVisible: boolean) {
+        this.translationHintVisibilitySubscribtions.forEach((subscribtion) => subscribtion(isVisible));
+    }
+
+    onImageHintVisibility(subscribtion: (isVisible: boolean) => void) {
+        this.imageHintVisibilitySubscribtions.push(subscribtion);
+    }
+
+    handleImageHintVisibility(isVisible: boolean) {
+        this.imageHintVisibilitySubscribtions.forEach((subscribtion) => subscribtion(isVisible));
+    }
+
+    onAudioHintVisibility(subscribtion: (isVisible: boolean) => void) {
+        this.audioHintVisibilitySubscribtions.push(subscribtion);
+    }
+
+    handleAudioHintVisibility(isVisible: boolean) {
+        this.audioHintVisibilitySubscribtions.forEach((subscribtion) => subscribtion(isVisible));
+    }
+
+    switchToNextSentence() {
+        let isNeedSwitchToNextRound = false;
+
+        if (this.currentSentenceIndex === this.maxSentenceIndex) {
+            this.currentRound += 1;
+            this.currentSentenceIndex = 0;
+            isNeedSwitchToNextRound = true;
+        } else {
+            this.currentSentenceIndex += 1;
+        }
+
+        return isNeedSwitchToNextRound;
+    }
+
+    get currentWords() {
+        return GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].words[this.currentSentenceIndex];
+    }
+
+    get currentTextExampleTranslate() {
+        return this.currentWords.textExampleTranslate;
+    }
+
+    get currentAudioExample() {
+        return this.currentWords.audioExample;
+    }
+
+    get currentTextExample() {
+        return this.currentWords.textExample;
+    }
+
+    get currentImage() {
+        return GameController.getWordCollection(this.currentLevel).rounds[this.currentRound].levelData.cutSrc;
+    }
+
+    get currentRounds() {
+        return GameController.getWordCollection(this.currentLevel).rounds;
     }
 
     static getWordCollection(level: Level): WorldCollection {

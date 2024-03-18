@@ -53,46 +53,7 @@
     display: none;
 }
 
-.settings {
-    display: flex;
-    gap: 7px;
-}
 
-.settings-button {
-    padding: 0 5px;
-    min-width: 40px;
-    height: 50px;
-    align-self: center;
-    border: none;
-    outline: none;
-    background: #3f3f3f;
-    color: #fff;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.settings-button--checked {
-    background: #b0b0b0;
-}
-
-.play-button {
-    width: 50px;
-    height: 50px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    align-self: center;
-    cursor: pointer;
-    position: absolute;
-}
-
-.play-button--hidden {
-    display: none;
-}
 
 .game-page--background-hidden .card {
     background-image: unset !important;
