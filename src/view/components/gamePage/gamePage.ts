@@ -10,6 +10,7 @@ import AudioMuteControlIcon from '../../../assets/images/speaker-mute-hint.svg';
 import AudioControlIcon from '../../../assets/images/speaker-hint.svg';
 import AudioActiveHintIcon from '../../../assets/images/speaker-active.svg';
 import AudioHintIcon from '../../../assets/images/speaker.svg';
+import ImageHintIcon from '../../../assets/images/image-hint.svg';
 
 export default class GamePage extends Component {
     activeResultBlock: ResultBlock;
@@ -42,6 +43,10 @@ export default class GamePage extends Component {
 
     playAudioHintIcon: Component;
 
+    toggleImageHintButton: Component;
+
+    imageHintIcon: Component;
+
     cardQuantity: number = 0;
 
     maxSentenceIndex: number = 9;
@@ -55,7 +60,7 @@ export default class GamePage extends Component {
     isPlayAudioActive: boolean = false;
 
     constructor() {
-        super({ tag: 'div', className: 'game-page' });
+        super({ tag: 'div', className: 'game-page game-page--background-hidden' });
         this.resultField = new Component({
             tag: 'div',
             className: 'result-field',
@@ -98,6 +103,13 @@ export default class GamePage extends Component {
             className: 'play-button play-button--hidden',
         });
         this.playAudioHintIcon = new Component({
+            tag: 'img',
+        });
+        this.toggleImageHintButton = new Component({
+            tag: 'button',
+            className: 'settings-button',
+        });
+        this.imageHintIcon = new Component({
             tag: 'img',
         });
         this.continueButton = new Component({
@@ -163,6 +175,16 @@ export default class GamePage extends Component {
         } else {
             this.translationHint.addClass('translation-hint--shown');
             this.toggleTranslationHint.addClass('settings-button--checked');
+        }
+    }
+
+    toggleImageHint() {
+        if (this.toggleImageHintButton.checkClass('settings-button--checked')) {
+            this.addClass('game-page--background-hidden');
+            this.toggleImageHintButton.removeClass('settings-button--checked');
+        } else {
+            this.removeClass('game-page--background-hidden');
+            this.toggleImageHintButton.addClass('settings-button--checked');
         }
     }
 
@@ -397,6 +419,7 @@ export default class GamePage extends Component {
         this.translationHintIcon.setAttribute('src', TranslationHintIcon);
         this.playAudioHintIcon.setAttribute('src', AudioHintIcon);
         this.toggleAudioHintIcon.setAttribute('src', AudioMuteControlIcon);
+        this.imageHintIcon.setAttribute('src', ImageHintIcon);
     }
 
     setupListeners() {
@@ -410,14 +433,16 @@ export default class GamePage extends Component {
         this.toggleTranslationHint.addListener('click', () => this.showTranslationHint());
         this.toggleAudioHintButton.addListener('click', () => this.toggleAudioHint());
         this.playAudioHintButton.addListener('click', () => this.playAudio());
+        this.toggleImageHintButton.addListener('click', () => this.toggleImageHint());
     }
 
     build() {
-        this.settings.appendChildren([this.toggleTranslationHint, this.toggleAudioHintButton]);
+        this.settings.appendChildren([this.toggleTranslationHint, this.toggleAudioHintButton, this.toggleImageHintButton]);
         this.resultField.append(this.activeResultBlock);
         this.toggleTranslationHint.append(this.translationHintIcon);
         this.toggleAudioHintButton.append(this.toggleAudioHintIcon);
         this.playAudioHintButton.append(this.playAudioHintIcon);
+        this.toggleImageHintButton.append(this.imageHintIcon);
         this.controls.appendChildren([this.autoCompleteButton, this.checkButton, this.continueButton]);
         this.appendChildren([
             this.settings,

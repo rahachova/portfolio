@@ -53,6 +53,11 @@
     display: block;
 }
 
+.settings {
+    display: flex;
+    gap: 7px;
+}
+
 .settings-button {
     padding: 0 5px;
     min-width: 40px;
@@ -87,4 +92,8 @@
 
 .play-button--hidden {
     display: none;
+}
+
+.game-page--background-hidden .card {
+    background-image: unset !important;
 }
