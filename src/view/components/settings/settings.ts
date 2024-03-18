@@ -120,14 +120,16 @@ export default class Settings extends Component {
         const newLevel = Number((event.target as HTMLInputElement).value) as Level;
         gameController.currentLevel = newLevel;
         gameController.currentRound = 0;
+        gameController.currentSentenceIndex = 0;
         this.buildPageSelectOptions();
-        gameController.handleGameStart();
+        gameController.handleGameStart(true);
     }
 
     static handlePageSelect(event: Event) {
         const newPage = Number((event.target as HTMLInputElement).value);
         gameController.currentRound = newPage;
-        gameController.handleGameStart();
+        gameController.currentSentenceIndex = 0;
+        gameController.handleGameStart(true);
     }
 
     initSettings() {

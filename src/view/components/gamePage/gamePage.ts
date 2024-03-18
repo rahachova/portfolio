@@ -66,10 +66,17 @@ export default class GamePage extends Component {
         this.build();
     }
 
-    initGamePage() {
+    initGamePage(isReset: boolean = false) {
         this.settings.initSettings();
         this.showGamePage();
         this.fillSourceBlock();
+        this.hideCheckButton();
+        this.hideContinueButton();
+        if (isReset) {
+            this.activeResultBlock = new ResultBlock();
+            this.resultField.destroyChildren();
+            this.resultField.append(this.activeResultBlock);
+        }
     }
 
     showImageHint(isVisible: boolean) {
@@ -134,7 +141,7 @@ export default class GamePage extends Component {
     }
 
     static calculateCardWidths(array: string[]): number[] {
-        const imageWidth = 1000;
+        const imageWidth = 768;
         const totalSymbolsAmount = array.reduce((accum, currentValue) => accum + currentValue.length, 0);
         const pixelsPerSymbol = imageWidth / totalSymbolsAmount;
         return array.map((word) => word.length * pixelsPerSymbol);

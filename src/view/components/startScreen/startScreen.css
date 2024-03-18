@@ -4,7 +4,10 @@
     flex-direction: column;
     justify-content: center;
     gap: 30px;
-    width: 800px;
+    margin: 5px;
+    width: 100%;
+    max-width: 768px;
+    box-sizing: border-box;
     background-color: white;
     border-radius: 10px;
     box-shadow: 10px 10px 5px #888888;

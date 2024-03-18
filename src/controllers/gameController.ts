@@ -16,7 +16,7 @@ export class GameController {
 
     maxSentenceIndex: number = 9;
 
-    gameStartSubscribtions: Array<() => void> = [];
+    gameStartSubscribtions: Array<(isReset?: boolean) => void> = [];
 
     initNextSentenceSubscribtions: Array<() => void> = [];
 
@@ -26,12 +26,12 @@ export class GameController {
 
     audioHintVisibilitySubscribtions: Array<(isVisible: boolean) => void> = [];
 
-    onGameStart(subscribtion: () => void) {
+    onGameStart(subscribtion: (isReset?: boolean) => void) {
         this.gameStartSubscribtions.push(subscribtion);
     }
 
-    handleGameStart() {
-        this.gameStartSubscribtions.forEach((subscribtion) => subscribtion());
+    handleGameStart(isReset: boolean = false) {
+        this.gameStartSubscribtions.forEach((subscribtion) => subscribtion(isReset));
     }
 
     onInitNextSentence(subscribtion: () => void) {
