@@ -1,18 +1,28 @@
 import './mainScreen.css';
 import Component from '../../common/component';
-import Header from '../header/header';
+import GaragePage from '../garagePage/garagePage';
+import WinnersPage from '../winnersPage/winnersPage';
+import appController from '../../controllers/appController';
 
 export default class MainScreen extends Component {
-    header: Component;
-
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
-        this.header = new Header();
-
-        this.buid();
+        this.initGaragePage();
+        this.setupSubscriptions();
     }
 
-    buid() {
-        this.append(this.header);
+    initGaragePage() {
+        this.destroyChildren();
+        this.append(new GaragePage());
+    }
+
+    initWinnersPage() {
+        this.destroyChildren();
+        this.append(new WinnersPage());
+    }
+
+    setupSubscriptions() {
+        appController.onGarageNavigate(this.initGaragePage.bind(this));
+        appController.onWinnersNavigate(this.initWinnersPage.bind(this));
     }
 }

@@ -1,14 +1,13 @@
-import MainScreen from './components/mainScreen/mainScreen';
+import AppScreen from './components/appScreen/appScreen';
 
 export default class App {
-
-    mainScreen: MainScreen;
+    appScreen: AppScreen;
 
     constructor() {
-        this.mainScreen = new MainScreen();
+        this.appScreen = new AppScreen();
     }
 
     start() {
-        document.querySelector('body')?.append(this.mainScreen.getNode());
+        document.querySelector('body')?.append(this.appScreen.getNode());
     }
 }
