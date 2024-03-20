@@ -1,0 +1,15 @@
+.button {
+    padding: 7px;
+    width: fit-content;
+    background-color: bisque;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.button--green {
+    background-color: rgb(105, 230, 128);
+}
+
+.button--blue {
+    background-color: rgb(105, 222, 230);
+}
