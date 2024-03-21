@@ -1,0 +1,14 @@
+.garage {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 10px;
+}
+
+.garage_header {
+    font-size: 25px;
+}
+
+.garage_page-number {
+    font-size: 20px;
+}

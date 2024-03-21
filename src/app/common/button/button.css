@@ -1,5 +1,5 @@
 .button {
-    padding: 7px;
+    padding: 5px;
     width: fit-content;
     background-color: bisque;
     border-radius: 10px;
@@ -12,4 +12,12 @@
 
 .button--blue {
     background-color: rgb(105, 222, 230);
+}
+
+.button--m {
+    width: 100px;
+}
+
+.button--l {
+    width: 150px;
 }

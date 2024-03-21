@@ -1,0 +1,16 @@
+.controls_input {
+    height: 22px;
+    width: 191px;
+}
+
+.controls_block {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
