@@ -3,3 +3,9 @@
     flex-direction: column;
     gap: 30px;
 }
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}

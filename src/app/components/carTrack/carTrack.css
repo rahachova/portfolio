@@ -1,0 +1,60 @@
+.car-track {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-bottom: dotted white;
+    height: 80px;
+}
+
+.car_controls,
+.engine_controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.car_name {
+    font-size: 20px;
+    color: rgb(250, 255, 149);
+}
+
+.engine_button {
+    width: 30px;
+    border: 1px solid rgb(0, 165, 0);
+    border-radius: 10px;
+    background-color: transparent;
+    color: rgb(0, 165, 0);
+    font-size: 20px;
+}
+
+.engine_button--inactive {
+    border-color: #666;
+    color: #666;
+}
+
+.engine_button:active {
+    box-shadow: 1px 1px #666;
+    transform: translateY(1px);
+}
+
+.car {
+    position: absolute;
+    bottom: 0;
+    left: 80px;
+    width: 70px;
+    height: 53px;
+    background-color: red;
+    mask: url(../../../assets/car.svg) no-repeat;
+}
+
+.flag {
+    position: absolute;
+    bottom: 0;
+    right: 80px;
+    width: 70px;
+    height: 53px;
+    background-color: red;
+    mask: url(../../../assets/flag.svg) no-repeat;
+}
