@@ -5,6 +5,8 @@ class AppController {
 
     createCarSubscriptions: Array<() => void> = [];
 
+    deleteCarSubscriptions: Array<() => void> = [];
+
     onGarageNavigate(subscribtion: () => void) {
         this.garageNavigateSubscriptions.push(subscribtion);
     }
@@ -17,6 +19,10 @@ class AppController {
         this.createCarSubscriptions.push(subscribtion);
     }
 
+    onDeleteCar(subscribtion: () => void) {
+        this.deleteCarSubscriptions.push(subscribtion);
+    }
+
     handleGarageNavigate() {
         this.garageNavigateSubscriptions.forEach((subscribtion) => subscribtion());
     }
@@ -27,6 +33,10 @@ class AppController {
 
     handleCreateCar() {
         this.createCarSubscriptions.forEach((subscribtion) => subscribtion());
+    }
+
+    handleDeleteCar() {
+        this.deleteCarSubscriptions.forEach((subscribtion) => subscribtion());
     }
 }
 

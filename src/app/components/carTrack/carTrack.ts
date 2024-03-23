@@ -2,6 +2,7 @@ import './carTrack.css';
 import Component from '../../common/component';
 import Button from '../../common/button/button';
 import { Car } from '../../types/types';
+import appController from '../../controllers/appController';
 
 export default class CarTrack extends Component {
     carControls: Component;
@@ -35,7 +36,7 @@ export default class CarTrack extends Component {
         this.removeButton = new Button({
             text: 'REMOVE',
             style: 'blue',
-            onClick: () => {},
+            onClick: this.removeCar.bind(this),
         });
         this.carName = new Component({ tag: 'p', text: car.name, className: 'car_name' });
         this.engineControls = new Component({ tag: 'div', className: 'engine_controls' });
@@ -47,6 +48,13 @@ export default class CarTrack extends Component {
 
         this.setupAttributes(car.color);
         this.build();
+    }
+
+    async removeCar() {
+        await fetch(`http://127.0.0.1:3000/garage/${this.carId}`, {
+            method: 'DELETE',
+        });
+        appController.handleDeleteCar();
     }
 
     setupAttributes(color: string) {
