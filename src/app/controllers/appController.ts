@@ -3,21 +3,31 @@ class AppController {
 
     winnersNavigateSubscriptions: Array<() => void> = [];
 
-   onGarageNavigate(subscribtion: () => void) {
-    this.garageNavigateSubscriptions.push(subscribtion);
-   }
+    createCarSubscriptions: Array<() => void> = [];
 
-   onWinnersNavigate(subscribtion: () => void) {
-    this.winnersNavigateSubscriptions.push(subscribtion);
-   }
+    onGarageNavigate(subscribtion: () => void) {
+        this.garageNavigateSubscriptions.push(subscribtion);
+    }
 
-   handleGarageNavigate() {
-    this.garageNavigateSubscriptions.forEach((subscribtion) => subscribtion());
-   }
+    onWinnersNavigate(subscribtion: () => void) {
+        this.winnersNavigateSubscriptions.push(subscribtion);
+    }
 
-   handleWinnersNavigate() {
-    this.winnersNavigateSubscriptions.forEach((subscribtion) => subscribtion());
-   }
+    onCreateCar(subscribtion: () => void) {
+        this.createCarSubscriptions.push(subscribtion);
+    }
+
+    handleGarageNavigate() {
+        this.garageNavigateSubscriptions.forEach((subscribtion) => subscribtion());
+    }
+
+    handleWinnersNavigate() {
+        this.winnersNavigateSubscriptions.forEach((subscribtion) => subscribtion());
+    }
+
+    handleCreateCar() {
+        this.createCarSubscriptions.forEach((subscribtion) => subscribtion());
+    }
 }
 
-export default new AppController()
+export default new AppController();

@@ -1,6 +1,7 @@
 import './garageControls.css';
 import Component from '../../common/component';
 import Button from '../../common/button/button';
+import appController from '../../controllers/appController';
 
 export default class GarageControls extends Component {
     createBlock: Component;
@@ -35,9 +36,7 @@ export default class GarageControls extends Component {
         this.createButton = new Button({
             style: 'blue',
             text: 'CREATE',
-            onClick: () => {
-                console.log('Create click');
-            },
+            onClick: this.createNewCar.bind(this),
         });
 
         this.updateBlock = new Component({ tag: 'div', className: 'controls_block' });
@@ -77,6 +76,19 @@ export default class GarageControls extends Component {
 
         this.setupAttributes();
         this.build();
+    }
+
+    async createNewCar() {
+        const carName = (this.createInput.getNode() as HTMLInputElement).value;
+        const carColor = (this.createColorPicker.getNode() as HTMLInputElement).value;
+        await fetch('http://localhost:3000/garage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: carName, color: carColor }),
+        });
+        appController.handleCreateCar()
     }
 
     setupAttributes() {

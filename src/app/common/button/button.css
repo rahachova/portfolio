@@ -21,3 +21,8 @@
 .button--l {
     width: 150px;
 }
+
+.button:disabled {
+    background-color: dimgrey;
+    color: rgb(170, 170, 170);
+}

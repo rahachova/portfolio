@@ -3,6 +3,7 @@ import Component from '../../common/component';
 import CarTrack from '../carTrack/carTrack';
 import Button from '../../common/button/button';
 import { Car } from '../../types/types';
+import appController from '../../controllers/appController';
 
 export default class Garage extends Component {
     garageHeader: Component;
@@ -29,9 +30,21 @@ export default class Garage extends Component {
         this.garagePageNumber = new Component({ tag: 'h2', text: `Page #${this.currentPage}`, className: 'garage_page-number' });
         this.carTracks = new Component({ tag: 'div', className: 'car-tracks' });
         this.pagination = new Component({ tag: 'div', className: 'pagination' });
-        this.prevButton = new Button({ style: 'green', text: 'PREV', onClick: () => {} });
-        this.nextButton = new Button({ style: 'green', text: 'NEXT', onClick: () => {} });
+        this.prevButton = new Button({
+            style: 'green',
+            text: 'PREV',
+            onClick: () => {},
+        });
+        this.nextButton = new Button({
+            style: 'green',
+            text: 'NEXT',
+            onClick: () => {
+                this.currentPage += 1;
+                this.renderCarTracks();
+            },
+        });
 
+        this.setupSubscriptions();
         this.build();
         this.init();
     }
@@ -53,7 +66,23 @@ export default class Garage extends Component {
         const response = await fetch(`http://127.0.0.1:3000/garage?_limit=${this.carsPerPage}&_page=${this.currentPage}`);
         const cars = await response.json();
         const carTracks = cars.map((car: Car) => new CarTrack(car));
+        this.carTracks.destroyChildren();
         this.carTracks.appendChildren(carTracks);
+        if (this.currentPage === 1) {
+            this.prevButton.setAttribute('disabled', 'true');
+        } else {
+            this.prevButton.removeAttribute('disabled');
+        }
+        if (this.currentPage === this.totalPages) {
+            this.nextButton.setAttribute('disabled', 'true');
+        } else {
+            this.nextButton.removeAttribute('disabled');
+        }
+        this.garagePageNumber.setTextContent(`Page #${this.currentPage}`);
+    }
+
+    setupSubscriptions() {
+        appController.onCreateCar(this.init.bind(this));
     }
 
     build() {
