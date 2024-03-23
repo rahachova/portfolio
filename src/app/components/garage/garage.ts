@@ -33,7 +33,10 @@ export default class Garage extends Component {
         this.prevButton = new Button({
             style: 'green',
             text: 'PREV',
-            onClick: () => {},
+            onClick: () => {
+                this.currentPage -= 1;
+                this.renderCarTracks();
+            },
         });
         this.nextButton = new Button({
             style: 'green',
