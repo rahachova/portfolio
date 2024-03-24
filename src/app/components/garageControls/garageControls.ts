@@ -3,6 +3,7 @@ import Component from '../../common/component';
 import Button from '../../common/button/button';
 import appController from '../../controllers/appController';
 import { Car } from '../../types/types';
+import { carColors, carManufacturers, carModels, carQuantityToGenerate } from '../../constants/constants';
 
 export default class GarageControls extends Component {
     createBlock: Component;
@@ -70,9 +71,7 @@ export default class GarageControls extends Component {
             style: 'blue',
             size: 'l',
             text: 'GENERATE CARS',
-            onClick: () => {
-                console.log('Generate click');
-            },
+            onClick: GarageControls.generateCars.bind(this),
         });
         this.selectedCar = undefined;
 
@@ -124,6 +123,28 @@ export default class GarageControls extends Component {
         this.updateButton.setAttribute('disabled', 'true');
         (this.updateInput.getNode() as HTMLInputElement).value = '';
         (this.updateColorPicker.getNode() as HTMLInputElement).value = 'black';
+    }
+
+    static getRandomInt(max: number) {
+        return Math.floor(Math.random() * max);
+    }
+
+    static async generateCars() {
+        const generateRequests = new Array(carQuantityToGenerate).fill(undefined).map(() => {
+            const carManufacturer = carManufacturers[GarageControls.getRandomInt(carManufacturers.length)];
+            const carModel = carModels[GarageControls.getRandomInt(carModels.length)];
+            const carColor = carColors[GarageControls.getRandomInt(carColors.length)];
+            const requestBody = { name: `${carManufacturer} ${carModel}`, color: carColor };
+            return fetch('http://localhost:3000/garage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+        });
+        await Promise.all(generateRequests);
+        appController.handleCreateCar();
     }
 
     setupSubscriptions() {

@@ -53,8 +53,8 @@ export default class Garage extends Component {
     }
 
     async init() {
-        this.renderGarage();
-        this.renderCarTracks();
+        await this.renderGarage();
+        await this.renderCarTracks();
     }
 
     async renderGarage() {
