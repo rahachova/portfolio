@@ -2,6 +2,7 @@ import './garageControls.css';
 import Component from '../../common/component';
 import Button from '../../common/button/button';
 import appController from '../../controllers/appController';
+import { Car } from '../../types/types';
 
 export default class GarageControls extends Component {
     createBlock: Component;
@@ -27,6 +28,8 @@ export default class GarageControls extends Component {
     resetButton: Component;
 
     generateCarsButton: Component;
+
+    selectedCar: Car | undefined;
 
     constructor() {
         super({ tag: 'div', className: 'controls' });
@@ -73,7 +76,9 @@ export default class GarageControls extends Component {
                 console.log('Generate click');
             },
         });
+        this.selectedCar = undefined;
 
+        this.setupSubscriptions();
         this.setupAttributes();
         this.build();
     }
@@ -88,12 +93,26 @@ export default class GarageControls extends Component {
             },
             body: JSON.stringify({ name: carName, color: carColor }),
         });
-        appController.handleCreateCar()
+        appController.handleCreateCar();
+    }
+
+    handleSelectedCar(car: Car) {
+        this.selectedCar = car;
+        this.updateInput.removeAttribute('disabled');
+        (this.updateInput.getNode() as HTMLInputElement).value = car.name;
+        this.updateColorPicker.removeAttribute('disabled');
+        (this.updateColorPicker.getNode() as HTMLInputElement).value = car.color;
+    }
+
+    setupSubscriptions() {
+        appController.onSelectCar(this.handleSelectedCar.bind(this));
     }
 
     setupAttributes() {
         this.createColorPicker.setAttribute('type', 'color');
         this.updateColorPicker.setAttribute('type', 'color');
+        this.updateInput.setAttribute('disabled', 'true');
+        this.updateColorPicker.setAttribute('disabled', 'true');
     }
 
     build() {

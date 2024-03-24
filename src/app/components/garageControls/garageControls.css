@@ -3,6 +3,10 @@
     width: 191px;
 }
 
+.controls_input:disabled {
+    background-color: grey;
+}
+
 .controls_block {
     display: flex;
     align-items: center;

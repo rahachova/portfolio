@@ -23,7 +23,7 @@ export default class CarTrack extends Component {
 
     flag: Component;
 
-    carId: number;
+    carData: Car;
 
     constructor(car: Car) {
         super({ tag: 'div', className: 'car-track', text: '' });
@@ -31,7 +31,7 @@ export default class CarTrack extends Component {
         this.selectButton = new Button({
             text: 'SELECT',
             style: 'blue',
-            onClick: () => {},
+            onClick: this.selectCar.bind(this),
         });
         this.removeButton = new Button({
             text: 'REMOVE',
@@ -44,17 +44,21 @@ export default class CarTrack extends Component {
         this.stopEngineButton = new Component({ tag: 'button', text: 'B', className: 'engine_button engine_button--inactive' });
         this.car = new Component({ tag: 'div', className: 'car' });
         this.flag = new Component({ tag: 'div', className: 'flag' });
-        this.carId = car.id;
+        this.carData = car;
 
         this.setupAttributes(car.color);
         this.build();
     }
 
     async removeCar() {
-        await fetch(`http://127.0.0.1:3000/garage/${this.carId}`, {
+        await fetch(`http://127.0.0.1:3000/garage/${this.carData.id}`, {
             method: 'DELETE',
         });
         appController.handleDeleteCar();
+    }
+
+    selectCar() {
+        appController.handleSelectCar(this.carData);
     }
 
     setupAttributes(color: string) {

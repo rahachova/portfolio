@@ -1,3 +1,5 @@
+import { Car } from '../types/types';
+
 class AppController {
     garageNavigateSubscriptions: Array<() => void> = [];
 
@@ -6,6 +8,8 @@ class AppController {
     createCarSubscriptions: Array<() => void> = [];
 
     deleteCarSubscriptions: Array<() => void> = [];
+
+    selectCarSubscriptions: Array<(car: Car) => void> = [];
 
     onGarageNavigate(subscribtion: () => void) {
         this.garageNavigateSubscriptions.push(subscribtion);
@@ -23,6 +27,10 @@ class AppController {
         this.deleteCarSubscriptions.push(subscribtion);
     }
 
+    onSelectCar(subscribtion: (car: Car) => void) {
+        this.selectCarSubscriptions.push(subscribtion);
+    }
+
     handleGarageNavigate() {
         this.garageNavigateSubscriptions.forEach((subscribtion) => subscribtion());
     }
@@ -37,6 +45,10 @@ class AppController {
 
     handleDeleteCar() {
         this.deleteCarSubscriptions.forEach((subscribtion) => subscribtion());
+    }
+
+    handleSelectCar(car: Car) {
+        this.selectCarSubscriptions.forEach((subscribtion) => subscribtion(car));
     }
 }
 
