@@ -48,9 +48,7 @@ export default class GarageControls extends Component {
         this.updateButton = new Button({
             style: 'blue',
             text: 'UPDATE',
-            onClick: () => {
-                console.log('Update click');
-            },
+            onClick: this.updateCar.bind(this),
         });
 
         this.mainControls = new Component({ tag: 'div', className: 'controls_block' });
@@ -78,6 +76,7 @@ export default class GarageControls extends Component {
         });
         this.selectedCar = undefined;
 
+        this.disableUpdateInput();
         this.setupSubscriptions();
         this.setupAttributes();
         this.build();
@@ -102,6 +101,29 @@ export default class GarageControls extends Component {
         (this.updateInput.getNode() as HTMLInputElement).value = car.name;
         this.updateColorPicker.removeAttribute('disabled');
         (this.updateColorPicker.getNode() as HTMLInputElement).value = car.color;
+        this.updateButton.removeAttribute('disabled');
+    }
+
+    async updateCar() {
+        const carName = (this.updateInput.getNode() as HTMLInputElement).value;
+        const carColor = (this.updateColorPicker.getNode() as HTMLInputElement).value;
+        await fetch(`http://localhost:3000/garage/${this.selectedCar?.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: carName, color: carColor }),
+        });
+        appController.handleUpdateCar();
+        this.disableUpdateInput();
+    }
+
+    disableUpdateInput() {
+        this.updateInput.setAttribute('disabled', 'true');
+        this.updateColorPicker.setAttribute('disabled', 'true');
+        this.updateButton.setAttribute('disabled', 'true');
+        (this.updateInput.getNode() as HTMLInputElement).value = '';
+        (this.updateColorPicker.getNode() as HTMLInputElement).value = 'black';
     }
 
     setupSubscriptions() {
@@ -111,8 +133,6 @@ export default class GarageControls extends Component {
     setupAttributes() {
         this.createColorPicker.setAttribute('type', 'color');
         this.updateColorPicker.setAttribute('type', 'color');
-        this.updateInput.setAttribute('disabled', 'true');
-        this.updateColorPicker.setAttribute('disabled', 'true');
     }
 
     build() {

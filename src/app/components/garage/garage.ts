@@ -87,6 +87,7 @@ export default class Garage extends Component {
     setupSubscriptions() {
         appController.onCreateCar(this.init.bind(this));
         appController.onDeleteCar(this.init.bind(this));
+        appController.onUpdateCar(this.renderCarTracks.bind(this));
     }
 
     build() {
