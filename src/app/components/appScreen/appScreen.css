@@ -3,3 +3,37 @@
     flex-direction: column;
     gap: 50px;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: rgb(255 228 196);
+    align-items: flex-end;
+    margin: 15% auto;
+    width: max-content;
+    padding: 50px;
+    border-radius: 20px;
+}
+
+.modal-content {
+    font-size: 40px;
+    color: black;
+}
+
+.modal--visible {
+    display: block;
+}

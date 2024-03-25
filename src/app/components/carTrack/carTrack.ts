@@ -33,6 +33,8 @@ export default class CarTrack extends Component {
 
     animationRequest: number = 1;
 
+    carStartData: CarStart;
+
     constructor(car: Car) {
         super({ tag: 'div', className: 'car-track', text: '' });
         this.carControls = new Component({ tag: 'div', className: 'car_controls' });
@@ -54,7 +56,9 @@ export default class CarTrack extends Component {
         this.car = new Component({ tag: 'div', className: 'car' });
         this.flag = new Component({ tag: 'div', className: 'flag' });
         this.carData = car;
+        this.carStartData = { velocity: 1, distance: 1 };
 
+        this.setupSubscriptions();
         this.setupListeners();
         this.setupAttributes(car.color);
         this.build();
@@ -65,10 +69,10 @@ export default class CarTrack extends Component {
         const startResponse = await fetch(`http://127.0.0.1:3000/engine?id=${this.carData.id}&status=started`, {
             method: 'PATCH',
         });
-        const carStartData = (await startResponse.json()) as CarStart;
+        this.carStartData = (await startResponse.json()) as CarStart;
         this.stopEngineButton.getNode().removeAttribute('disabled');
 
-        this.animateCar(carStartData);
+        this.animateCar(this.carStartData);
         const driveResponse = await this.handleDrive();
 
         if (driveResponse.status === 500) {
@@ -92,10 +96,14 @@ export default class CarTrack extends Component {
         await fetch(`http://127.0.0.1:3000/garage/${this.carData.id}`, {
             method: 'DELETE',
         });
+        await fetch(`http://127.0.0.1:3000/winners/${this.carData.id}`, {
+            method: 'DELETE',
+        });
         appController.handleDeleteCar();
     }
 
     stopAnimation() {
+        console.log('STOP_ANIMATION: ', this.animationRequest);
         cancelAnimationFrame(this.animationRequest);
     }
 
@@ -111,14 +119,24 @@ export default class CarTrack extends Component {
         if (timeFraction > 1) timeFraction = 1;
 
         this.car.getNode().style.left = `${timeFraction * 100}%`;
-
         if (timeFraction < 1) {
             this.animationRequest = requestAnimationFrame(this.animate.bind(this));
+        } else if (timeFraction === 1) {
+            const { name, id } = this.carData;
+            const { velocity, distance } = this.carStartData;
+
+            console.log('HANDLE FINIST: ', this.animationRequest);
+            appController.handleFinish(name, id, Math.round((distance / velocity / 1000) * 100) / 100);
         }
     }
 
     selectCar() {
         appController.handleSelectCar(this.carData);
+    }
+
+    setupSubscriptions() {
+        appController.onResetRace(this.stopAnimation.bind(this));
+        appController.onPageChange(this.stopAnimation.bind(this));
     }
 
     setupListeners() {

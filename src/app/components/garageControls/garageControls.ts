@@ -56,16 +56,12 @@ export default class GarageControls extends Component {
         this.raceButton = new Button({
             style: 'green',
             text: 'RACE',
-            onClick: () => {
-                console.log('Race click');
-            },
+            onClick: this.startRace.bind(this),
         });
         this.resetButton = new Button({
             style: 'green',
             text: 'RESET',
-            onClick: () => {
-                console.log('Reset click');
-            },
+            onClick: this.resetRace.bind(this),
         });
         this.generateCarsButton = new Button({
             style: 'blue',
@@ -79,6 +75,17 @@ export default class GarageControls extends Component {
         this.setupSubscriptions();
         this.setupAttributes();
         this.build();
+    }
+
+    startRace() {
+        this.raceButton.setAttribute('disabled', 'true');
+        appController.handleStartRace();
+    }
+
+    resetRace() {
+        this.raceButton.removeAttribute('disabled');
+        appController.handleResetRace();
+        appController.handleUpdateCar();
     }
 
     async createNewCar() {
@@ -149,6 +156,9 @@ export default class GarageControls extends Component {
 
     setupSubscriptions() {
         appController.onSelectCar(this.handleSelectedCar.bind(this));
+        appController.onPageChange(() => {
+            this.raceButton.removeAttribute('disabled');
+        });
     }
 
     setupAttributes() {

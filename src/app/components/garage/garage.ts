@@ -36,6 +36,7 @@ export default class Garage extends Component {
             onClick: () => {
                 this.currentPage -= 1;
                 this.renderCarTracks();
+                appController.handlePageChange();
             },
         });
         this.nextButton = new Button({
@@ -44,6 +45,7 @@ export default class Garage extends Component {
             onClick: () => {
                 this.currentPage += 1;
                 this.renderCarTracks();
+                appController.handlePageChange();
             },
         });
 
@@ -84,14 +86,22 @@ export default class Garage extends Component {
         this.garagePageNumber.setTextContent(`Page #${this.currentPage}`);
     }
 
-    // startRace() {}
+    startRace() {
+        (this.carTracks.getChildren() as CarTrack[]).forEach((carTrack: CarTrack) => carTrack.handleStartEngine());
+    }
 
-    // resetRace() {}
+    resetRace() {
+        (this.carTracks.getChildren() as CarTrack[]).forEach((carTrack: CarTrack) => {
+            carTrack.handleStopEngine();
+        });
+    }
 
     setupSubscriptions() {
         appController.onCreateCar(this.init.bind(this));
         appController.onDeleteCar(this.init.bind(this));
         appController.onUpdateCar(this.renderCarTracks.bind(this));
+        appController.onStartRace(this.startRace.bind(this));
+        appController.onResetRace(this.resetRace.bind(this));
     }
 
     build() {

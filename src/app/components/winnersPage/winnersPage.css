@@ -1,3 +1,44 @@
+.winners-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
 .winners-page--hidden {
     display: none;
+}
+
+.winners_header {
+    font-size: 25px;
+}
+
+.winners_page-number {
+    font-size: 20px;
+}
+
+.winners_table-header {
+    background-color: #4d90f2;
+}
+
+.winners_table-header th {
+    font-size: 20px;
+    padding: 5px;
+    font-weight: 500;
+}
+
+.winners_table-header--active {
+    cursor: pointer;
+}
+
+.winners_table-row td {
+    font-size: 18px;
+    padding: 5px;
+}
+
+.winners_car {
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    mask: url(../../../assets/table-car.svg) no-repeat;
 }
