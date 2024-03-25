@@ -122,7 +122,7 @@ export default class GarageControls extends Component {
         this.updateColorPicker.setAttribute('disabled', 'true');
         this.updateButton.setAttribute('disabled', 'true');
         (this.updateInput.getNode() as HTMLInputElement).value = '';
-        (this.updateColorPicker.getNode() as HTMLInputElement).value = 'black';
+        (this.updateColorPicker.getNode() as HTMLInputElement).value = '#ffffff';
     }
 
     static getRandomInt(max: number) {
@@ -153,7 +153,9 @@ export default class GarageControls extends Component {
 
     setupAttributes() {
         this.createColorPicker.setAttribute('type', 'color');
+        (this.createColorPicker.getNode() as HTMLInputElement).value = '#ffffff';
         this.updateColorPicker.setAttribute('type', 'color');
+        (this.updateColorPicker.getNode() as HTMLInputElement).value = '#ffffff';
     }
 
     build() {

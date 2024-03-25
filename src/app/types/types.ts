@@ -3,3 +3,8 @@ export type Car = {
     name: string;
     color: string;
 };
+
+export type CarStart = {
+    distance: number;
+    velocity: number;
+};

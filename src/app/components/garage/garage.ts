@@ -76,13 +76,17 @@ export default class Garage extends Component {
         } else {
             this.prevButton.removeAttribute('disabled');
         }
-        if (this.currentPage === this.totalPages) {
+        if (this.currentPage >= this.totalPages) {
             this.nextButton.setAttribute('disabled', 'true');
         } else {
             this.nextButton.removeAttribute('disabled');
         }
         this.garagePageNumber.setTextContent(`Page #${this.currentPage}`);
     }
+
+    // startRace() {}
+
+    // resetRace() {}
 
     setupSubscriptions() {
         appController.onCreateCar(this.init.bind(this));

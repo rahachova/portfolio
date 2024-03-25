@@ -16,6 +16,14 @@ export default class GaragePage extends Component {
         this.build();
     }
 
+    hide() {
+        this.addClass('garage-page--hidden');
+    }
+
+    show() {
+        this.removeClass('garage-page--hidden');
+    }
+
     build() {
         this.appendChildren([this.garageControls, this.garage]);
     }

@@ -5,24 +5,34 @@ import WinnersPage from '../winnersPage/winnersPage';
 import appController from '../../controllers/appController';
 
 export default class MainScreen extends Component {
+    garagePage: GaragePage;
+
+    winnersPage: WinnersPage;
+
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
-        this.initGaragePage();
+        this.garagePage = new GaragePage();
+        this.winnersPage = new WinnersPage();
         this.setupSubscriptions();
+        this.build();
     }
 
-    initGaragePage() {
-        this.destroyChildren();
-        this.append(new GaragePage());
+    showGaragePage() {
+        this.garagePage.show();
+        this.winnersPage.hide();
     }
 
-    initWinnersPage() {
-        this.destroyChildren();
-        this.append(new WinnersPage());
+    showWinnersPage() {
+        this.winnersPage.show();
+        this.garagePage.hide();
     }
 
     setupSubscriptions() {
-        appController.onGarageNavigate(this.initGaragePage.bind(this));
-        appController.onWinnersNavigate(this.initWinnersPage.bind(this));
+        appController.onGarageNavigate(this.showGaragePage.bind(this));
+        appController.onWinnersNavigate(this.showWinnersPage.bind(this));
+    }
+
+    build() {
+        this.appendChildren([this.garagePage, this.winnersPage]);
     }
 }

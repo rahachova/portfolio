@@ -4,6 +4,7 @@
     background-color: bisque;
     border-radius: 10px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .button--green {
@@ -25,4 +26,5 @@
 .button:disabled {
     background-color: dimgrey;
     color: rgb(170, 170, 170);
+    cursor: default;
 }

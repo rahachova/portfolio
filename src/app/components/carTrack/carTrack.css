@@ -5,6 +5,7 @@
     gap: 2px;
     border-bottom: dotted white;
     height: 80px;
+    padding-right: 70px;
 }
 
 .car_controls,
@@ -27,11 +28,13 @@
     background-color: transparent;
     color: rgb(0, 165, 0);
     font-size: 20px;
+    cursor: pointer;
 }
 
-.engine_button--inactive {
+.engine_button:disabled {
     border-color: #666;
     color: #666;
+    cursor: default;
 }
 
 .engine_button:active {
@@ -39,20 +42,27 @@
     transform: translateY(1px);
 }
 
+.car-road {
+    position: relative;
+    height: 100%;
+    width: calc(100% - 80px);
+    align-self: flex-end;
+}
+
 .car {
     position: absolute;
     bottom: 0;
-    left: 80px;
     width: 70px;
     height: 53px;
     background-color: red;
     mask: url(../../../assets/car.svg) no-repeat;
+    z-index: 1;
 }
 
 .flag {
     position: absolute;
     bottom: 0;
-    right: 80px;
+    right: 50px;
     width: 70px;
     height: 53px;
     background-color: red;
