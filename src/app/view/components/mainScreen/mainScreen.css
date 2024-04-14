@@ -1,11 +1,9 @@
 .main-screen {
     display: none;
-    animation: fadeOut 0.5s ease-out;
 }
 
 .main-screen--shown {
     display: block;
-    animation: fadeIn 0.5s ease-in;
 }
 
 .main_header {

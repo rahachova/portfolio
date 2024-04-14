@@ -1,4 +1,5 @@
-import View from '../view/view';
+import View from './view/view';
+import './app.css';
 
 export default class App {
     view: View;

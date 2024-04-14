@@ -1,5 +1,5 @@
 import './mainScreen.css';
-import Component from '../../common/component';
+import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
 
 export default class MainScreen extends Component {
@@ -50,7 +50,7 @@ export default class MainScreen extends Component {
 
     handleLogoutClick() {
         this.hideMainScreen();
-        setTimeout(() => loginController.handleLogout(), 500);
+        loginController.handleLogout();
     }
 
     build() {

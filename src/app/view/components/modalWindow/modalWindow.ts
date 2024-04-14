@@ -1,5 +1,5 @@
 import './modalWindow.css';
-import Component from '../../common/component';
+import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
@@ -127,10 +127,7 @@ export default class ModalWindow extends Component {
         const formData = new FormData(event.target as HTMLFormElement);
 
         this.hideModalWindow();
-        setTimeout(
-            () => loginController.handleLogin(formData.get(this.nameInputName) as string, formData.get(this.surnameInputName) as string),
-            500
-        );
+        loginController.handleLogin(formData.get(this.nameInputName) as string, formData.get(this.surnameInputName) as string);
     }
 
     hideModalWindow() {
