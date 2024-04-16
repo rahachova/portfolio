@@ -1,5 +1,6 @@
 import View from './view/view';
 import './app.css';
+import './controllers/webSocket';
 
 export default class App {
     view: View;

@@ -12,7 +12,7 @@ class PublishSubscribe {
     }
 
     sendEvent(eventName: PublishSubscribeEvents, payload?: Object) {
-        this.subscriptions[eventName].forEach((subscribtion) => subscribtion(payload));
+        this.subscriptions[eventName]?.forEach((subscribtion) => subscribtion(payload));
     }
 }
 

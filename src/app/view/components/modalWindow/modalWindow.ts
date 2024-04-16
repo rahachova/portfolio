@@ -31,6 +31,8 @@ export default class ModalWindow extends Component {
 
     passwordInputName: string = 'password';
 
+    buttons: Component;
+
     formButton: Component;
 
     aboutButton: Component;
@@ -61,6 +63,10 @@ export default class ModalWindow extends Component {
         this.passwordError = new Component({
             tag: 'span',
             className: 'modal_error',
+        });
+        this.buttons = new Component({
+            tag: 'div',
+            className: 'buttons',
         });
         this.formButton = new Component({
             tag: 'button',
@@ -105,6 +111,7 @@ export default class ModalWindow extends Component {
         this.nameInput.setAttribute('minlength', '3');
         this.nameInput.setAttribute('pattern', NAME_REGEX);
         this.nameInput.setAttribute('name', this.nameInputName);
+        this.passwordInput.setAttribute('type', 'password');
         this.passwordInput.setAttribute('required', '');
         this.passwordInput.setAttribute('minlength', '7');
         this.passwordInput.setAttribute('pattern', NAME_REGEX);
@@ -189,6 +196,7 @@ export default class ModalWindow extends Component {
     }
 
     build() {
+        this.buttons.appendChildren([this.formButton, this.aboutButton]);
         this.form.appendChildren([
             this.nameInputLabel,
             this.nameError,
@@ -196,7 +204,7 @@ export default class ModalWindow extends Component {
             this.passwordInputLabel,
             this.passwordError,
             this.passwordInput,
-            this.formButton,
+            this.buttons,
         ]);
         this.appendChildren([this.header, this.form]);
     }

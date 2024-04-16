@@ -48,3 +48,9 @@
 .modal_error--shown {
     display: block;
 }
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}

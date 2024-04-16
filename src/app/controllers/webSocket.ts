@@ -1,4 +1,7 @@
-class WebSocketClient {
+import PS from '../common/publishSubscribe';
+import PublishSubscribeEvent from '../types/publishSubscribeEvents';
+
+export class WebSocketClient {
     private url: string;
 
     private socket: WebSocket;
@@ -12,24 +15,35 @@ class WebSocketClient {
         this.socket.onerror = this.onError.bind(this);
     }
 
+    reconnect() {
+        this.socket = new WebSocket(this.url);
+        this.socket.onopen = this.onOpen.bind(this);
+        this.socket.onmessage = this.onMessage.bind(this);
+        this.socket.onclose = this.onClose.bind(this);
+        this.socket.onerror = this.onError.bind(this);
+    }
+
     // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
     onOpen(event: Event) {
-        console.log('WebSocket connection established.');
+        PS.sendEvent(PublishSubscribeEvent.Connect);
+        console.debug('WebSocket connection established.');
     }
 
     // eslint-disable-next-line class-methods-use-this
     onMessage(event: MessageEvent) {
-        console.log('Message received:', event.data);
+        console.debug('Message received:', event.data);
         // Handle incoming messages here
     }
 
-    // eslint-disable-next-line class-methods-use-this
     onClose(event: CloseEvent) {
-        console.log('WebSocket connection closed:', event.reason);
+        PS.sendEvent(PublishSubscribeEvent.Disconnect);
+        setTimeout(this.reconnect.bind(this), 2000);
+        console.debug('WebSocket connection closed:', event.reason);
     }
 
-    // eslint-disable-next-line class-methods-use-this
     onError(event: Event) {
+        PS.sendEvent(PublishSubscribeEvent.Disconnect);
+        this.close()
         console.error('WebSocket error:', event);
     }
 

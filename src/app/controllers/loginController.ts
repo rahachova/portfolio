@@ -4,12 +4,12 @@ import PublishSubscribeEvent from '../types/publishSubscribeEvents';
 class LoginController {
     isLoggedin: boolean;
 
-    firstNameKey: string = 'firstName';
+    nameKey: string = 'name';
 
-    surNameKey: string = 'surname';
+    passwordKey: string = 'password';
 
     constructor() {
-        this.isLoggedin = Boolean(localStorage.getItem(this.firstNameKey) && localStorage.getItem(this.surNameKey));
+        this.isLoggedin = Boolean(localStorage.getItem(this.nameKey) && localStorage.getItem(this.passwordKey));
         this.setupSubscribtion();
     }
 
@@ -18,9 +18,9 @@ class LoginController {
         PS.subscribe(PublishSubscribeEvent.Logout, LoginController.detateUserData);
     }
 
-    saveUserData({ name, surname }: { name: string; surname: string }) {
-        localStorage.setItem(this.firstNameKey, name);
-        localStorage.setItem(this.surNameKey, surname);
+    saveUserData({ name, password }: { name: string; password: string }) {
+        localStorage.setItem(this.nameKey, name);
+        localStorage.setItem(this.passwordKey, password);
     }
 
     static detateUserData() {
