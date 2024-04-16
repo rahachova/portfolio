@@ -1,6 +1,9 @@
 import './modalWindow.css';
 import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
+import PS from '../../../common/publishSubscribe';
+import PublishSubscribeEvents from '../../../types/publishSubscribeEvents';
+// import Button from '../../../common/button/button';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 export default class ModalWindow extends Component {
@@ -18,17 +21,19 @@ export default class ModalWindow extends Component {
 
     nameError: Component;
 
-    surnameError: Component;
+    passwordError: Component;
 
-    surnameInput: Component;
+    passwordInput: Component;
 
-    surnameInputLabel: Component;
+    passwordInputLabel: Component;
 
-    surnameInputId: string = 'surnameId';
+    passwordInputId: string = 'passwordId';
 
-    surnameInputName: string = 'surname';
+    passwordInputName: string = 'password';
 
     formButton: Component;
+
+    aboutButton: Component;
 
     constructor() {
         super({ tag: 'div', className: 'modal' });
@@ -48,12 +53,12 @@ export default class ModalWindow extends Component {
             tag: 'span',
             className: 'modal_error',
         });
-        this.surnameInput = new Component({ tag: 'input' });
-        this.surnameInputLabel = new Component({
+        this.passwordInput = new Component({ tag: 'input' });
+        this.passwordInputLabel = new Component({
             tag: 'label',
-            text: 'Surname:',
+            text: 'Password:',
         });
-        this.surnameError = new Component({
+        this.passwordError = new Component({
             tag: 'span',
             className: 'modal_error',
         });
@@ -61,6 +66,12 @@ export default class ModalWindow extends Component {
             tag: 'button',
             className: 'button',
             text: 'Login',
+        });
+
+        this.aboutButton = new Component({
+            tag: 'button',
+            className: 'button',
+            text: 'About',
         });
 
         this.setupElements();
@@ -76,9 +87,9 @@ export default class ModalWindow extends Component {
         this.nameInput.setAttribute('id', this.nameInputId);
 
         this.nameInputLabel.setAttribute('for', this.nameInputId);
-        this.surnameInput.setAttribute('type', 'text');
+        this.passwordInput.setAttribute('type', 'text');
 
-        this.surnameInputLabel.setAttribute('for', this.surnameInputId);
+        this.passwordInputLabel.setAttribute('for', this.passwordInputId);
         this.formButton.setAttribute('type', 'submit');
     }
 
@@ -94,40 +105,43 @@ export default class ModalWindow extends Component {
         this.nameInput.setAttribute('minlength', '3');
         this.nameInput.setAttribute('pattern', NAME_REGEX);
         this.nameInput.setAttribute('name', this.nameInputName);
-        this.surnameInput.setAttribute('required', '');
-        this.surnameInput.setAttribute('minlength', '4');
-        this.surnameInput.setAttribute('pattern', NAME_REGEX);
-        this.surnameInput.setAttribute('name', this.surnameInputName);
+        this.passwordInput.setAttribute('required', '');
+        this.passwordInput.setAttribute('minlength', '7');
+        this.passwordInput.setAttribute('pattern', NAME_REGEX);
+        this.passwordInput.setAttribute('name', this.passwordInputName);
     }
 
     setupSubscribtion() {
-        loginController.onLogout(this.showModalWindow.bind(this));
+        PS.subscribe(PublishSubscribeEvents.Logout, this.showModalWindow.bind(this));
     }
 
     setupListeners() {
         this.form.addListener('submit', this.handleFormSubmit.bind(this));
         this.nameInput.addListener('input', () => ModalWindow.hideInputError(this.nameError));
-        this.surnameInput.addListener('input', () => ModalWindow.hideInputError(this.surnameError));
+        this.passwordInput.addListener('input', () => ModalWindow.hideInputError(this.passwordError));
     }
 
     handleFormSubmit(event: Event) {
         event.preventDefault();
-        const nameErrorText = ModalWindow.validateInput(this.nameInputElement);
-        const surnameErrorText = ModalWindow.validateInput(this.surnameInputElement);
+        const nameErrorText = ModalWindow.validateInputName(this.nameInputElement);
+        const surnameErrorText = ModalWindow.validateInputPassword(this.surnameInputElement);
 
         if (nameErrorText) {
             ModalWindow.showInputError(nameErrorText, this.nameError);
             return;
         }
         if (surnameErrorText) {
-            ModalWindow.showInputError(surnameErrorText, this.surnameError);
+            ModalWindow.showInputError(surnameErrorText, this.passwordError);
             return;
         }
 
         const formData = new FormData(event.target as HTMLFormElement);
 
         this.hideModalWindow();
-        loginController.handleLogin(formData.get(this.nameInputName) as string, formData.get(this.surnameInputName) as string);
+        PS.sendEvent(PublishSubscribeEvents.Login, {
+            name: formData.get(this.nameInputName) as string,
+            password: formData.get(this.passwordInputName) as string,
+        });
     }
 
     hideModalWindow() {
@@ -148,9 +162,22 @@ export default class ModalWindow extends Component {
         errorComponent.setTextContent(errorText);
     }
 
-    static validateInput(input: HTMLInputElement): string {
+    static validateInputName(input: HTMLInputElement): string {
         if (input.validity.tooShort) {
-            return 'The field value is too short.';
+            return 'The name should be a minimum of 3 characters in length.';
+        }
+        if (input.validity.patternMismatch) {
+            return 'The name only accepts English alphabet letters and the hyphen symbol. The first letter has to be in uppercase.';
+        }
+        if (input.validity.valueMissing) {
+            return 'Please enter value.';
+        }
+        return '';
+    }
+
+    static validateInputPassword(input: HTMLInputElement): string {
+        if (input.validity.tooShort) {
+            return 'The password should be a minimum of 7 characters in length.';
         }
         if (input.validity.patternMismatch) {
             return 'The field only accepts English alphabet letters and the hyphen symbol. The first letter has to be in uppercase.';
@@ -166,9 +193,9 @@ export default class ModalWindow extends Component {
             this.nameInputLabel,
             this.nameError,
             this.nameInput,
-            this.surnameInputLabel,
-            this.surnameError,
-            this.surnameInput,
+            this.passwordInputLabel,
+            this.passwordError,
+            this.passwordInput,
             this.formButton,
         ]);
         this.appendChildren([this.header, this.form]);
@@ -179,6 +206,6 @@ export default class ModalWindow extends Component {
     }
 
     get surnameInputElement(): HTMLInputElement {
-        return this.surnameInput.getNode() as HTMLInputElement;
+        return this.passwordInput.getNode() as HTMLInputElement;
     }
 }

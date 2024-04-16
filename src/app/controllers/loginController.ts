@@ -1,8 +1,7 @@
+import PS from '../common/publishSubscribe';
+import PublishSubscribeEvent from '../types/publishSubscribeEvents';
+
 class LoginController {
-    logoutSubscribtions: Array<() => void> = [];
-
-    loginSubscribtions: Array<() => void> = [];
-
     isLoggedin: boolean;
 
     firstNameKey: string = 'firstName';
@@ -11,37 +10,21 @@ class LoginController {
 
     constructor() {
         this.isLoggedin = Boolean(localStorage.getItem(this.firstNameKey) && localStorage.getItem(this.surNameKey));
+        this.setupSubscribtion();
     }
 
-    onLogout(subscribtion: () => void) {
-        this.logoutSubscribtions.push(subscribtion);
+    setupSubscribtion() {
+        PS.subscribe(PublishSubscribeEvent.Login, this.saveUserData.bind(this));
+        PS.subscribe(PublishSubscribeEvent.Logout, LoginController.detateUserData);
     }
 
-    onLogin(subscribtion: () => void) {
-        this.loginSubscribtions.push(subscribtion);
-    }
-
-    handleLogin(firstName: string, surname: string) {
-        this.saveUserData(firstName, surname);
-        this.loginSubscribtions.forEach((subscribtion) => subscribtion());
-    }
-
-    handleLogout() {
-        LoginController.detateUserData();
-        this.logoutSubscribtions.forEach((subscribtion) => subscribtion());
-    }
-
-    saveUserData(firstName: string, surname: string) {
-        localStorage.setItem(this.firstNameKey, firstName);
+    saveUserData({ name, surname }: { name: string; surname: string }) {
+        localStorage.setItem(this.firstNameKey, name);
         localStorage.setItem(this.surNameKey, surname);
     }
 
     static detateUserData() {
         localStorage.clear();
-    }
-
-    getFullName() {
-        return `${localStorage.getItem(this.firstNameKey)} ${localStorage.getItem(this.surNameKey)}`;
     }
 }
 

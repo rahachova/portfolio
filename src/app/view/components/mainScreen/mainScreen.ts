@@ -1,27 +1,20 @@
 import './mainScreen.css';
 import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
+import PS from '../../../common/publishSubscribe';
+import PublishSubscribeEvents from '../../../types/publishSubscribeEvents';
+import Header from '../header/header';
 
 export default class MainScreen extends Component {
-    header: Component;
-
-    button: Component;
+    header: Header;
 
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
 
-        this.header = new Component({
-            tag: 'div',
-            className: 'main_header',
-        });
-        this.button = new Component({
-            tag: 'button',
-            className: 'button',
-            text: 'Logout',
-        });
+        this.header = new Header();
 
         this.setupSubscribtion();
-        this.setupListeners();
+        // this.setupListeners();
         this.setupState();
         this.build();
     }
@@ -35,11 +28,8 @@ export default class MainScreen extends Component {
     }
 
     setupSubscribtion() {
-        loginController.onLogin(this.showMainScreen.bind(this));
-    }
-
-    setupListeners() {
-        this.button.addListener('click', this.handleLogoutClick.bind(this));
+        PS.subscribe(PublishSubscribeEvents.Login, this.showMainScreen.bind(this));
+        PS.subscribe(PublishSubscribeEvents.Logout, this.hideMainScreen.bind(this));
     }
 
     setupState() {
@@ -48,14 +38,7 @@ export default class MainScreen extends Component {
         }
     }
 
-    handleLogoutClick() {
-        this.hideMainScreen();
-        loginController.handleLogout();
-    }
-
     build() {
-        this.header.append(this.button);
-
         this.appendChildren([this.header]);
     }
 }
