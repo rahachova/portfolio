@@ -1,0 +1,23 @@
+.users {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    /* background-color: white; */
+}
+
+.user_status {
+    mask: url(../../../../assets/flower-status.svg) no-repeat;
+    background-color: rgb(0, 228, 137);
+    width: 20px;
+    height: 20px;
+}

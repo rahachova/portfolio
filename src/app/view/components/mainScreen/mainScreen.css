@@ -1,13 +1,22 @@
 .main-screen {
     display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
 }
 
 .main-screen--shown {
-    display: block;
+    display: flex;
 }
 
 .main_header {
     padding: 5px;
     display: flex;
     justify-content: end;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }

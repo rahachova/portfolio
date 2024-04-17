@@ -1,7 +1,7 @@
 import './spinner.css';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
-import PublishSubscribeEvent from '../../../types/publishSubscribeEvents';
+import { PublishSubscribeEvent } from '../../../types/types';
 
 export default class Spinner extends Component {
     constructor() {
@@ -14,8 +14,8 @@ export default class Spinner extends Component {
     }
 
     setupSubscribtion() {
-        PS.subscribe(PublishSubscribeEvent.Connect, this.hideSpinner.bind(this));
-        PS.subscribe(PublishSubscribeEvent.Disconnect, this.showSpinner.bind(this));
+        PS.subscribe(PublishSubscribeEvent.WSConnect, this.hideSpinner.bind(this));
+        PS.subscribe(PublishSubscribeEvent.WSDisconnect, this.showSpinner.bind(this));
     }
 
     hideSpinner() {

@@ -1,0 +1,25 @@
+.chat {
+    padding: 20px;
+    width: 700px;
+    height: 700px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.message-story {
+    width: 100%;
+    height: 600px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.input-message {
+    padding: 5px;
+    width: 100%;
+    height: 26px;
+    border-radius: 5px;
+}

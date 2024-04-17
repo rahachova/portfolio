@@ -2,10 +2,11 @@ import './modalWindow.css';
 import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
 import PS from '../../../common/publishSubscribe';
-import PublishSubscribeEvents from '../../../types/publishSubscribeEvents';
+import { PublishSubscribeEvent } from '../../../types/types';
 // import Button from '../../../common/button/button';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
+const PASSWORD_REGEX = '^\\d+$';
 export default class ModalWindow extends Component {
     header: Component;
 
@@ -84,7 +85,6 @@ export default class ModalWindow extends Component {
         this.setupListeners();
         this.setupSubscribtion();
         this.setupForm();
-        this.setupState();
         this.build();
     }
 
@@ -99,11 +99,11 @@ export default class ModalWindow extends Component {
         this.formButton.setAttribute('type', 'submit');
     }
 
-    setupState() {
-        if (loginController.isLoggedin) {
-            this.hideModalWindow();
-        }
-    }
+    // setupState() {
+    // if (loginController.isLoggedin) {
+    //     this.hideModalWindow();
+    // }
+    // }
 
     setupForm() {
         this.form.setAttribute('novalidate', '');
@@ -114,12 +114,13 @@ export default class ModalWindow extends Component {
         this.passwordInput.setAttribute('type', 'password');
         this.passwordInput.setAttribute('required', '');
         this.passwordInput.setAttribute('minlength', '7');
-        this.passwordInput.setAttribute('pattern', NAME_REGEX);
+        this.passwordInput.setAttribute('pattern', PASSWORD_REGEX);
         this.passwordInput.setAttribute('name', this.passwordInputName);
     }
 
     setupSubscribtion() {
-        PS.subscribe(PublishSubscribeEvents.Logout, this.showModalWindow.bind(this));
+        PS.subscribe(PublishSubscribeEvent.Logout, this.showModalWindow.bind(this));
+        PS.subscribe(PublishSubscribeEvent.Loggedin, this.hideModalWindow.bind(this));
     }
 
     setupListeners() {
@@ -144,8 +145,7 @@ export default class ModalWindow extends Component {
 
         const formData = new FormData(event.target as HTMLFormElement);
 
-        this.hideModalWindow();
-        PS.sendEvent(PublishSubscribeEvents.Login, {
+        PS.sendEvent(PublishSubscribeEvent.Login, {
             name: formData.get(this.nameInputName) as string,
             password: formData.get(this.passwordInputName) as string,
         });
@@ -187,7 +187,7 @@ export default class ModalWindow extends Component {
             return 'The password should be a minimum of 7 characters in length.';
         }
         if (input.validity.patternMismatch) {
-            return 'The field only accepts English alphabet letters and the hyphen symbol. The first letter has to be in uppercase.';
+            return 'The field only accepts numbers.';
         }
         if (input.validity.valueMissing) {
             return 'Please enter value.';

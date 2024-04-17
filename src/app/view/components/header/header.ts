@@ -1,13 +1,15 @@
 import Button from '../../../common/button/button';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
-import PublishSubscribeEvents from '../../../types/publishSubscribeEvents';
+import { PublishSubscribeEvent } from '../../../types/types';
 import './header.css';
 
 export default class Header extends Component {
     userName: Component;
 
     gameName: Component;
+
+    buttonAbout: Button;
 
     buttonLeave: Button;
 
@@ -24,6 +26,10 @@ export default class Header extends Component {
             className: 'header_item',
             text: 'Fun chat',
         });
+        this.buttonAbout = new Button({
+            text: 'About',
+            onClick: Header.handleLogoutClick.bind(this),
+        });
         this.buttonLeave = new Button({
             text: 'Leave',
             onClick: Header.handleLogoutClick.bind(this),
@@ -36,10 +42,10 @@ export default class Header extends Component {
     }
 
     static handleLogoutClick() {
-        PS.sendEvent(PublishSubscribeEvents.Logout);
+        PS.sendEvent(PublishSubscribeEvent.Logout);
     }
 
     build() {
-        this.appendChildren([this.userName, this.gameName, this.buttonLeave]);
+        this.appendChildren([this.userName, this.gameName, this.buttonAbout, this.buttonLeave]);
     }
 }
