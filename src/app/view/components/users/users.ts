@@ -1,18 +1,13 @@
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
-import { PublishSubscribeEvent } from '../../../types/types';
+import { PublishSubscribeEvent, User, WSMessage, WSMessageType } from '../../../types/types';
+import { v4 as uuidv4 } from 'uuid';
 import './users.css';
 
 export default class Users extends Component {
     inputField: Component;
 
     usersList: Component;
-
-    user: Component;
-
-    userStatus: Component;
-
-    userName: Component;
 
     constructor() {
         super({ tag: 'div', className: 'users' });
@@ -25,25 +20,51 @@ export default class Users extends Component {
             tag: 'div',
             className: 'users_list',
         });
-        this.user = new Component({
-            tag: 'div',
-            className: 'user',
-        });
-        this.userStatus = new Component({
-            tag: 'div',
-            className: 'user_status',
-        });
-        this.userName = new Component({
-            tag: 'div',
-            className: 'user_name',
-            text: 'Alia',
-        });
 
-        // this.setupSubscribtion();
-        // this.setupListeners();
-        // this.setupState();
+        this.setupSubscribtion();
         this.setupAttribute();
         this.build();
+    }
+
+    getAuthenticatedUsers() {
+        PS.sendEvent(PublishSubscribeEvent.WSMessage, {
+            id: uuidv4(),
+            type: WSMessageType.USER_ACTIVE,
+            payload: null,
+        });
+    }
+
+    listenSocket(data: WSMessage) {
+        if (data.type === WSMessageType.USER_ACTIVE) {
+            this.createUsersList(data.payload.users);
+        }
+    }
+
+    createUsersList(users?: User[]) {
+        const userElements = users?.map(({ login }) => {
+            const user = new Component({
+                tag: 'div',
+                className: 'user',
+            });
+            const userStatus = new Component({
+                tag: 'div',
+                className: 'user_status',
+            });
+            const userName = new Component({
+                tag: 'div',
+                className: 'user_name',
+                text: login,
+            });
+            user.appendChildren([userStatus, userName]);
+            return user;
+        });
+        if (userElements) {
+            this.usersList.appendChildren(userElements);
+        }
+    }
+
+    setupSubscribtion() {
+        PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
     }
 
     setupAttribute() {
@@ -51,8 +72,7 @@ export default class Users extends Component {
     }
 
     build() {
-        this.user.appendChildren([this.userStatus, this.userName]);
-        this.usersList.appendChildren([this.user]);
         this.appendChildren([this.inputField, this.usersList]);
+        this.getAuthenticatedUsers();
     }
 }

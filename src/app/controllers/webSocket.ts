@@ -25,17 +25,14 @@ export class WebSocketClient {
         this.setupSubscriptions();
     }
 
-    // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
     onOpen(event: Event) {
         PS.sendEvent(PublishSubscribeEvent.WSConnect);
         console.debug('WebSocket connection established.');
     }
 
-    // eslint-disable-next-line class-methods-use-this
     onMessage(event: MessageEvent) {
         console.debug('Message received:', event.data);
         PS.sendEvent(PublishSubscribeEvent.WSMessageReceived, JSON.parse(event.data));
-        // Handle incoming messages here
     }
 
     onClose(event: CloseEvent) {
@@ -50,9 +47,9 @@ export class WebSocketClient {
         console.error('WebSocket error:', event);
     }
 
-    send({ message }: { message: string }) {
+    send(message: Object) {
         if (this.socket.readyState === WebSocket.OPEN) {
-            this.socket.send(message);
+            this.socket.send(JSON.stringify(message));
         } else {
             console.error('WebSocket connection not open.');
         }

@@ -33,9 +33,6 @@ export default class Chat extends Component {
             text: 'Send',
             onClick: () => {},
         });
-
-        // this.setupSubscribtion();
-        // this.setupListeners();
         this.setupAttribute();
         this.build();
     }

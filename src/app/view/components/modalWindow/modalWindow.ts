@@ -3,7 +3,6 @@ import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
 import PS from '../../../common/publishSubscribe';
 import { PublishSubscribeEvent } from '../../../types/types';
-// import Button from '../../../common/button/button';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 const PASSWORD_REGEX = '^\\d+$';
@@ -99,12 +98,6 @@ export default class ModalWindow extends Component {
         this.formButton.setAttribute('type', 'submit');
     }
 
-    // setupState() {
-    // if (loginController.isLoggedin) {
-    //     this.hideModalWindow();
-    // }
-    // }
-
     setupForm() {
         this.form.setAttribute('novalidate', '');
         this.nameInput.setAttribute('required', '');
@@ -119,7 +112,7 @@ export default class ModalWindow extends Component {
     }
 
     setupSubscribtion() {
-        PS.subscribe(PublishSubscribeEvent.Logout, this.showModalWindow.bind(this));
+        PS.subscribe(PublishSubscribeEvent.Loggedout, this.showModalWindow.bind(this));
         PS.subscribe(PublishSubscribeEvent.Loggedin, this.hideModalWindow.bind(this));
     }
 

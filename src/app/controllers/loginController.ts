@@ -1,5 +1,6 @@
 import PS from '../common/publishSubscribe';
 import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../types/types';
+import { v4 as uuidv4 } from 'uuid';
 
 class LoginController {
     nameKey: string = 'name';
@@ -22,7 +23,7 @@ class LoginController {
 
     setupSubscribtion() {
         PS.subscribe(PublishSubscribeEvent.Login, this.loginUser.bind(this));
-        PS.subscribe(PublishSubscribeEvent.Logout, LoginController.detateUserData);
+        PS.subscribe(PublishSubscribeEvent.Logout, this.logoutUser.bind(this));
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
         PS.subscribe(PublishSubscribeEvent.WSConnect, this.checkUserLogin.bind(this));
     }
@@ -32,8 +33,8 @@ class LoginController {
         localStorage.setItem(this.passwordKey, password);
 
         const loginObject = {
-            id: '123241',
-            type: 'USER_LOGIN',
+            id: uuidv4(),
+            type: WSMessageType.USER_LOGIN,
             payload: {
                 user: {
                     login: name,
@@ -41,14 +42,31 @@ class LoginController {
                 },
             },
         };
-        PS.sendEvent(PublishSubscribeEvent.WSMessage, {
-            message: JSON.stringify(loginObject),
-        });
+        PS.sendEvent(PublishSubscribeEvent.WSMessage, loginObject);
+    }
+
+    logoutUser() {
+        const name = localStorage.getItem(this.nameKey);
+        const password = localStorage.getItem(this.passwordKey);
+        const logoutObject = {
+            id: uuidv4(),
+            type: WSMessageType.USER_LOGOUT,
+            payload: {
+                user: {
+                    login: name,
+                    password: password,
+                },
+            },
+        };
+        PS.sendEvent(PublishSubscribeEvent.WSMessage, logoutObject);
+        LoginController.detateUserData();
     }
 
     listenSocket(data: WSMessage) {
         if (data.type === WSMessageType.USER_LOGIN) {
             PS.sendEvent(PublishSubscribeEvent.Loggedin);
+        } else if (data.type === WSMessageType.USER_LOGOUT) {
+            PS.sendEvent(PublishSubscribeEvent.Loggedout);
         }
     }
 

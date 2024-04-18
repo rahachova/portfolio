@@ -1,7 +1,7 @@
 import Button from '../../../common/button/button';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
-import { PublishSubscribeEvent } from '../../../types/types';
+import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../../../types/types';
 import './header.css';
 
 export default class Header extends Component {
@@ -19,7 +19,7 @@ export default class Header extends Component {
         this.userName = new Component({
             tag: 'p',
             className: 'header_item',
-            text: 'User: ',
+            text: `User: ${localStorage.getItem('name')}`,
         });
         this.gameName = new Component({
             tag: 'p',
@@ -34,10 +34,6 @@ export default class Header extends Component {
             text: 'Leave',
             onClick: Header.handleLogoutClick.bind(this),
         });
-
-        // this.setupSubscribtion();
-        // this.setupListeners();
-        // this.setupState();
         this.build();
     }
 

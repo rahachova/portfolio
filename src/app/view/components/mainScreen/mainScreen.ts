@@ -8,29 +8,17 @@ import Users from '../users/users';
 import Chat from '../chat/chat';
 
 export default class MainScreen extends Component {
-    header: Header;
+    header!: Header;
 
-    users: Users;
+    users!: Users;
 
-    chat: Chat;
+    chat!: Chat;
 
-    wrapper: Component;
+    wrapper!: Component;
 
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
-
-        this.header = new Header();
-        this.users = new Users();
-        this.chat = new Chat();
-        this.wrapper = new Component({
-            tag: 'div',
-            className: 'wrapper',
-        });
-
-        this.setupSubscribtion();
-        // this.setupListeners();
-        // this.setupState();
-        this.build();
+        this.setupSubscribtions();
     }
 
     showMainScreen() {
@@ -39,18 +27,26 @@ export default class MainScreen extends Component {
 
     hideMainScreen() {
         this.removeClass('main-screen--shown');
+        this.destroyChildren();
     }
 
-    setupSubscribtion() {
-        PS.subscribe(PublishSubscribeEvent.Loggedin, this.showMainScreen.bind(this));
+    createMainScreen() {
+        this.header = new Header();
+        this.users = new Users();
+        this.chat = new Chat();
+        this.wrapper = new Component({
+            tag: 'div',
+            className: 'wrapper',
+        });
+
+        this.build();
+        this.showMainScreen();
+    }
+
+    setupSubscribtions() {
+        PS.subscribe(PublishSubscribeEvent.Loggedin, this.createMainScreen.bind(this));
         PS.subscribe(PublishSubscribeEvent.Logout, this.hideMainScreen.bind(this));
     }
-
-    // setupState() {
-        // if (loginController.isLoggedin) {
-        //     this.showMainScreen();
-        // }
-    // }
 
     build() {
         this.wrapper.appendChildren([this.users, this.chat]);

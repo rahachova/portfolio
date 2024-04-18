@@ -8,9 +8,6 @@ export default class Spinner extends Component {
         super({ tag: 'div', className: 'loading' });
 
         this.setupSubscribtion();
-        // // this.setupListeners();
-        // this.setupState();
-        // this.build();
     }
 
     setupSubscribtion() {
