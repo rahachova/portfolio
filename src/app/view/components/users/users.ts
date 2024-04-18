@@ -11,6 +11,12 @@ export default class Users extends Component {
 
     inactiveUsersList: Component;
 
+    activeUsersData: User[] | undefined = [];
+
+    inactiveUsersData: User[] | undefined = [];
+
+    userNameFilter: string = '';
+
     constructor() {
         super({ tag: 'div', className: 'users' });
 
@@ -29,6 +35,7 @@ export default class Users extends Component {
 
         this.setupSubscribtion();
         this.setupAttribute();
+        this.setupListener();
         this.build();
     }
 
@@ -47,61 +54,77 @@ export default class Users extends Component {
 
     listenSocket(data: WSMessage) {
         if (data.type === WSMessageType.USER_ACTIVE) {
-            this.createActiveUsersList(data.payload.users);
+            this.activeUsersData = data.payload.users;
+            this.renderActiveUsersList();
         }
         if (data.type === WSMessageType.USER_INACTIVE) {
-            this.createInactiveUsersList(data.payload.users);
+            this.inactiveUsersData = data.payload.users;
+            this.renderInactiveUsersList();
         }
     }
 
-    createActiveUsersList(users?: User[]) {
-        const userElements = users?.map(({ login }) => {
-            const user = new Component({
-                tag: 'div',
-                className: 'user',
+    renderActiveUsersList() {
+        const userElements = this.activeUsersData
+            ?.filter((user: User) => user.login.toLowerCase().includes(this.userNameFilter.toLowerCase()))
+            .map(({ login }) => {
+                const user = new Component({
+                    tag: 'div',
+                    className: 'user',
+                });
+                const userStatus = new Component({
+                    tag: 'div',
+                    className: 'user_status--active',
+                });
+                const userName = new Component({
+                    tag: 'div',
+                    className: 'user_name',
+                    text: login,
+                });
+                user.appendChildren([userStatus, userName]);
+                return user;
             });
-            const userStatus = new Component({
-                tag: 'div',
-                className: 'user_status--active',
-            });
-            const userName = new Component({
-                tag: 'div',
-                className: 'user_name',
-                text: login,
-            });
-            user.re([userStatus, userName]);
-            return user;
-        });
         if (userElements) {
+            this.activeUsersList.destroyChildren();
             this.activeUsersList.appendChildren(userElements);
         }
     }
 
-    createInactiveUsersList(users?: User[]) {
-        const userElements = users?.map(({ login }) => {
-            const user = new Component({
-                tag: 'div',
-                className: 'user',
+    renderInactiveUsersList() {
+        const userElements = this.inactiveUsersData
+            ?.filter((user: User) => user.login.toLowerCase().includes(this.userNameFilter.toLowerCase()))
+            .map(({ login }) => {
+                const user = new Component({
+                    tag: 'div',
+                    className: 'user',
+                });
+                const userStatus = new Component({
+                    tag: 'div',
+                    className: 'user_status--inactive',
+                });
+                const userName = new Component({
+                    tag: 'div',
+                    className: 'user_name',
+                    text: login,
+                });
+                user.appendChildren([userStatus, userName]);
+                return user;
             });
-            const userStatus = new Component({
-                tag: 'div',
-                className: 'user_status--inactive',
-            });
-            const userName = new Component({
-                tag: 'div',
-                className: 'user_name',
-                text: login,
-            });
-            user.appendChildren([userStatus, userName]);
-            return user;
-        });
         if (userElements) {
+            this.inactiveUsersList.destroyChildren();
             this.inactiveUsersList.appendChildren(userElements);
         }
     }
 
     setupSubscribtion() {
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
+    }
+
+    setupListener() {
+        this.inputField.addListener('input', (event) => {
+            this.userNameFilter = (event.target as HTMLInputElement).value;
+            this.renderActiveUsersList();
+            this.renderInactiveUsersList();
+        });
     }
 
     setupAttribute() {

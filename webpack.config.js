@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const prodConfig = require('./webpack.prod.config');
 const devConfig = require('./webpack.dev.config');
 const { merge } = require('webpack-merge');
+const WebpackFavicons = require('webpack-favicons');
 
 const baseConfig = {
     entry: path.resolve(__dirname, './src/index.ts'),
@@ -36,6 +37,9 @@ const baseConfig = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
+        }),
+        new WebpackFavicons({
+            src: path.resolve(__dirname, './src/assets/favicon-chat.png'),
         }),
     ],
     devServer: {
