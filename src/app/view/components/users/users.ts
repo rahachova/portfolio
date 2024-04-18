@@ -7,7 +7,9 @@ import './users.css';
 export default class Users extends Component {
     inputField: Component;
 
-    usersList: Component;
+    activeUsersList: Component;
+
+    inactiveUsersList: Component;
 
     constructor() {
         super({ tag: 'div', className: 'users' });
@@ -16,7 +18,11 @@ export default class Users extends Component {
             tag: 'input',
             className: 'input-search',
         });
-        this.usersList = new Component({
+        this.activeUsersList = new Component({
+            tag: 'div',
+            className: 'users_list',
+        });
+        this.inactiveUsersList = new Component({
             tag: 'div',
             className: 'users_list',
         });
@@ -26,21 +32,29 @@ export default class Users extends Component {
         this.build();
     }
 
-    getAuthenticatedUsers() {
+    getUsers() {
         PS.sendEvent(PublishSubscribeEvent.WSMessage, {
             id: uuidv4(),
             type: WSMessageType.USER_ACTIVE,
+            payload: null,
+        });
+        PS.sendEvent(PublishSubscribeEvent.WSMessage, {
+            id: uuidv4(),
+            type: WSMessageType.USER_INACTIVE,
             payload: null,
         });
     }
 
     listenSocket(data: WSMessage) {
         if (data.type === WSMessageType.USER_ACTIVE) {
-            this.createUsersList(data.payload.users);
+            this.createActiveUsersList(data.payload.users);
+        }
+        if (data.type === WSMessageType.USER_INACTIVE) {
+            this.createInactiveUsersList(data.payload.users);
         }
     }
 
-    createUsersList(users?: User[]) {
+    createActiveUsersList(users?: User[]) {
         const userElements = users?.map(({ login }) => {
             const user = new Component({
                 tag: 'div',
@@ -48,7 +62,30 @@ export default class Users extends Component {
             });
             const userStatus = new Component({
                 tag: 'div',
-                className: 'user_status',
+                className: 'user_status--active',
+            });
+            const userName = new Component({
+                tag: 'div',
+                className: 'user_name',
+                text: login,
+            });
+            user.re([userStatus, userName]);
+            return user;
+        });
+        if (userElements) {
+            this.activeUsersList.appendChildren(userElements);
+        }
+    }
+
+    createInactiveUsersList(users?: User[]) {
+        const userElements = users?.map(({ login }) => {
+            const user = new Component({
+                tag: 'div',
+                className: 'user',
+            });
+            const userStatus = new Component({
+                tag: 'div',
+                className: 'user_status--inactive',
             });
             const userName = new Component({
                 tag: 'div',
@@ -59,7 +96,7 @@ export default class Users extends Component {
             return user;
         });
         if (userElements) {
-            this.usersList.appendChildren(userElements);
+            this.inactiveUsersList.appendChildren(userElements);
         }
     }
 
@@ -72,7 +109,7 @@ export default class Users extends Component {
     }
 
     build() {
-        this.appendChildren([this.inputField, this.usersList]);
-        this.getAuthenticatedUsers();
+        this.appendChildren([this.inputField, this.activeUsersList, this.inactiveUsersList]);
+        this.getUsers();
     }
 }

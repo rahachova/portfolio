@@ -15,6 +15,7 @@ export enum WSMessageType {
     USER_LOGIN = 'USER_LOGIN',
     USER_LOGOUT = 'USER_LOGOUT',
     USER_ACTIVE = 'USER_ACTIVE',
+    USER_INACTIVE = 'USER_INACTIVE',
 }
 
 export type User = {

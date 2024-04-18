@@ -12,12 +12,24 @@
     flex-direction: row;
     align-items: center;
     gap: 10px;
-    /* background-color: white; */
 }
 
-.user_status {
+.users_list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.user_status--active {
     mask: url(../../../../assets/flower-status.svg) no-repeat;
     background-color: rgb(0, 228, 137);
+    width: 20px;
+    height: 20px;
+}
+
+.user_status--inactive {
+    mask: url(../../../../assets/flower-status.svg) no-repeat;
+    background-color: rgb(211, 21, 0);
     width: 20px;
     height: 20px;
 }
