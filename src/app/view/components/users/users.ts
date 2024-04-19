@@ -17,6 +17,8 @@ export default class Users extends Component {
 
     userNameFilter: string = '';
 
+    authenticatedUser: string | null = localStorage.getItem('name');
+
     constructor() {
         super({ tag: 'div', className: 'users' });
 
@@ -54,11 +56,11 @@ export default class Users extends Component {
 
     listenSocket(data: WSMessage) {
         if (data.type === WSMessageType.USER_ACTIVE) {
-            this.activeUsersData = data.payload.users;
+            this.activeUsersData = data.payload.users?.filter((user) => user.login !== this.authenticatedUser);
             this.renderActiveUsersList();
         }
         if (data.type === WSMessageType.USER_INACTIVE) {
-            this.inactiveUsersData = data.payload.users;
+            this.inactiveUsersData = data.payload.users?.filter((user) => user.login !== this.authenticatedUser);
             this.renderInactiveUsersList();
         }
     }

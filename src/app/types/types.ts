@@ -17,6 +17,8 @@ export enum WSMessageType {
     USER_LOGOUT = 'USER_LOGOUT',
     USER_ACTIVE = 'USER_ACTIVE',
     USER_INACTIVE = 'USER_INACTIVE',
+    MSG_FROM_USER = 'MSG_FROM_USER',
+    MSG_SEND = 'MSG_SEND',
 }
 
 export type User = {
@@ -24,11 +26,28 @@ export type User = {
     isLogined: boolean;
 };
 
+export type Message = {
+    id: string;
+    from: string;
+    to: string;
+    text: string;
+    datetime: number;
+    status: {
+        isDelivered: boolean;
+        isReaded: boolean;
+        isEdited: boolean;
+    };
+};
+
+export type WSPayload = {
+    user?: User;
+    users?: User[];
+    message?: Message;
+    messages?: Message[];
+};
+
 export type WSMessage = {
     id: string;
     type: WSMessageType;
-    payload: {
-        user?: User;
-        users?: User[];
-    };
+    payload: WSPayload;
 };
