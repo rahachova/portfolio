@@ -14,6 +14,11 @@
     gap: 10px;
 }
 
+.user_name {
+    width: 100%;
+    cursor: pointer;
+}
+
 .users_list {
     display: flex;
     flex-direction: column;
@@ -23,13 +28,13 @@
 .user_status--active {
     mask: url(../../../../assets/flower-status.svg) no-repeat;
     background-color: rgb(0, 228, 137);
-    width: 20px;
+    width: 24px;
     height: 20px;
 }
 
 .user_status--inactive {
     mask: url(../../../../assets/flower-status.svg) no-repeat;
     background-color: rgb(211, 21, 0);
-    width: 20px;
+    width: 24px;
     height: 20px;
 }

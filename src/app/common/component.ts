@@ -62,6 +62,10 @@ export default class Component {
         this.node.classList.remove(className);
     }
 
+    public removeClasses(classNames: string[]) {
+        classNames.forEach(this.removeClass.bind(this));
+    }
+
     public checkClass(className: string): boolean {
         return this.node.classList.contains(className);
     }

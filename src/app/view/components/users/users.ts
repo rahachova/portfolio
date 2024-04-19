@@ -80,6 +80,7 @@ export default class Users extends Component {
                     className: 'user_name',
                     text: login,
                 });
+                userName.setAttribute('id', login);
                 user.appendChildren([userStatus, userName]);
                 return user;
             });
@@ -106,6 +107,7 @@ export default class Users extends Component {
                     className: 'user_name',
                     text: login,
                 });
+                userName.setAttribute('id', login);
                 user.appendChildren([userStatus, userName]);
                 return user;
             });
@@ -124,6 +126,16 @@ export default class Users extends Component {
             this.userNameFilter = (event.target as HTMLInputElement).value;
             this.renderActiveUsersList();
             this.renderInactiveUsersList();
+        });
+        this.activeUsersList.addListener('click', (event) => {
+            if ((event.target as HTMLElement).classList.contains('user_name')) {
+                PS.sendEvent(PublishSubscribeEvent.SelectInterlocutor, { login: (event.target as HTMLElement).id, active: true });
+            }
+        });
+        this.inactiveUsersList.addListener('click', (event) => {
+            if ((event.target as HTMLElement).classList.contains('user_name')) {
+                PS.sendEvent(PublishSubscribeEvent.SelectInterlocutor, { login: (event.target as HTMLElement).id, active: false });
+            }
         });
     }
 
