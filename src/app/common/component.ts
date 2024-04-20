@@ -1,4 +1,6 @@
 export default class Component {
+    private dataAttributes: { [key: string]: string | boolean } = {};
+
     private children: Component[] = [];
 
     private node: HTMLElement;
@@ -76,6 +78,14 @@ export default class Component {
 
     public removeListener(event: string, listener: () => void, options: boolean = false) {
         this.node.removeEventListener(event, listener, options);
+    }
+
+    getDataAttribute(key: string): string | boolean {
+        return this.dataAttributes[key];
+    }
+
+    setDataAttribute(key: string, value: string | boolean) {
+        this.dataAttributes[key] = value;
     }
 
     destroyChildren() {

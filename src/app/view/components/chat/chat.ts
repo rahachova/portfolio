@@ -14,6 +14,8 @@ export default class Chat extends Component {
 
     messageStory: Component;
 
+    messageStoryOuter: Component;
+
     messagesPlaceholder: Component;
 
     inputContainer: Component;
@@ -25,6 +27,10 @@ export default class Chat extends Component {
     activeInterlocutorName: string = '';
 
     isHistoryEmpty: boolean = false;
+
+    hasUnread: boolean = false;
+
+    isScrollIntoView: boolean = false;
 
     constructor() {
         super({ tag: 'div', className: 'chat' });
@@ -47,6 +53,11 @@ export default class Chat extends Component {
         this.messageStory = new Component({
             tag: 'div',
             className: 'message_story',
+        });
+
+        this.messageStoryOuter = new Component({
+            tag: 'div',
+            className: 'message_story--outer',
         });
 
         this.messagesPlaceholder = new Component({
@@ -86,6 +97,7 @@ export default class Chat extends Component {
     }
 
     sendMessage() {
+        this.markAllReaded();
         PS.sendEvent(PublishSubscribeEvent.WSMessage, {
             id: uuidv4(),
             type: WSMessageType.MSG_SEND,
@@ -100,6 +112,7 @@ export default class Chat extends Component {
     }
 
     renderDialogue(payload: { login: string; active: boolean }) {
+        this.hasUnread = false;
         const { login, active } = payload;
         this.activeInterlocutorName = login;
         this.interlocutorName.setTextContent(login);
@@ -112,13 +125,22 @@ export default class Chat extends Component {
     }
 
     createMessage(message: Message) {
+        this.hasUnread = !message.status.isReaded;
+        const messageElementOuter = new Component({ tag: 'div', className: 'message--outer' });
+        messageElementOuter.setDataAttribute('isReaded', message.status.isReaded);
+        messageElementOuter.setDataAttribute('id', message.id);
+        messageElementOuter.setDataAttribute('isIncome', message.from === this.activeInterlocutorName);
         const messageElement = new Component({ tag: 'div', className: 'message', text: message.text });
         if (message.from === this.activeInterlocutorName) {
-            messageElement.addClass('message--from');
+            messageElementOuter.addClass('message--from');
         } else {
-            messageElement.addClass('message--to');
+            messageElementOuter.addClass('message--to');
         }
-        return messageElement;
+        if (!message.status.isReaded && message.from === this.activeInterlocutorName) {
+            messageElementOuter.addClass('message--unread');
+        }
+        messageElementOuter.append(messageElement);
+        return messageElementOuter;
     }
 
     renderMessages(payload: WSPayload) {
@@ -126,7 +148,14 @@ export default class Chat extends Component {
         this.messageStory.destroyChildren();
         if (messages?.length) {
             this.messageStory.appendChildren(messages);
-            messages[messages.length - 1].getNode().scrollIntoView();
+            this.isScrollIntoView = true;
+            const firstUnreadMessage = messages.find((message) => !message.getDataAttribute('isReaded'));
+            if (firstUnreadMessage) {
+                firstUnreadMessage.getNode().scrollIntoView();
+            } else {
+                messages[messages.length - 1].getNode().scrollIntoView();
+            }
+            this.isHistoryEmpty = false;
         } else {
             const messagesPlaceholder = new Component({
                 tag: 'div',
@@ -141,13 +170,61 @@ export default class Chat extends Component {
     renderNewMessage(payload: WSPayload) {
         if (payload.message) {
             if (this.isHistoryEmpty) {
-                debugger;
                 this.messageStory.destroyChildren();
                 this.isHistoryEmpty = false;
             }
+            const isScrollNeeded = !this.hasUnread;
             const messageElement = this.createMessage(payload.message);
             this.messageStory.append(messageElement);
-            messageElement.getNode().scrollIntoView();
+            this.isScrollIntoView = true;
+            isScrollNeeded && messageElement.getNode().scrollIntoView();
+        }
+    }
+
+    handleScroll(event: Event) {
+        if (this.isScrollIntoView) {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            this.isScrollIntoView = false;
+        } else {
+            this.markAllReaded();
+        }
+    }
+
+    markAllReaded() {
+        if (this.hasUnread) {
+            console.log('dsa');
+            this.messageStory.getChildren().forEach((messageElement) => {
+                const isReaded = messageElement.getDataAttribute('isReaded');
+                const id = messageElement.getDataAttribute('id');
+                const isIncome = messageElement.getDataAttribute('isIncome');
+                if (!isReaded && isIncome) {
+                    PS.sendEvent(PublishSubscribeEvent.WSMessage, {
+                        id: uuidv4(),
+                        type: WSMessageType.MSG_READ,
+                        payload: {
+                            message: {
+                                id,
+                            },
+                        },
+                    });
+                }
+            });
+            this.hasUnread = false;
+        }
+    }
+
+    updateReadStatus(payload: WSPayload) {
+        const messageToUpdate = this.messageStory.getChildren().find((messageElement) => {
+            return messageElement.getDataAttribute('id') === payload.message?.id;
+        });
+
+        const isReaded = payload.message?.status.isReaded;
+        messageToUpdate?.setDataAttribute('isReaded', Boolean(isReaded));
+        if (isReaded) {
+            messageToUpdate?.removeClass('message--unread');
+        } else {
+            messageToUpdate?.addClass('message--unread');
         }
     }
 
@@ -163,6 +240,8 @@ export default class Chat extends Component {
                 this.sendMessage();
             }
         });
+        this.messageStoryOuter.addListener('click', this.markAllReaded.bind(this));
+        this.messageStoryOuter.addListener('scroll', this.handleScroll.bind(this));
     }
 
     setupSubscribtion() {
@@ -175,13 +254,16 @@ export default class Chat extends Component {
             this.renderMessages(data.payload);
         } else if (data.type === WSMessageType.MSG_SEND) {
             this.renderNewMessage(data.payload);
+        } else if (data.type === WSMessageType.MSG_READ) {
+            this.updateReadStatus(data.payload);
         }
     }
 
     build() {
+        this.messageStoryOuter.append(this.messageStory);
         this.messageStory.append(this.messagesPlaceholder);
         this.interlocutorInfo.appendChildren([this.interlocutorName, this.interlocutorStatus]);
         this.inputContainer.appendChildren([this.inputMessage, this.sendButton]);
-        this.appendChildren([this.interlocutorInfo, this.messageStory, this.inputContainer]);
+        this.appendChildren([this.interlocutorInfo, this.messageStoryOuter, this.inputContainer]);
     }
 }
