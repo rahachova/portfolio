@@ -30,6 +30,7 @@ export default class MainScreen extends Component {
     }
 
     createMainScreen() {
+        this.destroyChildren();
         this.header = new Header();
         this.users = new Users();
         this.chat = new Chat();

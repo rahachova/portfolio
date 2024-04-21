@@ -262,13 +262,41 @@ export default class Chat extends Component {
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
     }
 
+    handleUserLogin() {
+        this.interlocutorStatus.setTextContent('online');
+        this.interlocutorStatus.removeClass('interlocutor_status--offline');
+        this.interlocutorStatus.addClass('interlocutor_status--online');
+    }
+
+    handleUserLogout() {
+        this.interlocutorStatus.setTextContent('offline');
+        this.interlocutorStatus.removeClass('interlocutor_status--online');
+        this.interlocutorStatus.addClass('interlocutor_status--offline');
+    }
+
     listenSocket(data: WSMessage) {
-        if (data.type === WSMessageType.MSG_FROM_USER) {
-            this.renderMessages(data);
-        } else if (data.type === WSMessageType.MSG_SEND) {
-            this.renderNewMessage(data.payload);
-        } else if (data.type === WSMessageType.MSG_READ) {
-            this.updateReadStatus(data.payload);
+        switch (data.type) {
+            case WSMessageType.MSG_FROM_USER:
+                this.renderMessages(data);
+                break;
+            case WSMessageType.MSG_SEND:
+                this.renderNewMessage(data.payload);
+                break;
+            case WSMessageType.MSG_READ:
+                this.updateReadStatus(data.payload);
+                break;
+            case WSMessageType.USER_EXTERNAL_LOGIN:
+                if (data.payload.user?.login === this.activeInterlocutorName) {
+                    this.handleUserLogin();
+                }
+                break;
+            case WSMessageType.USER_EXTERNAL_LOGOUT:
+                if (data.payload.user?.login === this.activeInterlocutorName) {
+                    this.handleUserLogout();
+                }
+                break;
+            default:
+                break;
         }
     }
 

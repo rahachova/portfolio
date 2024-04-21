@@ -66,6 +66,10 @@ export default class Users extends Component {
         if (userElement) {
             this.inactiveUsersList.removeChild(userElement);
             this.activeUsersList.append(userElement);
+        } else if (payload.user) {
+            const { login, isLogined } = payload.user;
+            const newUser = new UserComponent(login, isLogined);
+            this.activeUsersList.append(newUser);
         }
     }
 
