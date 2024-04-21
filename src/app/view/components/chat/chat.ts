@@ -168,6 +168,11 @@ export default class Chat extends Component {
     }
 
     renderNewMessage(payload: WSPayload) {
+        const isMessageAppliesToCurrentDialogue =
+            this.activeInterlocutorName === payload.message?.from || this.activeInterlocutorName === payload.message?.to;
+        if (!isMessageAppliesToCurrentDialogue) {
+            return;
+        }
         if (payload.message) {
             if (this.isHistoryEmpty) {
                 this.messageStory.destroyChildren();

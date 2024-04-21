@@ -2,12 +2,14 @@ import './modalWindow.css';
 import Component from '../../../common/component';
 import loginController from '../../../controllers/loginController';
 import PS from '../../../common/publishSubscribe';
-import { PublishSubscribeEvent } from '../../../types/types';
+import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../../../types/types';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 const PASSWORD_REGEX = '^\\d+$';
 export default class ModalWindow extends Component {
     header: Component;
+
+    serverError: Component;
 
     form: Component;
 
@@ -44,6 +46,10 @@ export default class ModalWindow extends Component {
             tag: 'h2',
             className: 'modal_header',
             text: 'Sign in',
+        });
+        this.serverError = new Component({
+            tag: 'span',
+            className: 'modal_error',
         });
         this.form = new Component({ tag: 'form', className: 'modal_form' });
         this.nameInput = new Component({ tag: 'input' });
@@ -114,12 +120,25 @@ export default class ModalWindow extends Component {
     setupSubscribtion() {
         PS.subscribe(PublishSubscribeEvent.Loggedout, this.showModalWindow.bind(this));
         PS.subscribe(PublishSubscribeEvent.Loggedin, this.hideModalWindow.bind(this));
+        PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
     }
 
     setupListeners() {
         this.form.addListener('submit', this.handleFormSubmit.bind(this));
-        this.nameInput.addListener('input', () => ModalWindow.hideInputError(this.nameError));
-        this.passwordInput.addListener('input', () => ModalWindow.hideInputError(this.passwordError));
+        this.nameInput.addListener('input', () => {
+            ModalWindow.hideInputError(this.nameError);
+            ModalWindow.hideInputError(this.serverError);
+        });
+        this.passwordInput.addListener('input', () => {
+            ModalWindow.hideInputError(this.passwordError);
+            ModalWindow.hideInputError(this.serverError);
+        });
+    }
+
+    listenSocket(data: WSMessage) {
+        if (data.type === WSMessageType.ERROR) {
+            this.handleServerError(data.payload.error);
+        }
     }
 
     handleFormSubmit(event: Event) {
@@ -142,6 +161,12 @@ export default class ModalWindow extends Component {
             name: formData.get(this.nameInputName) as string,
             password: formData.get(this.passwordInputName) as string,
         });
+    }
+
+    handleServerError(error: string | undefined) {
+        if (error) {
+            ModalWindow.showInputError(error.charAt(0).toUpperCase() + error.slice(1), this.serverError);
+        }
     }
 
     hideModalWindow() {
@@ -199,7 +224,7 @@ export default class ModalWindow extends Component {
             this.passwordInput,
             this.buttons,
         ]);
-        this.appendChildren([this.header, this.form]);
+        this.appendChildren([this.header, this.serverError, this.form]);
     }
 
     get nameInputElement(): HTMLInputElement {

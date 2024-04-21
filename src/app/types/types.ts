@@ -45,6 +45,7 @@ export type WSPayload = {
     users?: User[];
     message?: Message;
     messages?: Message[];
+    error?: string;
 };
 
 export type WSMessage = {
