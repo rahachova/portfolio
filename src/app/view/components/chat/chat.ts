@@ -4,6 +4,7 @@ import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
 import { Message, PublishSubscribeEvent, WSMessage, WSMessageType, WSPayload } from '../../../types/types';
 import './chat.css';
+import MessageComponent from '../message/message';
 
 export default class Chat extends Component {
     interlocutorInfo: Component;
@@ -101,18 +102,21 @@ export default class Chat extends Component {
     }
 
     sendMessage() {
-        this.markAllReaded();
-        PS.sendEvent(PublishSubscribeEvent.WSMessage, {
-            id: uuidv4(),
-            type: WSMessageType.MSG_SEND,
-            payload: {
-                message: {
-                    to: this.activeInterlocutorName,
-                    text: (this.inputMessage.getNode() as HTMLInputElement).value,
+        const inputValue = (this.inputMessage.getNode() as HTMLInputElement).value.trim();
+        if (inputValue) {
+            this.markAllReaded();
+            PS.sendEvent(PublishSubscribeEvent.WSMessage, {
+                id: uuidv4(),
+                type: WSMessageType.MSG_SEND,
+                payload: {
+                    message: {
+                        to: this.activeInterlocutorName,
+                        text: inputValue,
+                    },
                 },
-            },
-        });
-        (this.inputMessage.getNode() as HTMLInputElement).value = '';
+            });
+            (this.inputMessage.getNode() as HTMLInputElement).value = '';
+        }
     }
 
     renderDialogue(payload: { login: string; active: boolean }) {
@@ -130,21 +134,7 @@ export default class Chat extends Component {
 
     createMessage(message: Message) {
         this.hasUnread = message.from === this.activeInterlocutorName && !message.status.isReaded;
-        const messageElementOuter = new Component({ tag: 'div', className: 'message--outer' });
-        messageElementOuter.setDataAttribute('isReaded', message.status.isReaded);
-        messageElementOuter.setDataAttribute('id', message.id);
-        messageElementOuter.setDataAttribute('isIncome', message.from === this.activeInterlocutorName);
-        const messageElement = new Component({ tag: 'div', className: 'message', text: message.text });
-        if (message.from === this.activeInterlocutorName) {
-            messageElementOuter.addClass('message--from');
-        } else {
-            messageElementOuter.addClass('message--to');
-        }
-        if (!message.status.isReaded && message.from === this.activeInterlocutorName) {
-            messageElementOuter.addClass('message--unread');
-        }
-        messageElementOuter.append(messageElement);
-        return messageElementOuter;
+        return new MessageComponent(message, this.activeInterlocutorName);
     }
 
     renderMessages({ id, payload }: WSMessage) {
@@ -274,6 +264,15 @@ export default class Chat extends Component {
         this.interlocutorStatus.addClass('interlocutor_status--offline');
     }
 
+    deleteMessage(payload: WSPayload) {
+        const messageToDelete = this.messageStory
+            .getChildren()
+            .find((message) => (message as MessageComponent).message.id === payload.message?.id);
+        if (messageToDelete) {
+            this.messageStory.removeChild(messageToDelete);
+        }
+    }
+
     listenSocket(data: WSMessage) {
         switch (data.type) {
             case WSMessageType.MSG_FROM_USER:
@@ -294,6 +293,9 @@ export default class Chat extends Component {
                 if (data.payload.user?.login === this.activeInterlocutorName) {
                     this.handleUserLogout();
                 }
+                break;
+            case WSMessageType.MSG_DELETE:
+                this.deleteMessage(data.payload);
                 break;
             default:
                 break;

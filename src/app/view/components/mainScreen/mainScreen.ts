@@ -28,22 +28,24 @@ export default class MainScreen extends Component {
 
     hideMainScreen() {
         this.removeClass('main-screen--shown');
-        this.destroyChildren();
     }
 
     createMainScreen() {
-        if (this.isCreated) return;
-        this.header = new Header();
-        this.users = new Users();
-        this.chat = new Chat();
-        this.wrapper = new Component({
-            tag: 'div',
-            className: 'wrapper',
-        });
-        this.isCreated = true;
+        if (this.isCreated) {
+            this.showMainScreen();
+        } else {
+            this.header = new Header();
+            this.users = new Users();
+            this.chat = new Chat();
+            this.wrapper = new Component({
+                tag: 'div',
+                className: 'wrapper',
+            });
+            this.isCreated = true;
 
-        this.build();
-        this.showMainScreen();
+            this.build();
+            this.showMainScreen();
+        }
     }
 
     setupSubscribtions() {
