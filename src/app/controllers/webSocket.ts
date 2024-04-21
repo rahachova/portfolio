@@ -9,8 +9,8 @@ export class WebSocketClient {
     constructor() {
         this.url = 'ws://localhost:4000';
         this.socket = new WebSocket(this.url);
-        this.socket.onopen = this.onOpen.bind(this);
-        this.socket.onmessage = this.onMessage.bind(this);
+        this.socket.onopen = WebSocketClient.onOpen;
+        this.socket.onmessage = WebSocketClient.onMessage;
         this.socket.onclose = this.onClose.bind(this);
         this.socket.onerror = this.onError.bind(this);
         this.setupSubscriptions();
@@ -18,19 +18,19 @@ export class WebSocketClient {
 
     reconnect() {
         this.socket = new WebSocket(this.url);
-        this.socket.onopen = this.onOpen.bind(this);
-        this.socket.onmessage = this.onMessage.bind(this);
+        this.socket.onopen = WebSocketClient.onOpen;
+        this.socket.onmessage = WebSocketClient.onMessage;
         this.socket.onclose = this.onClose.bind(this);
         this.socket.onerror = this.onError.bind(this);
         this.setupSubscriptions();
     }
 
-    onOpen(event: Event) {
+    static onOpen() {
         PS.sendEvent(PublishSubscribeEvent.WSConnect);
         console.debug('WebSocket connection established.');
     }
 
-    onMessage(event: MessageEvent) {
+    static onMessage(event: MessageEvent) {
         console.debug('Message received:', event.data);
         PS.sendEvent(PublishSubscribeEvent.WSMessageReceived, JSON.parse(event.data));
     }

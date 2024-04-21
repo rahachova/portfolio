@@ -1,8 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
-import { PublishSubscribeEvent, User, WSMessage, WSMessageType } from '../../../types/types';
-import { v4 as uuidv4 } from 'uuid';
+import { PublishSubscribeEvent, User, WSMessage, WSMessageType, WSPayload } from '../../../types/types';
 import './users.css';
+import UserComponent from '../user/user';
 
 export default class Users extends Component {
     inputField: Component;
@@ -14,8 +15,6 @@ export default class Users extends Component {
     activeUsersData: User[] | undefined = [];
 
     inactiveUsersData: User[] | undefined = [];
-
-    userNameFilter: string = '';
 
     authenticatedUser: string | null = localStorage.getItem('name');
 
@@ -41,7 +40,7 @@ export default class Users extends Component {
         this.build();
     }
 
-    getUsers() {
+    static getUsers() {
         PS.sendEvent(PublishSubscribeEvent.WSMessage, {
             id: uuidv4(),
             type: WSMessageType.USER_ACTIVE,
@@ -54,68 +53,56 @@ export default class Users extends Component {
         });
     }
 
+    handleUserLogout(payload: WSPayload) {
+        const userElement = this.activeUsersList.getChildren().find((user) => (user as UserComponent).login === payload.user?.login);
+        if (userElement) {
+            this.activeUsersList.removeChild(userElement);
+            this.inactiveUsersList.append(userElement);
+        }
+    }
+
+    handleUserLogin(payload: WSPayload) {
+        const userElement = this.inactiveUsersList.getChildren().find((user) => (user as UserComponent).login === payload.user?.login);
+        if (userElement) {
+            this.inactiveUsersList.removeChild(userElement);
+            this.activeUsersList.append(userElement);
+        }
+    }
+
     listenSocket(data: WSMessage) {
-        if (data.type === WSMessageType.USER_ACTIVE) {
-            this.activeUsersData = data.payload.users?.filter((user) => user.login !== this.authenticatedUser);
-            this.renderActiveUsersList();
-        }
-        if (data.type === WSMessageType.USER_INACTIVE) {
-            this.inactiveUsersData = data.payload.users?.filter((user) => user.login !== this.authenticatedUser);
-            this.renderInactiveUsersList();
-        }
-    }
-
-    renderActiveUsersList() {
-        const userElements = this.activeUsersData
-            ?.filter((user: User) => user.login.toLowerCase().includes(this.userNameFilter.toLowerCase()))
-            .map(({ login }) => {
-                const user = new Component({
-                    tag: 'div',
-                    className: 'user',
-                });
-                const userStatus = new Component({
-                    tag: 'div',
-                    className: 'user_status--active',
-                });
-                const userName = new Component({
-                    tag: 'div',
-                    className: 'user_name',
-                    text: login,
-                });
-                userName.setAttribute('id', login);
-                user.appendChildren([userStatus, userName]);
-                return user;
-            });
-        if (userElements) {
-            this.activeUsersList.destroyChildren();
-            this.activeUsersList.appendChildren(userElements);
+        switch (data.type) {
+            case WSMessageType.USER_ACTIVE:
+                this.activeUsersData = data.payload.users?.filter((user) => user.login !== this.authenticatedUser);
+                this.renderUsersList(this.activeUsersData, true);
+                break;
+            case WSMessageType.USER_INACTIVE:
+                this.inactiveUsersData = data.payload.users?.filter((user) => user.login !== this.authenticatedUser);
+                this.renderUsersList(this.inactiveUsersData, false);
+                break;
+            case WSMessageType.USER_EXTERNAL_LOGIN:
+                this.handleUserLogin(data.payload);
+                break;
+            case WSMessageType.USER_EXTERNAL_LOGOUT:
+                this.handleUserLogout(data.payload);
+                break;
+            default:
+                break;
         }
     }
 
-    renderInactiveUsersList() {
-        const userElements = this.inactiveUsersData
-            ?.filter((user: User) => user.login.toLowerCase().includes(this.userNameFilter.toLowerCase()))
-            .map(({ login }) => {
-                const user = new Component({
-                    tag: 'div',
-                    className: 'user',
-                });
-                const userStatus = new Component({
-                    tag: 'div',
-                    className: 'user_status--inactive',
-                });
-                const userName = new Component({
-                    tag: 'div',
-                    className: 'user_name',
-                    text: login,
-                });
-                userName.setAttribute('id', login);
-                user.appendChildren([userStatus, userName]);
-                return user;
-            });
+    renderUsersList(usersData: User[] | undefined, isActive: boolean) {
+        const userElements = usersData?.map(({ login }) => new UserComponent(login, isActive));
         if (userElements) {
-            this.inactiveUsersList.destroyChildren();
-            this.inactiveUsersList.appendChildren(userElements);
+            switch (isActive) {
+                case true:
+                    this.activeUsersList.appendChildren(userElements);
+                    break;
+                case false:
+                    this.inactiveUsersList.appendChildren(userElements);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -125,9 +112,21 @@ export default class Users extends Component {
 
     setupListener() {
         this.inputField.addListener('input', (event) => {
-            this.userNameFilter = (event.target as HTMLInputElement).value;
-            this.renderActiveUsersList();
-            this.renderInactiveUsersList();
+            const userNameFilter = (event.target as HTMLInputElement).value;
+            this.activeUsersList.getChildren().forEach((user) => {
+                if ((user as UserComponent).login.toLowerCase().includes(userNameFilter.toLowerCase())) {
+                    user.removeClass('user--hidden');
+                } else {
+                    user.addClass('user--hidden');
+                }
+            });
+            this.inactiveUsersList.getChildren().forEach((user) => {
+                if ((user as UserComponent).login.toLowerCase().includes(userNameFilter.toLowerCase())) {
+                    user.removeClass('user--hidden');
+                } else {
+                    user.addClass('user--hidden');
+                }
+            });
         });
         this.activeUsersList.addListener('click', (event) => {
             if ((event.target as HTMLElement).classList.contains('user_name')) {
@@ -147,6 +146,6 @@ export default class Users extends Component {
 
     build() {
         this.appendChildren([this.inputField, this.activeUsersList, this.inactiveUsersList]);
-        this.getUsers();
+        Users.getUsers();
     }
 }

@@ -1,8 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
 import Button from '../../../common/button/button';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
 import { Message, PublishSubscribeEvent, WSMessage, WSMessageType, WSPayload } from '../../../types/types';
-import { v4 as uuidv4 } from 'uuid';
 import './chat.css';
 
 export default class Chat extends Component {
@@ -31,6 +31,8 @@ export default class Chat extends Component {
     hasUnread: boolean = false;
 
     isScrollIntoView: boolean = false;
+
+    messagesHistoryRequestId: string | undefined;
 
     constructor() {
         super({ tag: 'div', className: 'chat' });
@@ -85,8 +87,10 @@ export default class Chat extends Component {
     }
 
     getMessages() {
+        this.messagesHistoryRequestId = uuidv4();
+
         PS.sendEvent(PublishSubscribeEvent.WSMessage, {
-            id: uuidv4(),
+            id: this.messagesHistoryRequestId,
             type: WSMessageType.MSG_FROM_USER,
             payload: {
                 user: {
@@ -125,7 +129,7 @@ export default class Chat extends Component {
     }
 
     createMessage(message: Message) {
-        this.hasUnread = !message.status.isReaded;
+        this.hasUnread = message.from === this.activeInterlocutorName && !message.status.isReaded;
         const messageElementOuter = new Component({ tag: 'div', className: 'message--outer' });
         messageElementOuter.setDataAttribute('isReaded', message.status.isReaded);
         messageElementOuter.setDataAttribute('id', message.id);
@@ -143,13 +147,16 @@ export default class Chat extends Component {
         return messageElementOuter;
     }
 
-    renderMessages(payload: WSPayload) {
+    renderMessages({ id, payload }: WSMessage) {
+        if (id !== this.messagesHistoryRequestId) return;
         const messages = payload.messages?.map(this.createMessage.bind(this));
         this.messageStory.destroyChildren();
         if (messages?.length) {
             this.messageStory.appendChildren(messages);
             this.isScrollIntoView = true;
-            const firstUnreadMessage = messages.find((message) => !message.getDataAttribute('isReaded'));
+            const firstUnreadMessage = messages.find(
+                (message) => message.getDataAttribute('isIncome') && !message.getDataAttribute('isReaded')
+            );
             if (firstUnreadMessage) {
                 firstUnreadMessage.getNode().scrollIntoView();
             } else {
@@ -181,8 +188,10 @@ export default class Chat extends Component {
             const isScrollNeeded = !this.hasUnread;
             const messageElement = this.createMessage(payload.message);
             this.messageStory.append(messageElement);
-            this.isScrollIntoView = true;
-            isScrollNeeded && messageElement.getNode().scrollIntoView();
+            if (isScrollNeeded) {
+                this.isScrollIntoView = true;
+                messageElement.getNode().scrollIntoView();
+            }
         }
     }
 
@@ -198,7 +207,6 @@ export default class Chat extends Component {
 
     markAllReaded() {
         if (this.hasUnread) {
-            console.log('dsa');
             this.messageStory.getChildren().forEach((messageElement) => {
                 const isReaded = messageElement.getDataAttribute('isReaded');
                 const id = messageElement.getDataAttribute('id');
@@ -220,9 +228,9 @@ export default class Chat extends Component {
     }
 
     updateReadStatus(payload: WSPayload) {
-        const messageToUpdate = this.messageStory.getChildren().find((messageElement) => {
-            return messageElement.getDataAttribute('id') === payload.message?.id;
-        });
+        const messageToUpdate = this.messageStory
+            .getChildren()
+            .find((messageElement) => messageElement.getDataAttribute('id') === payload.message?.id);
 
         const isReaded = payload.message?.status.isReaded;
         messageToUpdate?.setDataAttribute('isReaded', Boolean(isReaded));
@@ -256,7 +264,7 @@ export default class Chat extends Component {
 
     listenSocket(data: WSMessage) {
         if (data.type === WSMessageType.MSG_FROM_USER) {
-            this.renderMessages(data.payload);
+            this.renderMessages(data);
         } else if (data.type === WSMessageType.MSG_SEND) {
             this.renderNewMessage(data.payload);
         } else if (data.type === WSMessageType.MSG_READ) {

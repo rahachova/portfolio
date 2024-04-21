@@ -1,6 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
 import PS from '../common/publishSubscribe';
 import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../types/types';
-import { v4 as uuidv4 } from 'uuid';
 
 class LoginController {
     nameKey: string = 'name';
@@ -24,7 +24,7 @@ class LoginController {
     setupSubscribtion() {
         PS.subscribe(PublishSubscribeEvent.Login, this.loginUser.bind(this));
         PS.subscribe(PublishSubscribeEvent.Logout, this.logoutUser.bind(this));
-        PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
+        PS.subscribe(PublishSubscribeEvent.WSMessageReceived, LoginController.listenSocket);
         PS.subscribe(PublishSubscribeEvent.WSConnect, this.checkUserLogin.bind(this));
     }
 
@@ -38,7 +38,7 @@ class LoginController {
             payload: {
                 user: {
                     login: name,
-                    password: password,
+                    password,
                 },
             },
         };
@@ -54,7 +54,7 @@ class LoginController {
             payload: {
                 user: {
                     login: name,
-                    password: password,
+                    password,
                 },
             },
         };
@@ -62,7 +62,7 @@ class LoginController {
         LoginController.detateUserData();
     }
 
-    listenSocket(data: WSMessage) {
+    static listenSocket(data: WSMessage) {
         if (data.type === WSMessageType.USER_LOGIN) {
             PS.sendEvent(PublishSubscribeEvent.Loggedin);
         } else if (data.type === WSMessageType.USER_LOGOUT) {

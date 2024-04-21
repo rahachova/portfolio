@@ -1,7 +1,7 @@
 import Button from '../../../common/button/button';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
-import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../../../types/types';
+import { PublishSubscribeEvent } from '../../../types/types';
 import './header.css';
 
 export default class Header extends Component {

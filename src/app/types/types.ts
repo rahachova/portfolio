@@ -12,6 +12,7 @@ export enum PublishSubscribeEvent {
 
 export enum WSMessageType {
     USER_EXTERNAL_LOGIN = 'USER_EXTERNAL_LOGIN',
+    USER_EXTERNAL_LOGOUT = 'USER_EXTERNAL_LOGOUT',
     ERROR = 'ERROR',
     USER_LOGIN = 'USER_LOGIN',
     USER_LOGOUT = 'USER_LOGOUT',

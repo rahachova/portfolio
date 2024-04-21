@@ -1,6 +1,5 @@
 import './mainScreen.css';
 import Component from '../../../common/component';
-import loginController from '../../../controllers/loginController';
 import PS from '../../../common/publishSubscribe';
 import { PublishSubscribeEvent } from '../../../types/types';
 import Header from '../header/header';

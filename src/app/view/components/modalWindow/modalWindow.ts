@@ -1,6 +1,5 @@
 import './modalWindow.css';
 import Component from '../../../common/component';
-import loginController from '../../../controllers/loginController';
 import PS from '../../../common/publishSubscribe';
 import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../../../types/types';
 

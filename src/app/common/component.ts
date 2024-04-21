@@ -1,5 +1,5 @@
 export default class Component {
-    private dataAttributes: { [key: string]: string | boolean } = {};
+    private dataAttributes: { [key: string]: string | boolean | number } = {};
 
     private children: Component[] = [];
 
@@ -23,7 +23,8 @@ export default class Component {
 
     public removeChild(child: Component) {
         const childIndex = this.children.indexOf(child);
-        this.children.splice(childIndex, 1);
+        const [childToRemove] = this.children.splice(childIndex, 1);
+        this.node.removeChild((childToRemove as Component).getNode());
     }
 
     public appendChildren(children: Component[]) {
@@ -80,11 +81,11 @@ export default class Component {
         this.node.removeEventListener(event, listener, options);
     }
 
-    getDataAttribute(key: string): string | boolean {
+    getDataAttribute(key: string): string | boolean | number {
         return this.dataAttributes[key];
     }
 
-    setDataAttribute(key: string, value: string | boolean) {
+    setDataAttribute(key: string, value: string | boolean | number) {
         this.dataAttributes[key] = value;
     }
 

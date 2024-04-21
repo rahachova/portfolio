@@ -9,8 +9,6 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "rules": {
-        "no-param-reassign": 0s
-    },
+    "rules": {},
     "ignorePatterns": ["*.d.ts"]
 }
