@@ -22,7 +22,6 @@ export class WebSocketClient {
         this.socket.onmessage = WebSocketClient.onMessage;
         this.socket.onclose = this.onClose.bind(this);
         this.socket.onerror = this.onError.bind(this);
-        this.setupSubscriptions();
     }
 
     static onOpen() {

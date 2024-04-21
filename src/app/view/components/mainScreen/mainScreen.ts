@@ -15,6 +15,8 @@ export default class MainScreen extends Component {
 
     wrapper!: Component;
 
+    isCreated: boolean = false;
+
     constructor() {
         super({ tag: 'div', className: 'main-screen' });
         this.setupSubscribtions();
@@ -30,7 +32,7 @@ export default class MainScreen extends Component {
     }
 
     createMainScreen() {
-        this.destroyChildren();
+        if (this.isCreated) return;
         this.header = new Header();
         this.users = new Users();
         this.chat = new Chat();
@@ -38,6 +40,7 @@ export default class MainScreen extends Component {
             tag: 'div',
             className: 'wrapper',
         });
+        this.isCreated = true;
 
         this.build();
         this.showMainScreen();

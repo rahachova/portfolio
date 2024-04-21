@@ -99,9 +99,11 @@ export default class Users extends Component {
         if (userElements) {
             switch (isActive) {
                 case true:
+                    this.activeUsersList.destroyChildren();
                     this.activeUsersList.appendChildren(userElements);
                     break;
                 case false:
+                    this.inactiveUsersList.destroyChildren();
                     this.inactiveUsersList.appendChildren(userElements);
                     break;
                 default:
