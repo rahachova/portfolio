@@ -30,6 +30,7 @@ export default class MessageComponent extends Component {
         this.setClasses();
         this.setListeners();
         this.setAttributes();
+        this.setupSubscribtions();
         this.build();
     }
 
@@ -44,7 +45,9 @@ export default class MessageComponent extends Component {
         }
     }
 
-    handleEdit() {}
+    handleEdit() {
+        PS.sendEvent(PublishSubscribeEvent.StartMessageEdit, { text: this.message.text, id: this.message.id });
+    }
 
     handleDelete() {
         PS.sendEvent(PublishSubscribeEvent.WSMessage, {
@@ -58,7 +61,24 @@ export default class MessageComponent extends Component {
         });
     }
 
-    editMessage(payload: WSPayload) {}
+    editMessage(payload: WSPayload) {
+        if (payload.message?.id === this.message.id) {
+            this.messageElement.setTextContent(payload.message.text);
+        }
+        // {
+        //   id: string,
+        //   type: "MSG_EDIT"
+        //   payload: {
+        //     message: {
+        //       id: string,
+        //       text: string,
+        //       status: {
+        //         isEdited: boolean,
+        //       }
+        //     }
+        //   }
+        // }
+    }
 
     setListeners() {
         this.editButton.addListener('click', this.handleEdit.bind(this));
@@ -71,13 +91,13 @@ export default class MessageComponent extends Component {
         this.setDataAttribute('isIncome', this.message.from === this.interlocutorName);
     }
 
-    setupSubscribtion() {
+    setupSubscribtions() {
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
     }
 
     listenSocket(data: WSMessage) {
         switch (data.type) {
-            case WSMessageType.MSG_DELETE:
+            case WSMessageType.MSG_EDIT:
                 this.editMessage(data.payload);
                 break;
             default:

@@ -19,6 +19,8 @@ export default class Chat extends Component {
 
     messagesPlaceholder: Component;
 
+    inputHint: Component;
+
     inputContainer: Component;
 
     inputMessage: Component;
@@ -32,6 +34,10 @@ export default class Chat extends Component {
     hasUnread: boolean = false;
 
     isScrollIntoView: boolean = false;
+
+    isEditMode: boolean = false;
+
+    editMessageId: string = '';
 
     messagesHistoryRequestId: string | undefined;
 
@@ -69,6 +75,12 @@ export default class Chat extends Component {
             text: 'Choose interlocutor to send a message',
         });
 
+        this.inputHint = new Component({
+            tag: 'p',
+            className: 'input_hint',
+            text: 'Edit message:',
+        });
+
         this.inputContainer = new Component({
             tag: 'div',
             className: 'input_container',
@@ -79,7 +91,7 @@ export default class Chat extends Component {
         });
         this.sendButton = new Button({
             text: 'Send',
-            onClick: this.sendMessage.bind(this),
+            onClick: this.submitInput.bind(this),
         });
         this.setupAttribute();
         this.setupListeners();
@@ -101,22 +113,52 @@ export default class Chat extends Component {
         });
     }
 
-    sendMessage() {
+    submitInput() {
         const inputValue = (this.inputMessage.getNode() as HTMLInputElement).value.trim();
         if (inputValue) {
-            this.markAllReaded();
-            PS.sendEvent(PublishSubscribeEvent.WSMessage, {
-                id: uuidv4(),
-                type: WSMessageType.MSG_SEND,
-                payload: {
-                    message: {
-                        to: this.activeInterlocutorName,
-                        text: inputValue,
-                    },
-                },
-            });
-            (this.inputMessage.getNode() as HTMLInputElement).value = '';
+            switch (this.isEditMode) {
+                case true:
+                    this.editMessage(inputValue);
+                    break;
+                case false:
+                    this.sendMessage(inputValue);
+                    break;
+                default:
+                    break;
+            }
         }
+    }
+
+    sendMessage(inputValue: string) {
+        this.markAllReaded();
+        PS.sendEvent(PublishSubscribeEvent.WSMessage, {
+            id: uuidv4(),
+            type: WSMessageType.MSG_SEND,
+            payload: {
+                message: {
+                    to: this.activeInterlocutorName,
+                    text: inputValue,
+                },
+            },
+        });
+        (this.inputMessage.getNode() as HTMLInputElement).value = '';
+    }
+
+    editMessage(inputValue: string) {
+        PS.sendEvent(PublishSubscribeEvent.WSMessage, {
+            id: uuidv4(),
+            type: WSMessageType.MSG_EDIT,
+            payload: {
+                message: {
+                    id: this.editMessageId,
+                    text: inputValue,
+                },
+            },
+        });
+        this.isEditMode = false;
+        (this.inputMessage.getNode() as HTMLInputElement).value = '';
+        this.sendButton.setTextContent('Send');
+        this.inputHint.removeClass('input_hint--visible');
     }
 
     renderDialogue(payload: { login: string; active: boolean }) {
@@ -231,6 +273,15 @@ export default class Chat extends Component {
         }
     }
 
+    startEditMode(payload: { text: string; id: string }) {
+        const { text, id } = payload;
+        this.isEditMode = true;
+        this.editMessageId = id;
+        (this.inputMessage.getNode() as HTMLInputElement).value = text;
+        this.sendButton.setTextContent('Edit');
+        this.inputHint.addClass('input_hint--visible');
+    }
+
     setupAttribute() {
         this.inputMessage.setAttribute('placeholder', 'Write a message...');
         this.inputMessage.setAttribute('disabled', 'true');
@@ -240,7 +291,7 @@ export default class Chat extends Component {
     setupListeners() {
         this.inputMessage.getNode().addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                this.sendMessage();
+                this.submitInput();
             }
         });
         this.messageStoryOuter.addListener('click', this.markAllReaded.bind(this));
@@ -248,6 +299,7 @@ export default class Chat extends Component {
     }
 
     setupSubscribtion() {
+        PS.subscribe(PublishSubscribeEvent.StartMessageEdit, this.startEditMode.bind(this));
         PS.subscribe(PublishSubscribeEvent.SelectInterlocutor, this.renderDialogue.bind(this));
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
     }
@@ -307,6 +359,6 @@ export default class Chat extends Component {
         this.messageStory.append(this.messagesPlaceholder);
         this.interlocutorInfo.appendChildren([this.interlocutorName, this.interlocutorStatus]);
         this.inputContainer.appendChildren([this.inputMessage, this.sendButton]);
-        this.appendChildren([this.interlocutorInfo, this.messageStoryOuter, this.inputContainer]);
+        this.appendChildren([this.interlocutorInfo, this.messageStoryOuter, this.inputHint, this.inputContainer]);
     }
 }

@@ -4,6 +4,7 @@ export enum PublishSubscribeEvent {
     Loggedout = 'loggedout',
     Logout = 'logout',
     SelectInterlocutor = 'selectInterlocutor',
+    StartMessageEdit = 'startMessageEdit',
     WSConnect = 'connect',
     WSDisconnect = 'disconnect',
     WSMessage = 'message',

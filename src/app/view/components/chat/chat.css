@@ -58,3 +58,12 @@
     min-height: 200px;
     text-align: center;
 }
+
+.input_hint {
+    display: none;
+    padding-bottom: 5px;
+}
+
+.input_hint--visible {
+    display: block;
+}
