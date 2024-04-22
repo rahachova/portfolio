@@ -11,6 +11,8 @@ body {
     position: relative;
     background-color: rgb(246 246 246);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    box-sizing: border-box;
+    height: 100vh;
 }
 
 @media (max-width: 500px) {
