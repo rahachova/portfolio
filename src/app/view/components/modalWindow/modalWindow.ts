@@ -5,6 +5,8 @@ import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../../../types/
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 const PASSWORD_REGEX = '^\\d+$';
+const PASSWORD_MINLENGTH = '7';
+const NAME_MINLENGTH = '3';
 export default class ModalWindow extends Component {
     header: Component;
 
@@ -106,12 +108,12 @@ export default class ModalWindow extends Component {
     setupForm() {
         this.form.setAttribute('novalidate', '');
         this.nameInput.setAttribute('required', '');
-        this.nameInput.setAttribute('minlength', '3');
+        this.nameInput.setAttribute('minlength', NAME_MINLENGTH);
         this.nameInput.setAttribute('pattern', NAME_REGEX);
         this.nameInput.setAttribute('name', this.nameInputName);
         this.passwordInput.setAttribute('type', 'password');
         this.passwordInput.setAttribute('required', '');
-        this.passwordInput.setAttribute('minlength', '7');
+        this.passwordInput.setAttribute('minlength', PASSWORD_MINLENGTH);
         this.passwordInput.setAttribute('pattern', PASSWORD_REGEX);
         this.passwordInput.setAttribute('name', this.passwordInputName);
     }

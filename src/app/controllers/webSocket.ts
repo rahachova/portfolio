@@ -1,13 +1,14 @@
 import PS from '../common/publishSubscribe';
 import { PublishSubscribeEvent } from '../types/types';
 
+const SERVER_URL = 'ws://localhost:4000';
 export class WebSocketClient {
     private url: string;
 
     private socket: WebSocket;
 
     constructor() {
-        this.url = 'ws://localhost:4000';
+        this.url = SERVER_URL;
         this.socket = new WebSocket(this.url);
         this.socket.onopen = WebSocketClient.onOpen;
         this.socket.onmessage = WebSocketClient.onMessage;
@@ -26,31 +27,25 @@ export class WebSocketClient {
 
     static onOpen() {
         PS.sendEvent(PublishSubscribeEvent.WSConnect);
-        console.debug('WebSocket connection established.');
     }
 
     static onMessage(event: MessageEvent) {
-        console.debug('Message received:', event.data);
         PS.sendEvent(PublishSubscribeEvent.WSMessageReceived, JSON.parse(event.data));
     }
 
-    onClose(event: CloseEvent) {
+    onClose() {
         PS.sendEvent(PublishSubscribeEvent.WSDisconnect);
         setTimeout(this.reconnect.bind(this), 2000);
-        console.debug('WebSocket connection closed:', event.reason);
     }
 
-    onError(event: Event) {
+    onError() {
         PS.sendEvent(PublishSubscribeEvent.WSDisconnect);
         this.close();
-        console.error('WebSocket error:', event);
     }
 
     send(message: Object) {
         if (this.socket.readyState === WebSocket.OPEN) {
             this.socket.send(JSON.stringify(message));
-        } else {
-            console.error('WebSocket connection not open.');
         }
     }
 

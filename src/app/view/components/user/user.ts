@@ -40,7 +40,6 @@ export default class UserComponent extends Component {
         });
         this.setupSubscribtions();
         this.setupAttribute();
-        // this.setupListener();
         this.build();
     }
 
@@ -135,24 +134,6 @@ export default class UserComponent extends Component {
     setupSubscribtions() {
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
     }
-
-    // setupListener() {
-    //     this.inputField.addListener('input', (event) => {
-    //         this.userNameFilter = (event.target as HTMLInputElement).value;
-    //         this.renderActiveUsersList();
-    //         this.renderInactiveUsersList();
-    //     });
-    //     this.activeUsersList.addListener('click', (event) => {
-    //         if ((event.target as HTMLElement).classList.contains('user_name')) {
-    //             PS.sendEvent(PublishSubscribeEvent.SelectInterlocutor, { login: (event.target as HTMLElement).id, active: true });
-    //         }
-    //     });
-    //     this.inactiveUsersList.addListener('click', (event) => {
-    //         if ((event.target as HTMLElement).classList.contains('user_name')) {
-    //             PS.sendEvent(PublishSubscribeEvent.SelectInterlocutor, { login: (event.target as HTMLElement).id, active: false });
-    //         }
-    //     });
-    // }
 
     setupAttribute() {
         this.userName.setAttribute('id', this.login);
