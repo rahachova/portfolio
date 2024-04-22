@@ -52,6 +52,9 @@
     right: 0;
     text-align: center;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;
 }
 
 .message-buttons {
@@ -90,4 +93,8 @@
     display: flex;
     gap: 10px;
     justify-content: space-between;
+}
+
+.message_top-info {
+    flex-wrap: wrap;
 }

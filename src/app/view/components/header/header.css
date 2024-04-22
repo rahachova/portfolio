@@ -6,3 +6,18 @@
     justify-content: center;
     gap: 40px;
 }
+
+.header_item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+p.header_item {
+    min-width: 50px;
+}
+
+@media (max-width: 500px) {
+    .header {
+        gap: 10px;
+    }
+}

@@ -26,6 +26,9 @@
 .user_name {
     width: 100%;
     cursor: pointer;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user_unread-count {
@@ -40,4 +43,57 @@
 
 .user_unread-count--hidden {
     display: none;
+}
+
+.input-search {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+    .user_name {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .users {
+        padding: 2px;
+    }
+}
+
+@media (max-width: 500px) {
+    .user_name {
+        max-width: 70px;
+    }
+}
+
+@media (max-width: 400px) {
+    .user_name {
+        width: 100%;
+        cursor: pointer;
+        max-width: 60px;
+    }
+
+    .user_status--active {
+        mask: none;
+        min-width: 5px;
+        min-height: 5px;
+    }
+
+    .user_status--inactive {
+        mask: none;
+        min-width: 5px;
+        min-height: 5px;
+    }
+
+    .user_unread-count {
+        padding: 0px 3px;
+        height: 14px;
+        font-size: 12px;
+    }
+
+    .user {
+        gap: 2px;
+    }
 }

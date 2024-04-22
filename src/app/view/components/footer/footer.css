@@ -8,6 +8,7 @@
     border: 1px solid black;
     border-radius: 10px;
     width: 100%;
+    gap: 20px;
 }
 
 .footer_link {
@@ -18,4 +19,10 @@
 
 .footer_logo {
     width: 60px;
+}
+
+@media (max-width: 500px) {
+    .footer {
+        gap: 5px;
+    }
 }

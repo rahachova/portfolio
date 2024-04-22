@@ -2,6 +2,7 @@ import './modalWindow.css';
 import Component from '../../../common/component';
 import PS from '../../../common/publishSubscribe';
 import { PublishSubscribeEvent, WSMessage, WSMessageType } from '../../../types/types';
+import Button from '../../../common/button/button';
 
 const NAME_REGEX = '[A-Z][\\-a-z]+';
 const PASSWORD_REGEX = '^\\d+$';
@@ -81,10 +82,9 @@ export default class ModalWindow extends Component {
             text: 'Login',
         });
 
-        this.aboutButton = new Component({
-            tag: 'button',
-            className: 'button',
+        this.aboutButton = new Button({
             text: 'About',
+            onClick: ModalWindow.handleShowAbout,
         });
 
         this.setupElements();
@@ -92,6 +92,11 @@ export default class ModalWindow extends Component {
         this.setupSubscribtion();
         this.setupForm();
         this.build();
+    }
+
+    static handleShowAbout(event: Event) {
+        event.preventDefault();
+        PS.sendEvent(PublishSubscribeEvent.AboutShown, { isLoggedin: false });
     }
 
     setupElements() {
@@ -122,6 +127,8 @@ export default class ModalWindow extends Component {
         PS.subscribe(PublishSubscribeEvent.Loggedout, this.showModalWindow.bind(this));
         PS.subscribe(PublishSubscribeEvent.Loggedin, this.hideModalWindow.bind(this));
         PS.subscribe(PublishSubscribeEvent.WSMessageReceived, this.listenSocket.bind(this));
+        PS.subscribe(PublishSubscribeEvent.AboutShown, this.hideModalWindow.bind(this));
+        PS.subscribe(PublishSubscribeEvent.AboutHidden, this.showModalWindow.bind(this));
     }
 
     setupListeners() {
@@ -174,8 +181,14 @@ export default class ModalWindow extends Component {
         this.addClass('modal--hidden');
     }
 
-    showModalWindow() {
-        this.removeClass('modal--hidden');
+    showModalWindow(payload?: { isLoggedin: boolean }) {
+        if (payload) {
+            if (!payload.isLoggedin) {
+                this.removeClass('modal--hidden');
+            }
+        } else {
+            this.removeClass('modal--hidden');
+        }
     }
 
     static hideInputError(errorComponent: Component) {

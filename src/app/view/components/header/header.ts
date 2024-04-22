@@ -28,7 +28,7 @@ export default class Header extends Component {
         });
         this.buttonAbout = new Button({
             text: 'About',
-            onClick: Header.handleLogoutClick.bind(this),
+            onClick: Header.handleShowAbout,
         });
         this.buttonLeave = new Button({
             text: 'Leave',
@@ -39,6 +39,11 @@ export default class Header extends Component {
 
     static handleLogoutClick() {
         PS.sendEvent(PublishSubscribeEvent.Logout);
+    }
+
+    static handleShowAbout(event: Event) {
+        event.preventDefault();
+        PS.sendEvent(PublishSubscribeEvent.AboutShown, { isLoggedin: true });
     }
 
     build() {

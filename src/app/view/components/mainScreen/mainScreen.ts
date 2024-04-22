@@ -25,14 +25,24 @@ export default class MainScreen extends Component {
         this.setupSubscribtions();
     }
 
-    showMainScreen() {
-        this.addClass('main-screen--shown');
+    showMainScreen(payload?: { isLoggedin: boolean }) {
+        if (payload) {
+            if (payload.isLoggedin) {
+                this.addClass('main-screen--shown');
+            }
+        } else {
+            this.addClass('main-screen--shown');
+        }
     }
 
     hideMainScreen() {
+        this.removeClass('main-screen--shown');
+    }
+
+    destroyMainScreen() {
         this.isCreated = false;
         this.destroyChildren();
-        this.removeClass('main-screen--shown');
+        this.hideMainScreen();
     }
 
     createMainScreen() {
@@ -56,7 +66,9 @@ export default class MainScreen extends Component {
 
     setupSubscribtions() {
         PS.subscribe(PublishSubscribeEvent.Loggedin, this.createMainScreen.bind(this));
-        PS.subscribe(PublishSubscribeEvent.Logout, this.hideMainScreen.bind(this));
+        PS.subscribe(PublishSubscribeEvent.Logout, this.destroyMainScreen.bind(this));
+        PS.subscribe(PublishSubscribeEvent.AboutShown, this.hideMainScreen.bind(this));
+        PS.subscribe(PublishSubscribeEvent.AboutHidden, this.showMainScreen.bind(this));
     }
 
     build() {

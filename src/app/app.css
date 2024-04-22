@@ -13,6 +13,12 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+@media (max-width: 500px) {
+    .body {
+        padding: 20px;
+    }
+}
+
 @keyframes fadeIn {
     0% {
         display: none;

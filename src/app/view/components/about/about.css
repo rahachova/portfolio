@@ -1,0 +1,24 @@
+.about {
+    padding: 15px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 60%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.about--shown {
+    display: flex;
+}
+
+.game_name {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.game_description {
+    text-align: center;
+    line-height: 1.5;
+}
