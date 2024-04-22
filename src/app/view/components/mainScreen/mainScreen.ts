@@ -5,6 +5,7 @@ import { PublishSubscribeEvent } from '../../../types/types';
 import Header from '../header/header';
 import Users from '../users/users';
 import Chat from '../chat/chat';
+import Footer from '../footer/footer';
 
 export default class MainScreen extends Component {
     header!: Header;
@@ -14,6 +15,8 @@ export default class MainScreen extends Component {
     chat!: Chat;
 
     wrapper!: Component;
+
+    footer!: Component;
 
     isCreated: boolean = false;
 
@@ -43,6 +46,7 @@ export default class MainScreen extends Component {
                 tag: 'div',
                 className: 'wrapper',
             });
+            this.footer = new Footer();
             this.isCreated = true;
 
             this.build();
@@ -57,6 +61,6 @@ export default class MainScreen extends Component {
 
     build() {
         this.wrapper.appendChildren([this.users, this.chat]);
-        this.appendChildren([this.header, this.wrapper]);
+        this.appendChildren([this.header, this.wrapper, this.footer]);
     }
 }
