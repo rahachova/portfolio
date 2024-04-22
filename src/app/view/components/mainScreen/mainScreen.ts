@@ -27,6 +27,8 @@ export default class MainScreen extends Component {
     }
 
     hideMainScreen() {
+        this.isCreated = false;
+        this.destroyChildren();
         this.removeClass('main-screen--shown');
     }
 

@@ -9,6 +9,6 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "rules": {},
+    "noInlineConfig": true,
     "ignorePatterns": ["*.d.ts"]
 }

@@ -24,6 +24,7 @@ export enum WSMessageType {
     MSG_READ = 'MSG_READ',
     MSG_DELETE = 'MSG_DELETE',
     MSG_EDIT = 'MSG_EDIT',
+    MSG_DELIVER = 'MSG_DELIVER',
 }
 
 export type User = {

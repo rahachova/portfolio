@@ -1,15 +1,22 @@
 .message--outer {
     display: flex;
     position: relative;
+    gap: 5px;
 }
 
 .message {
-    max-width: 80%;
     padding: 10px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
     word-wrap: break-word;
     box-sizing: border-box;
+}
+
+.message_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 80%;
 }
 
 .message--from {
@@ -38,12 +45,13 @@
 
 .message--to + .message--from.message--unread::after,
 .message--from:not(.message--unread) + .message--from.message--unread:after {
-    content: 'New messages:';
+    content: '\25BC New messages';
     position: absolute;
     width: 20%;
     top: 0;
     right: 0;
     text-align: center;
+    font-size: 14px;
 }
 
 .message-buttons {
@@ -68,4 +76,18 @@
 
 .message-button--delete {
     background-image: url('../../../../assets/cross.svg');
+}
+
+.message_sending-time,
+.message_sender-name,
+.message_delivery-status,
+.message_edit-status {
+    font-size: 12px;
+}
+
+.message_top-info,
+.message_bottom-info {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
 }
