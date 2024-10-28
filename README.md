@@ -13,7 +13,7 @@ RSS Puzzle is an interactive mini-game aimed at enhancing English language skill
 
 Fun Chat is an engaging chat application where users can have dynamic conversations with friends.
 
-  **Tech Stack:** TypeScript, Webpack
+  **Tech Stack:** TypeScript, Webpack, WebSocket
 
   **SRC:** https://github.com/rahachova/portfolio/tree/fun-chat
 
@@ -50,5 +50,14 @@ Nonograms is a puzzle game to reveal a hidden picture by looking at the number c
   **Deploy:** https://rolling-scopes-school.github.io/rahachova-JSFE2023Q4/nonograms/index.html
 
 
+## 6. Paws and Tails 😺
+
+Paws and Tails is a user-friendly interface for an online pet goods store, seamlessly integrated with the powerful [Commercetools](https://docs.commercetools.com/docs/) back-end. The project was developed by a team of three developers using the Scrum methodology.
+
+**Tech Stack:** HTML, TypeScript, SCSS, Webpack, Jest
+
+  **SRC:** https://github.com/rahachova/eCommerce-application
+
+  **Deploy:** https://future-juniors.netlify.app/ (trial 'commerce tools' license expired)
 
 
